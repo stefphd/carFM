@@ -26,9 +26,6 @@ if ds < dsmin
     keep_last = rem(numel(traj.zeta)-1, n_ds)~=0;
     for k = 1 : numel(traj_fields)
         field = traj_fields{k};
-        if ~any(strcmp(field, [required_fields optional_fields, {'rha'}]))
-            continue;
-        end
         % resample
         last_val = traj.(field)(end);
         traj.(field) = traj.(field)(1:n_ds:end);
@@ -55,14 +52,6 @@ for k = 1 : numel(optional_fields)
     end
     field = optional_fields{k};
     output.(field) = interpField(traj, backend, 'zeta', field, method);
-end
-
-% Interp RHA field
-field = 'rha';
-output.isRHA = false;
-if any(strcmp(field, traj_fields))
-    output.isRHA = true;
-    output.(field) = interpField(traj, backend, 'zeta', field, 'linear');
 end
 
 end

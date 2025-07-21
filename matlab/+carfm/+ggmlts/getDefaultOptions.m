@@ -49,7 +49,6 @@ function opts = getDefaultOptions(opts)
     default_opts.scheme = 'trapz'; % integration scheme ('euler','trapz','midpoint','lgr<N>')
     default_opts.gginterpMethod = 'bspline'; % G-G interpolation method
     default_opts.trackinterpMethod = 'linear'; % track & traj interpolation method
-    default_opts.deactRHABrake = true; % deactivate RHA when braking (true/false)
     default_opts.maxIter = 2000; % NLP max iter (3000 default used in IPOPT)
     default_opts.exactHessian = false; % use exact NLP Hessian (instead of 'limited-memory' option in IPOPT)
     default_opts.printInt = 5; % Print iteration interval
@@ -72,9 +71,9 @@ function opts = getDefaultOptions(opts)
     default_opts.optTolAccept = 1e-4; % NLP optimality tol for acceptable (acceptable_dual_inf_tol=1e10 default in IPOPT)
     default_opts.complTolAccept = 1e-4; % NLP complementarity tol for acceptable (acceptable_compl_inf_tol=1e-2 default in IPOPT)
     default_opts.objChangeAccept = 5e-6; % NLP objective change for acceptable (acceptable_obj_change_tol=1e20 default in IPOPT)
-    % Undocumented options: these options are for internal use and should
-    % not be documented
-    default_opts.refineSol = false; % refine the solution using WORHP SQP (requires WORHP installed) - used only for mex=true
+    % Undocumented options: these options are for internal use and are hidden to the user
+    % defualt_opts.bcsRelax = false; % Relax the boundary conditions (add them to penalty)
+    % default_opts.refineSol = false; % refine the solution using WORHP SQP (requires WORHP installed) - used only for mex=true
     % override default options
     opts_fields = fieldnames(opts);
     for k = 1 : numel(opts_fields)

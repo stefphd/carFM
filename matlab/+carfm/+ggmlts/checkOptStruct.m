@@ -400,28 +400,6 @@ function checkOptStruct(opts)
                     msg = 'Type of field "bcsRelax" must be logical.';
                     error(eid,msg);
                 end
-            case 'deactRHABrake'
-                if ~isequal(size(opts.deactRHABrake),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "deactRHABrake" must be [1,1].';
-                    error(eid,msg);
-                end
-                if ~islogical(opts.deactRHABrake)
-                    eid = 'carfm:incorrectType';
-                    msg = 'Type of field "deactRHABrake" must be logical.';
-                    error(eid,msg);
-                end
-            case 'refineSol'
-                if ~isequal(size(opts.refineSol),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "refineSol" must be [1,1].';
-                    error(eid,msg);
-                end
-                if ~islogical(opts.refineSol)
-                    eid = 'carfm:incorrectType';
-                    msg = 'Type of field "refineSol" must be logical.';
-                    error(eid,msg);
-                end
             case 'numThreads'
                 if ~isequal(size(opts.numThreads),[1 1])
                     eid = 'carfm:notEqual';

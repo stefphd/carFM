@@ -46,21 +46,6 @@ else
     phi = 0*t;
 end
 
-%% Eval RHA
-if aux.track.isRHA % This is to semplify generated expressions in CASADI in the case of no RHA
-    % With RHA
-    rha = aux.track.rha(s);
-    % Enforce either 0 or 1
-    rha = 1*(rha>0.5) + 0;
-    % Enforce RHA=0 in braking
-    if opts.deactRHABrake
-        rha = full(rha) .* (at > 0); % full needed for numerical eval, otherwise error
-    end
-else
-    % No RHA
-    rha = 0*t;
-end
-
 %% Others
 wt = opts.wt;
 wn = opts.wn;
@@ -92,30 +77,13 @@ ateq = at + g*(sin(mu).*cos(chi)-cos(mu).*sin(phi).*sin(chi)); %apparent tangent
 aneq = an - g*(cos(mu).*sin(phi).*cos(chi)+sin(mu).*sin(chi)); %apparent normal acceleration
 geq = -az + g*cos(mu).*cos(phi); % apparent gravity
 % eval g-g map: rho{l}(alpha,V,gtilda), with alpha,rho computed from axtilda,aytilda
-rhomax2 = []; rho2 = []; alpha = [];
-% atan2mod = @(y,x) atan(tan(atan2(y, x))).*(+1*(x>=0) - 1*(x<0));
-for l = 1 : numel(aux.rho)
-    at0 = 0*V;
-    for k = 1 : numel(V)
-        at0(k) = aux.shift{l}(V(k));
-    end
-    alpha = [alpha; atan2(ateq-at0*g,aneq)]; 
-    rhomax2 = [rhomax2; aux.rho{l}{1}([alpha(l,:);V(:)';geq(:)'/g]).^2];
-    % calc rho
-    rho2 = [rho2; ((ateq-at0*g).^2+aneq.^2) / g^2];
+at0 = 0*V;
+for k = 1 : numel(V)
+    at0(k) = aux.shift{1}(V(k));
 end
-% weight g-g using rha
-if aux.track.isRHA && numel(aux.rho)>1
-    alpha = (alpha(1,:).*(1-rha) + alpha(2,:).*rha);
-    rhomax2 = (rhomax2(1,:).*(1-rha) + rhomax2(2,:).*rha);
-    rho2 = (rho2(1,:).*(1-rha) + rho2(2,:).*rha);
-else
-    rha = 0*t; % RHA not used
-end
-% take first vals
-rho2 = rho2(1,:);
-rhomax2 = rhomax2(1,:);
-alpha = alpha(1,:);
+alpha = atan2(ateq-at0*g,aneq); 
+rhomax2 = aux.rho{1}{1}([alpha(:)';V(:)';geq(:)'/g]).^2;
+rho2 = ((ateq-at0*g).^2+aneq.^2) / g^2;
 % create c
 c = [n./rwr
      n./rwl
@@ -189,7 +157,6 @@ if nargout > 3
 	data.Gammax = data.omegax./data.V;
 	data.Gammay = data.omegay./data.V;
 	data.Gammaz = data.omegaz./data.V;
-    data.rha = full(rha);
     % if isnumeric(tp)
     data.t = cumtrapz(data.s, full(tp));
     % end

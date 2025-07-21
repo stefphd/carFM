@@ -10,7 +10,7 @@ function traj = checkTrajStruct(traj)
     end
     
     required_fields = {'zeta', 'x', 'y', 'psi', 'Gammaz'};
-    optional_fields = {'z', 'sigma', 'beta', 'Gammax', 'Gammay', 'rha'};
+    optional_fields = {'z', 'sigma', 'beta', 'Gammax', 'Gammay'};
     track_fields = fieldnames(traj);
     % Check required fields
     for k = 1 : numel(required_fields)

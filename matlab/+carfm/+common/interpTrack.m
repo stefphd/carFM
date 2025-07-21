@@ -26,9 +26,6 @@ if ds < dsmin
     keep_last = rem(numel(track.s)-1, n_ds)~=0;
     for k = 1 : numel(track_fields)
         field = track_fields{k};
-        if ~any(strcmp(field, [required_fields optional_fields, {'rha'}]))
-            continue;
-        end
         % resample
         last_val = track.(field)(end);
         track.(field) = track.(field)(1:n_ds:end);
@@ -55,14 +52,6 @@ for k = 1 : numel(optional_fields)
     end
     field = optional_fields{k};
     output.(field) = interpField(track, backend, 's', field, method);
-end
-
-% Interp RHA field
-field = 'rha';
-output.isRHA = false;
-if any(strcmp(field, track_fields))
-    output.isRHA = true;
-    output.(field) = interpField(track, backend, 's', field, 'linear');
 end
 
 end

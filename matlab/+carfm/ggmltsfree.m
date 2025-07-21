@@ -3,7 +3,7 @@ function mltsout = ggmltsfree(gg, track, opts, guess)
 
 % Check args
 arguments
-    gg (1,:) struct {carfm.ggmlts.checkGGStruct(gg)}
+    gg (1,1) struct {carfm.ggmlts.checkGGStruct(gg)}
     track (1,1) struct {carfm.common.checkTrackStruct(track)}
     opts (1,1) struct {carfm.ggmlts.checkOptStruct(opts)} = struct()
     guess (1,1) struct {carfm.common.checkGuessStruct(guess, {'s','V','n','chi','at','an','jt','jn'})} = struct()
@@ -334,7 +334,12 @@ if opts.mex % use OPTra
     problem.mesh = hmesh/sum(hmesh);
     % Call to OPTRA
     sol = carfm.optra.solve(problem);
-    % Refine the solution using WORHP
+    % Undocumented feature: refine the solution using WORHP
+    % This feature refines the solution using using WORHP SQP (requires 
+    % WORHP installed) if mex=true. Default is opts.refineSol = false.
+    if ~isfield(opts, 'refineSol')
+        opts.refineSol = false;
+    end
     if opts.refineSol
         problem = sol.next_problem;
         problem.options.sb = true; % suppress banner

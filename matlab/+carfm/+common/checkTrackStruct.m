@@ -5,7 +5,7 @@ function checkTrackStruct(track)
     % track: the track structure
     
     required_fields = {'s', 'rwr', 'rwl', 'x', 'y', 'theta', 'Omegaz', 'xl', 'yl', 'xr', 'yr'};
-    optional_fields = {'z', 'zl', 'zr', 'mu', 'phi', 'Omegax', 'Omegay', 'rha'};
+    optional_fields = {'z', 'zl', 'zr', 'mu', 'phi', 'Omegax', 'Omegay'};
     track_fields = fieldnames(track);
     % Check required fields
     for k = 1 : numel(required_fields)

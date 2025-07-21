@@ -11,3 +11,4 @@
 *.fig
 maple/+maple
 matlab/optra
+*.log

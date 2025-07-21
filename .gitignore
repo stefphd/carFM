@@ -1,0 +1,13 @@
+**/casadi-*
+**/*.mat
+**/*.csv
+**/*.txt
+**/*.zip
+**/*.dll
+**/*.c
+**/*.mex*
+**/.build
+**/.aux
+*.fig
+maple/+maple
+matlab/optra

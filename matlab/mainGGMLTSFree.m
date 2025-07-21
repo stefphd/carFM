@@ -2,15 +2,14 @@
 clc, clear
 
 % g-g map
-gg(1) = load('gg-2d'); % full G-G w/o RHA
+gg(1) = load('gg-2d'); % full G-G
 
 % track
 track = load('adria');
 
 % options
 opts = struct();
-% opts.deactRHABrake = false;
-opts.mex = true;
+% opts.mex = true;
 % opts.sRange = [4300 4800]; % bucine
 % % x = [V, n, chi, at, an]
 % opts.bcsFunc = @(xi, xf) [xi(1)-70.5; xf(1)-70.1; xi(2)-5.1; xf(2)-5.2];

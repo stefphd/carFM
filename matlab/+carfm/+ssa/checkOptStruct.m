@@ -25,7 +25,18 @@ function checkOptStruct(opts)
                 end
                 if any(abs(opts.xsign) ~= 1)
                     eid = 'carfm:invalidValue';
-                    msg = 'Values of field "xsign" must be greater than 0.';
+                    msg = 'Values of field "xsign" must be either +1 or -1.';
+                    error(eid,msg)
+                end
+            case 'xswap'
+                if ~isequal(size(opts.xswap, 2),2)
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "xswap" must be [:,2].';
+                    error(eid,msg)
+                end
+                if (min(opts.xswap) < 1) || (min(opts.xswap) > 33)
+                    eid = 'carfm:invalidValue';
+                    msg = 'Values of field "xswap" must be greater than 1 and lower than 33.';
                     error(eid,msg)
                 end
             case 'rscale'

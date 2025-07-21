@@ -27,6 +27,19 @@ function opts = getDefaultOptions(opts)
                           +1 ... % Tau__t = Tau__fl+Tau__fr+Tau__rl+Tau__rr
                           +1 -1 +1 ... % V, yaw__rate, a__t
                           ]; % x signs for symmetrization
+    default_opts.xswap = [5 6   % z__fl, z__fr
+                          7 8   % z__rl, z__rl
+                          10 11 % kappa__fl, kappa__fr
+                          12 13 % kappa__rl, kappa__rr
+                          14 15 % X__fl, X__fr
+                          16 17 % X__rl, X__rr
+                          18 19 % Y__fl, Y__fr
+                          20 21 % Y__rl, Y__rr
+                          22 23 % N__fl, N__fr
+                          24 25 % N__rl, N__rr
+                          26 27 % F__fl, F__fr
+                          28 29 % F__rl, F__rr
+                          ]; % swap x values between first and second columns for symmetrization
     default_opts.rscale = [1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3... % tyres
                            1e3 1e3 1e3 1e3 ... % suspensions
                            1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 1e3 ... % SS equations
@@ -71,6 +84,11 @@ function opts = getDefaultOptions(opts)
     default_opts.isSymGG = true; % assume symmetric GG, i.e. avoid computation of left-side
     default_opts.GGshift = @(V) 0; % function handle (function of V) for the GG vertical shift (expressed in g)
     default_opts.algorithmGGopt = 'interior-point'; % algorithm employed for GG optimization ('interior-point' or 'sqp')
+    % GGMLTS2SS options
+    default_opts.GGRadiusTol = 0.95; % tolerance for GG radius on GG boundary
+    default_opts.refineMLTS = false; % refine to solve exactly SSA
+    default_opts.refineRange = [-inf, +inf]; % refine range (m)
+    default_opts.ggmlts2ssMexName = 'ggmlts2ssSolver'; % mex filename for ggmlts2ss solver
     % [...]
     % override default options
     opts_fields = fieldnames(opts);

@@ -13,7 +13,7 @@ g0 = 1;
 
 % options
 opts = struct();
-opts.mex = true; % mex function to speed up
+% opts.mex = true; % mex function to speed up
 opts.GGshift = @(V) -3e-5*V^2; % g-g shift function handle
 
 % call to ggmap

@@ -14,7 +14,7 @@ u_long = [100/3.6 % speed (m/s)
           ];
 
 % SS lat inputs
-u_lat = [0.3 % yaw rate (rad/s)
+u_lat = [0 % yaw rate (rad/s)
          0 % steering angle (rad)
          0 % drift angle (rad)
          ];

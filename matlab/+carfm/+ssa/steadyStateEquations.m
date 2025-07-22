@@ -488,7 +488,7 @@ if nargout > 1
     output.frontLeftTyre.verticalDeformation = xi__fl0;
     output.frontLeftTyre.verticalDeformationRate = 0;
     output.frontLeftTyre.N        = N__fl0;
-    output.frontLeftTyre.sideSlip = alpha__fl0;
+    output.frontLeftTyre.sideSlip = alpha__fl0; % use alpha__fl0 instad of sa__fl for consistent definition in dymlts
     output.frontLeftTyre.camber   = ca__fl;
     output.frontLeftTyre.longSlip = ls__fl;
     output.frontLeftTyre.radius = r0__fl;
@@ -507,7 +507,7 @@ if nargout > 1
     output.frontRightTyre.verticalDeformation = xi__fr0;
     output.frontRightTyre.verticalDeformationRate = 0;
     output.frontRightTyre.N        = N__fr0;
-    output.frontRightTyre.sideSlip = alpha__fr0;
+    output.frontRightTyre.sideSlip = alpha__fr0; % use alpha__fr0 instad of sa__fr for consistent definition in dymlts
     output.frontRightTyre.camber   = ca__fr;
     output.frontRightTyre.longSlip = ls__fr;
     output.frontRightTyre.radius = r0__fr;
@@ -526,7 +526,7 @@ if nargout > 1
     output.rearLeftTyre.verticalDeformation = xi__rl0;
     output.rearLeftTyre.verticalDeformationRate = 0;
     output.rearLeftTyre.N        = N__rl0;
-    output.rearLeftTyre.sideSlip = alpha__rl0;
+    output.rearLeftTyre.sideSlip = alpha__rl0; % use alpha__rl0 instad of sa__rl for consistent definition in dymlts
     output.rearLeftTyre.camber   = ca__rl;
     output.rearLeftTyre.longSlip = ls__rl;
     output.rearLeftTyre.radius = r0__rl;
@@ -545,7 +545,7 @@ if nargout > 1
     output.rearRightTyre.verticalDeformation = xi__rr0;
     output.rearRightTyre.verticalDeformationRate = 0;
     output.rearRightTyre.N        = N__rr0;
-    output.rearRightTyre.sideSlip = alpha__rr0;
+    output.rearRightTyre.sideSlip = alpha__rr0; % use alpha__rr0 instad of sa__rr for consistent definition in dymlts
     output.rearRightTyre.camber   = ca__rr;
     output.rearRightTyre.longSlip = ls__rr;
     output.rearRightTyre.radius = r0__rr;

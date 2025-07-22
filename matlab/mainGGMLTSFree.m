@@ -2,7 +2,7 @@
 clc, clear
 
 % g-g map
-gg(1) = load('gg-2d'); % full G-G
+gg = load('gg-fm'); % full G-G
 
 % track
 track = load('adria');

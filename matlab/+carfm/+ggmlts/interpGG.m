@@ -66,7 +66,7 @@ for l = 1 : numel(gg)
         dg = gg(l).g(2)-gg(l).g(1); % assumed equally-spaced
     else
         dg = 0.5;
-        gg(l).g = gg(l).g + [-dg, dg];
+        gg(l).g = gg(l).g + [-dg, 0, dg]; % include also baseline value of g
         for k0 = 1 : numel(varargin)
             field = varargin{k0};
             gg(l).(field) = repmat(gg(l).(field)(:,:,1,:), [1 1 numel(gg(l).g)]);

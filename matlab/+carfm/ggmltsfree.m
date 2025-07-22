@@ -217,14 +217,21 @@ ocp_bcs = casadi.Function('ocp_bcs', {w0, z0, wn, zn, p}, {b});
 ocp_int = casadi.Function('ocp_int', {t, w1, z1, w2, z2, p, h}, {[]});
 
 % Bounds
-lbx = [min(gg(1).V) -max(track.rwl) -pi/2 -3*opts.g -3*opts.g]   ./ opts.xscale; % lower state bound
-ubx = [max(gg(1).V) +max(track.rwr(:)) +pi/2 +3*opts.g +3*opts.g] ./ opts.xscale; % upper state bound
+lbx = [min(gg(1).V) -max(track.rwl) -pi/2 -4*opts.g -4*opts.g]   ./ opts.xscale; % lower state bound
+ubx = [max(gg(1).V) +max(track.rwr(:)) +pi/2 +4*opts.g +4*opts.g] ./ opts.xscale; % upper state bound
 lbu = [opts.minLongJerk*opts.g, -opts.maxLatJerk*opts.g] ./ opts.uscale;
 ubu = [opts.maxLongJerk*opts.g, +opts.maxLatJerk*opts.g] ./ opts.uscale;
 lbc = [-10, -1, -1, min(gg(1).g)] ./ opts.cscale;
 ubc = [+1, +10, 1, max(gg(1).g)] ./ opts.cscale;
 lbb = zeros(nb,1);
 ubb = zeros(nb,1);
+% fix lbc,ubc for geq/g constraint in the case of 2D g-g is provided
+if numel(gg(1).g)<2 % 2D g-g
+    % disable limits - these should be large enough (geq/g typically within [0,2])
+    % these are also consistent with the one harcoded in interpGG
+    lbc(end) = 0;
+    ubc(end) = +2;
+end
 % repeat bounds for augmented vars
 lbw = repmat(lbx(:), [d,1]); ubw = repmat(ubx(:), [d,1]);
 lbz = repmat(lbu(:), [d,1]); ubz = repmat(ubu(:), [d,1]);

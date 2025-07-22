@@ -301,10 +301,10 @@ Tau__rrb = 0.5*Tau__rb;
 % non-physical results on front torque when turning with e.g. gamma__d=0 (i.e. RWD)
 Tau__fe = gamma__d*Tau__te;
 Tau__re = Tau__te - Tau__fe; % 0.5*(1-gamma__d)*Tau__te
-Tau__fle = 0.5*Tau__fe + k__df*(omega__fl0-omega__fr0);
-Tau__fre = 0.5*Tau__fe - k__df*(omega__fl0-omega__fr0);
-Tau__rle = 0.5*Tau__re + k__dr*(omega__rl0-omega__rr0);
-Tau__rre = 0.5*Tau__re - k__dr*(omega__rl0-omega__rr0);
+Tau__fle = 0.5*Tau__fe + Tau__fe*k__d*(omega__fl0-omega__fr0);
+Tau__fre = 0.5*Tau__fe - Tau__fe*k__d*(omega__fl0-omega__fr0);
+Tau__rle = 0.5*Tau__re + Tau__re*k__d*(omega__rl0-omega__rr0);
+Tau__rre = 0.5*Tau__re - Tau__re*k__d*(omega__rl0-omega__rr0);
 % sum all
 Tau__fl0 = Tau__flb + Tau__fle;
 Tau__fr0 = Tau__frb + Tau__fre;

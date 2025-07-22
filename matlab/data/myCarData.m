@@ -42,8 +42,7 @@ gearboxRatios = 1; % from 1st to highest gear - no gear ratios considered
 gearboxSwitchingSpeeds = 1000;
 transmissionInertia = 0; % neglected
 transmissionEfficiency = 1.00;
-frontDifferentialStiffness = 0; % front differential sitffness (0=open)
-rearDifferentialStiffness = 0; % front differential sitffness (0=open)
+differentialStiffness = 0; % normalized differential sitffness (0=open)
 driveRatio = 0; % define as front drive torque / total drive torque (0=RWD, 1=AWD)
 brakeRatio = 0.58; % defined as front braking torque / total braking torque
 

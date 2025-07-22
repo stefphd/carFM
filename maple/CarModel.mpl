@@ -29,7 +29,9 @@ PDEtools[declare](
 
 prime=t,quiet);
 # Small variables
-linear_modeling(  {delta(t), mu(t), phi(t),
+linear_modeling(  {delta(t), phi(t), mu(t),
+### Omega__x(t),Omega__y(t),omega__x(t),omega__y(t),   # Not necessary
+
 psi__fl, phi__fl, mu__fl,
 psi__fr, phi__fr, mu__fr,
 psi__rl, phi__rl, mu__rl,
@@ -54,7 +56,7 @@ T__V := master_frame;
 # 
 
 # Transformation T1 moves from the car CoG to the road
-T1 := translate(-d,0,0) * translate(b,0,z(t)-h) * rotate('X',phi(t))* rotate('Y',mu(t)): 
+T1 := translate(-d,0,0) * translate(b,0,z(t)-h) * rotate('X',phi(t)) * rotate('Y',mu(t)): 
 # T__P reference frame is at road level, at the reference point P, SAE convention
 T__P := inv_frame(T1);
 T__R := T__P * translate(-d,0,0);  # same of T__P but at rear axle
@@ -78,7 +80,6 @@ T2 := T__V*translate(-b,0,h); set_frame_name(T2,'T2'): # attached to the chassis
 T4 := T__V*translate(+a,0,h); set_frame_name(T4,'T4'): # attached to the chassis, origin at the nominal front axle middle at road level
 #velocity(origin(T__R)): show(%); 
 #simplify(subs(velocity_eqns,%%),size): show(%);
-# T__P:=T__R*translate(d,0,0);
 P:=origin(T__P): show(%);
 VP:=project(velocity(P),T__P):show(%);
 AP:=project(velocity(simplify(subs(velocity_eqns, VP))),T__P): #show(%);
@@ -118,15 +119,16 @@ G := origin(T__V):
 a := w - b;   # use wheelbase w and rear CoG distance b as model parameters
 I__yz:=0:  I__xy:=0:  #because of the simmetry with respect XY plane
 car_body := make_BODY(T__V,m,I__xx,I__yy,I__zz,0,I__xz,0): show(car_body);
-# Wheel non-spinning reference frames at wheel center, aligned with the road , rotated by steer for the front, translated by x__i,y__i, and rotated by toe, camber 
+# Wheel non-spinning reference frames at wheel center, rotated by steer for the front, translated by x__i,y__i, and rotated by toe, camber 
 # t__f, t__r: half track-widths
-T__flw := T4 * translate(0,-t__f,0) * rotate('Y',-mu(t)) * rotate('X',-phi(t))* translate(0,0,-R__f+z__fl(t)) * rotate('Z', delta(t))
+# x__ij,y__ij,psi__ij,phi__ij,mu__ij are relative to the chassis, so they can be easily found from a kinematic simulation of the suspension only (i.e. fixed-chassis)
+T__flw := T4 * translate(0,-t__f,0) * translate(0,0,-R__f+z__fl(t)) * rotate('Z', delta(t))
            * translate(x__fl,y__fl,0) * rotate('Z', psi__fl) * rotate('X', phi__fl) * rotate('Y', mu__fl); # front left
-T__frw := T4 * translate(0,+t__f,0) * rotate('Y',-mu(t)) * rotate('X',-phi(t))* translate(0,0,-R__f+z__fr(t)) * rotate('Z', delta(t))
+T__frw := T4 * translate(0,+t__f,0) * translate(0,0,-R__f+z__fr(t)) * rotate('Z', delta(t))
            * translate(x__fr,y__fr,0) * rotate('Z', psi__fr) * rotate('X', phi__fr) * rotate('Y', mu__fr); # front right
-T__rlw := T2 * translate(0,-t__r,0) * rotate('Y',-mu(t)) * rotate('X',-phi(t))* translate(0,0,-R__r+z__rl(t))
+T__rlw := T2 * translate(0,-t__r,0) * translate(0,0,-R__r+z__rl(t))
            * translate(x__rl,y__rl,0) * rotate('Z', psi__rl) * rotate('X', phi__rl) * rotate('Y', mu__rl); # rear left
-T__rrw := T2 * translate(0,+t__r,0) * rotate('Y',-mu(t)) * rotate('X',-phi(t))* translate(0,0,-R__r+z__rr(t))
+T__rrw := T2 * translate(0,+t__r,0) * translate(0,0,-R__r+z__rr(t))
            * translate(x__rr,y__rr,0) * rotate('Z', psi__rr) * rotate('X', phi__rr) * rotate('Y', mu__rr); # rear right
 # Wheel centers
 W__fl := origin(T__flw): show(W__fl):
@@ -246,6 +248,9 @@ show(nominal(project(CPrr,T__R)));
 <VSrr,VNrr,VRrr>;
 # Tire deflection
 xirr_eqn := [xi__rr(t) = R__r - rr__rr(t)];
+# Tire camber angles
+frontTyreAngles := [ca__fl = rhs(front_left_tyre['angles'][2]), ca__fr = rhs(front_right_tyre['angles'][2])]:<%>;  # front 
+rearTyreAngles := [ca__rl = rhs(rear_left_tyre['angles'][2]), ca__rr = rhs(rear_right_tyre['angles'][2])]:<%>;  # rear
 # Force
 # Gravity
 _gravity := make_VECTOR(T__R, g__x,g__y,g__z):
@@ -401,6 +406,7 @@ save(pos,vel,velocity_eqns,G,VG,P,VP,AP,
 VSfl,VNfl,VRfl,VSfr,VNfr,VRfr,
 VSrl,VNrl,VRrl,VSrr,VNrr,VRrr,
 CPfl,CPfr,CPrl,CPrr,
+frontTyreAngles, rearTyreAngles,
 W__fl,W__fr,W__rl,W__rr,
 T__R,T__P,T__V,
 G__all,I__all,CA,

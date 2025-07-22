@@ -5,69 +5,70 @@ Omega__y(t), z__fldot(t), z__frdot(t), z__rldot(t), z__rrdot(t)];
 velocity_eqns := [diff(x(t),t) = ((v__w(t)*cos(beta(t))-sin(beta(t))*(((-b+d)*
 mu(t)+h-z(t))*omega__x(t)+phi(t)*(b-d)*omega__y(t)+V__z(t)*phi(t)+(b-d)*
 Omega__z(t)-V__y(t)))*sin(sigma(t))+cos(sigma(t))*((-z(t)+h)*omega__y(t)+V__z(t
-)*mu(t)+V__x(t)))*cos(psi(t))+((((-b+d)*mu(t)+h-z(t))*omega__x(t)+phi(t)*(b-d)*
-omega__y(t)+V__z(t)*phi(t)+(b-d)*Omega__z(t)-V__y(t))*cos(beta(t))+sin(beta(t))
-*v__w(t))*sin(psi(t)), diff(y(t),t) = ((v__w(t)*cos(beta(t))-sin(beta(t))*(((-b
-+d)*mu(t)+h-z(t))*omega__x(t)+phi(t)*(b-d)*omega__y(t)+V__z(t)*phi(t)+(b-d)*
-Omega__z(t)-V__y(t)))*sin(sigma(t))+cos(sigma(t))*((-z(t)+h)*omega__y(t)+V__z(t
-)*mu(t)+V__x(t)))*sin(psi(t))-cos(psi(t))*((((-b+d)*mu(t)+h-z(t))*omega__x(t)+
+)*mu(t)+V__x(t)))*cos(psi(t))+sin(psi(t))*((((-b+d)*mu(t)+h-z(t))*omega__x(t)+
 phi(t)*(b-d)*omega__y(t)+V__z(t)*phi(t)+(b-d)*Omega__z(t)-V__y(t))*cos(beta(t))
-+sin(beta(t))*v__w(t)), omega__z(t) = -mu(t)*omega__x(t)+omega__y(t)*phi(t)+
-Omega__z(t), diff(phi(t),t) = Omega__x(t)-omega__x(t)+mu(t)*Omega__z(t), diff(
-mu(t),t) = -omega__y(t)+Omega__y(t)-phi(t)*Omega__z(t), diff(z(t),t) = (b-d)*
-omega__y(t)-V__x(t)*mu(t)+V__y(t)*phi(t)+V__z(t)-v__w(t), diff(delta(t),t) = 
++v__w(t)*sin(beta(t))), diff(y(t),t) = ((v__w(t)*cos(beta(t))-sin(beta(t))*(((-
+b+d)*mu(t)+h-z(t))*omega__x(t)+phi(t)*(b-d)*omega__y(t)+V__z(t)*phi(t)+(b-d)*
+Omega__z(t)-V__y(t)))*sin(sigma(t))+cos(sigma(t))*((-z(t)+h)*omega__y(t)+V__z(t
+)*mu(t)+V__x(t)))*sin(psi(t))-((((-b+d)*mu(t)+h-z(t))*omega__x(t)+phi(t)*(b-d)*
+omega__y(t)+V__z(t)*phi(t)+(b-d)*Omega__z(t)-V__y(t))*cos(beta(t))+v__w(t)*sin(
+beta(t)))*cos(psi(t)), omega__z(t) = -omega__x(t)*mu(t)+omega__y(t)*phi(t)+
+Omega__z(t), diff(phi(t),t) = -omega__x(t)+Omega__x(t)+mu(t)*Omega__z(t), diff(
+mu(t),t) = Omega__y(t)-omega__y(t)-phi(t)*Omega__z(t), diff(z(t),t) = (b-d)*
+omega__y(t)-V__x(t)*mu(t)+phi(t)*V__y(t)+V__z(t)-v__w(t), diff(delta(t),t) = 
 delta__dot(t), diff(delta__dot(t),t) = delta__ddot(t), diff(z__fl(t),t) = 
 z__fldot(t), diff(z__fr(t),t) = z__frdot(t), diff(z__rl(t),t) = z__rldot(t), 
 diff(z__rr(t),t) = z__rrdot(t)];
-G := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4, [[
-1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], attributes = [T__V])),(obj)=POINT]);
+G := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=(
+Matrix(4, 4, [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], attributes = [T__V]))])
+;
 VG := table([(comps)=(Matrix(4, 1, [[V__x(t)+V__z(t)*mu(t)],[V__y(t)-V__z(t)*
-phi(t)],[-V__x(t)*mu(t)+V__y(t)*phi(t)+V__z(t)],[0]])),(frame)=(Matrix(4, 4, [[
-1,0,-mu(t),-b+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[mu(t),-phi(t),1,-
-mu(t)*b-z(t)+h],[0,0,0,1]], attributes = [T__R])),(obj)=VECTOR]);
-P := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4, [[
-1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[mu(t),-phi(t),1,
--mu(t)*(b-d)-z(t)+h],[0,0,0,1]])),(obj)=POINT]);
+phi(t)],[-V__x(t)*mu(t)+phi(t)*V__y(t)+V__z(t)],[0]])),(obj)=VECTOR,(frame)=(
+Matrix(4, 4, [[1,0,-mu(t),-b+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[mu(
+t),-phi(t),1,-mu(t)*b-z(t)+h],[0,0,0,1]], attributes = [T__R]))]);
+P := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=(
+Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[
+mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0,1]]))]);
 VP := table([(comps)=(Matrix(4, 1, [[-Omega__y(t)*z(t)+Omega__y(t)*h+V__x(t)+
 diff(mu(t),t)*(z(t)-h)+V__z(t)*mu(t)+Omega__z(t)*phi(t)*(z(t)-h)],[(z(t)-h)*
 Omega__x(t)-(b-d)*Omega__z(t)+V__y(t)-diff(phi(t),t)*(z(t)-h)+(Omega__z(t)*z(t)
 +Omega__x(t)*b-Omega__x(t)*d-Omega__z(t)*h)*mu(t)-(Omega__y(t)*b-Omega__y(t)*d+
 V__z(t))*phi(t)],[-diff(z(t),t)+(b-d)*Omega__y(t)+V__z(t)-diff(mu(t),t)*(b-d)-(
-Omega__z(t)*b-Omega__z(t)*d-V__y(t))*phi(t)-V__x(t)*mu(t)],[0]])),(frame)=(
-Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[
-mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0,1]])),(obj)=VECTOR]);
-AP := table([(comps)=(Matrix(4, 1, [[-2*Omega__y(t)*diff(z(t),t)-(z(t)-h)*diff(
+Omega__z(t)*b-Omega__z(t)*d-V__y(t))*phi(t)-V__x(t)*mu(t)],[0]])),(obj)=VECTOR,
+(frame)=(Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(
+t)-h)],[mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0,1]]))]);
+AP := table([(comps)=(Matrix(4, 1, [[-2*diff(z(t),t)*Omega__y(t)-(z(t)-h)*diff(
 Omega__y(t),t)+diff(V__x(t),t)-Omega__z(t)*(z(t)-h)*Omega__x(t)+(b-d)*Omega__y(
-t)^2+Omega__y(t)*V__z(t)+(b-d)*Omega__z(t)^2-Omega__z(t)*V__y(t)+diff(diff(mu(t
-),t),t)*(z(t)-h)-2*(Omega__y(t)*b-Omega__y(t)*d-diff(z(t),t))*diff(mu(t),t)+2*(
-z(t)-h)*Omega__z(t)*diff(phi(t),t)+(z(t)*Omega__x(t)^2-z(t)*Omega__z(t)^2-
+t)^2+V__z(t)*Omega__y(t)+(b-d)*Omega__z(t)^2-Omega__z(t)*V__y(t)+diff(diff(mu(t
+),t),t)*(z(t)-h)+2*(-Omega__y(t)*b+Omega__y(t)*d+diff(z(t),t))*diff(mu(t),t)+2*
+(z(t)-h)*Omega__z(t)*diff(phi(t),t)+(z(t)*Omega__x(t)^2-z(t)*Omega__z(t)^2-
 Omega__x(t)^2*h-2*Omega__x(t)*Omega__z(t)*b+2*Omega__x(t)*Omega__z(t)*d+
-Omega__z(t)^2*h+Omega__x(t)*V__y(t)-Omega__y(t)*V__x(t)+diff(V__z(t),t))*mu(t)-
-(z(t)*Omega__x(t)*Omega__y(t)-Omega__x(t)*Omega__y(t)*h-diff(Omega__z(t),t)*z(t
-)-2*Omega__z(t)*diff(z(t),t)+diff(Omega__z(t),t)*h)*phi(t)],[(z(t)-h)*diff(
+Omega__z(t)^2*h+Omega__x(t)*V__y(t)-Omega__y(t)*V__x(t)+diff(V__z(t),t))*mu(t)+
+(-z(t)*Omega__x(t)*Omega__y(t)+Omega__x(t)*Omega__y(t)*h+diff(Omega__z(t),t)*z(
+t)-diff(Omega__z(t),t)*h+2*Omega__z(t)*diff(z(t),t))*phi(t)],[(z(t)-h)*diff(
 Omega__x(t),t)+2*Omega__x(t)*diff(z(t),t)-diff(Omega__z(t),t)*(b-d)+diff(V__y(t
 ),t)-(Omega__y(t)*b-Omega__y(t)*d+V__z(t))*Omega__x(t)-(z(t)-h)*Omega__z(t)*
 Omega__y(t)+Omega__z(t)*V__x(t)-(z(t)-h)*diff(diff(phi(t),t),t)+2*(Omega__z(t)*
 z(t)+Omega__x(t)*b-Omega__x(t)*d-Omega__z(t)*h)*diff(mu(t),t)-2*diff(z(t),t)*
 diff(phi(t),t)+(z(t)*Omega__x(t)*Omega__y(t)-Omega__x(t)*Omega__y(t)*h-Omega__z
-(t)*Omega__y(t)*b+Omega__z(t)*Omega__y(t)*d+diff(Omega__z(t),t)*z(t)+2*Omega__z
-(t)*diff(z(t),t)+diff(Omega__x(t),t)*b-diff(Omega__x(t),t)*d-diff(Omega__z(t),t
-)*h)*mu(t)+(z(t)*Omega__z(t)^2-z(t)*Omega__y(t)^2+Omega__x(t)*Omega__z(t)*b-
-Omega__x(t)*Omega__z(t)*d-Omega__z(t)^2*h+Omega__y(t)^2*h-Omega__x(t)*V__y(t)+
-Omega__y(t)*V__x(t)-diff(Omega__y(t),t)*b+diff(Omega__y(t),t)*d-diff(V__z(t),t)
-)*phi(t)],[-diff(diff(z(t),t),t)+(b-d)*diff(Omega__y(t),t)+diff(V__z(t),t)+(z(t
-)-h)*Omega__x(t)^2-(Omega__z(t)*b-Omega__z(t)*d-V__y(t))*Omega__x(t)+(z(t)-h)*
-Omega__y(t)^2-Omega__y(t)*V__x(t)-(b-d)*diff(diff(mu(t),t),t)-2*(z(t)-h)*
-Omega__y(t)*diff(mu(t),t)-2*Omega__x(t)*(z(t)-h)*diff(phi(t),t)+(2*Omega__z(t)*
-Omega__x(t)*z(t)+Omega__x(t)^2*b-Omega__x(t)^2*d-2*Omega__z(t)*Omega__x(t)*h-
-Omega__z(t)^2*b+Omega__z(t)^2*d+Omega__z(t)*V__y(t)-Omega__y(t)*V__z(t)-diff(
+(t)*Omega__y(t)*b+Omega__z(t)*Omega__y(t)*d+diff(Omega__z(t),t)*z(t)-diff(
+Omega__z(t),t)*h+diff(Omega__x(t),t)*b-diff(Omega__x(t),t)*d+2*Omega__z(t)*diff
+(z(t),t))*mu(t)-(-z(t)*Omega__z(t)^2+z(t)*Omega__y(t)^2-Omega__x(t)*Omega__z(t)
+*b+Omega__x(t)*Omega__z(t)*d+Omega__z(t)^2*h-Omega__y(t)^2*h+diff(Omega__y(t),t
+)*b-diff(Omega__y(t),t)*d+Omega__x(t)*V__y(t)-Omega__y(t)*V__x(t)+diff(V__z(t),
+t))*phi(t)],[-diff(diff(z(t),t),t)+(b-d)*diff(Omega__y(t),t)+diff(V__z(t),t)+(z
+(t)-h)*Omega__x(t)^2-(Omega__z(t)*b-Omega__z(t)*d-V__y(t))*Omega__x(t)+(z(t)-h)
+*Omega__y(t)^2-Omega__y(t)*V__x(t)-(b-d)*diff(diff(mu(t),t),t)-2*(z(t)-h)*
+Omega__y(t)*diff(mu(t),t)-2*Omega__x(t)*(z(t)-h)*diff(phi(t),t)-(-2*Omega__z(t)
+*Omega__x(t)*z(t)-Omega__x(t)^2*b+Omega__x(t)^2*d+2*Omega__z(t)*Omega__x(t)*h+
+Omega__z(t)^2*b-Omega__z(t)^2*d+V__z(t)*Omega__y(t)-Omega__z(t)*V__y(t)+diff(
 V__x(t),t))*mu(t)-(2*Omega__z(t)*Omega__y(t)*z(t)+Omega__x(t)*Omega__y(t)*b-
-Omega__x(t)*Omega__y(t)*d-2*Omega__z(t)*Omega__y(t)*h+Omega__x(t)*V__z(t)-
-Omega__z(t)*V__x(t)+diff(Omega__z(t),t)*b-diff(Omega__z(t),t)*d-diff(V__y(t),t)
-)*phi(t)],[0]])),(frame)=(Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,
-phi(t),-phi(t)*(z(t)-h)],[mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0,1]])),(
-obj)=VECTOR]);
-VSfl := -diff(delta(t),t)*y__fl+mu(t)*diff(z__fl(t),t)-diff(mu(t),t)*rr__fl(t)+
+Omega__x(t)*Omega__y(t)*d-2*Omega__z(t)*Omega__y(t)*h+diff(Omega__z(t),t)*b-
+diff(Omega__z(t),t)*d+Omega__x(t)*V__z(t)-Omega__z(t)*V__x(t)-diff(V__y(t),t))*
+phi(t)],[0]])),(obj)=VECTOR,(frame)=(Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)
+-h)],[0,1,phi(t),-phi(t)*(z(t)-h)],[mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0
+,1]]))]);
+VSfl := -diff(delta(t),t)*y__fl+diff(z__fl(t),t)*mu(t)-diff(mu(t),t)*rr__fl(t)+
 ((-z__fl(t)-rr__fl(t)-h+R__f)*delta(t)+(-t__f+y__fl)*mu(t)-psi__fl*(z__fl(t)+h+
 rr__fl(t)-R__f))*Omega__x(t)+((w-b)*delta(t)+rr__fl(t)*phi__fl+(-b+w+x__fl)*
 psi__fl+t__f-y__fl)*Omega__z(t)+((b-w-x__fl)*mu(t)+z__fl(t)+rr__fl(t)+h-R__f)*
@@ -77,14 +78,14 @@ z__fl(t),t)+((-b+w+x__fl)*phi(t)-(z__fl(t)+h+rr__fl(t)-R__f)*(delta(t)+psi__fl)
 )*Omega__y(t)+((t__f-y__fl)*Omega__x(t)-V__z(t))*phi(t)+(-delta(t)*t__f-mu(t)*
 rr__fl(t)+(-t__f+y__fl)*psi__fl-b+w+x__fl)*Omega__z(t)+(-z__fl(t)-rr__fl(t)-h+
 R__f)*Omega__x(t)-V__x(t)*psi__fl-delta(t)*V__x(t)+V__y(t);
-VRfl := rr__fl(t)*(-omega__fl(t)+diff(mu(t),t));
+VRfl := -rr__fl(t)*(omega__fl(t)-diff(mu(t),t));
 VSfr := -diff(delta(t),t)*y__fr+mu(t)*diff(z__fr(t),t)-diff(mu(t),t)*rr__fr(t)+
 ((-z__fr(t)-rr__fr(t)-h+R__f)*delta(t)+(t__f+y__fr)*mu(t)-psi__fr*(z__fr(t)+h+
 rr__fr(t)-R__f))*Omega__x(t)+((w-b)*delta(t)+rr__fr(t)*phi__fr+(-b+w+x__fr)*
 psi__fr-t__f-y__fr)*Omega__z(t)+((b-w-x__fr)*mu(t)+z__fr(t)+rr__fr(t)+h-R__f)*
 Omega__y(t)+V__y(t)*psi__fr+V__z(t)*mu(t)+delta(t)*V__y(t)+V__x(t);
-VNfr := (-phi__fr-phi(t))*diff(rr__fr(t),t)+diff(delta(t),t)*x__fr-phi(t)*diff(
-z__fr(t),t)+((-b+w+x__fr)*phi(t)-(z__fr(t)+h+rr__fr(t)-R__f)*(delta(t)+psi__fr)
+VNfr := (-phi__fr-phi(t))*diff(rr__fr(t),t)+diff(delta(t),t)*x__fr-diff(z__fr(t
+),t)*phi(t)+((-b+w+x__fr)*phi(t)-(z__fr(t)+h+rr__fr(t)-R__f)*(delta(t)+psi__fr)
 )*Omega__y(t)+((-t__f-y__fr)*Omega__x(t)-V__z(t))*phi(t)+(delta(t)*t__f-mu(t)*
 rr__fr(t)+(t__f+y__fr)*psi__fr-b+w+x__fr)*Omega__z(t)+(-z__fr(t)-rr__fr(t)-h+
 R__f)*Omega__x(t)-V__x(t)*psi__fr-delta(t)*V__x(t)+V__y(t);
@@ -98,144 +99,144 @@ t__r)*Omega__x(t)+Omega__y(t)*(x__rl-b)-V__z(t))*phi(t)+(-z__rl(t)-rr__rl(t)-h+
 R__r)*Omega__x(t)-psi__rl*(z__rl(t)+h+rr__rl(t)-R__r)*Omega__y(t)+(-mu(t)*
 rr__rl(t)+(y__rl-t__r)*psi__rl-b+x__rl)*Omega__z(t)-V__x(t)*psi__rl+V__y(t);
 VRrl := -rr__rl(t)*(omega__rl(t)-diff(mu(t),t));
-VSrr := mu(t)*diff(z__rr(t),t)-diff(mu(t),t)*rr__rr(t)+((y__rr+t__r)*mu(t)-
+VSrr := diff(z__rr(t),t)*mu(t)-diff(mu(t),t)*rr__rr(t)+((y__rr+t__r)*mu(t)-
 psi__rr*(z__rr(t)+h+rr__rr(t)-R__r))*Omega__x(t)+((b-x__rr)*mu(t)+z__rr(t)+
 rr__rr(t)+h-R__r)*Omega__y(t)+V__z(t)*mu(t)+(rr__rr(t)*phi__rr+(x__rr-b)*
 psi__rr-t__r-y__rr)*Omega__z(t)+V__y(t)*psi__rr+V__x(t);
-VNrr := (-phi__rr-phi(t))*diff(rr__rr(t),t)-phi(t)*diff(z__rr(t),t)+((-t__r-
+VNrr := (-phi__rr-phi(t))*diff(rr__rr(t),t)-diff(z__rr(t),t)*phi(t)+((-t__r-
 y__rr)*Omega__x(t)+Omega__y(t)*(x__rr-b)-V__z(t))*phi(t)+(-z__rr(t)-rr__rr(t)-h
 +R__r)*Omega__x(t)-psi__rr*(z__rr(t)+h+rr__rr(t)-R__r)*Omega__y(t)+(-mu(t)*
 rr__rr(t)+(y__rr+t__r)*psi__rr-b+x__rr)*Omega__z(t)-V__x(t)*psi__rr+V__y(t);
 VRrr := rr__rr(t)*(-omega__rr(t)+diff(mu(t),t));
-CPfl := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__fl(t)],[1]])),(frame)=(
-Matrix(4, 4, [[1,-psi__fl-delta(t),-mu(t),x__fl-delta(t)*y__fl+w-b],[delta(t)+
-psi__fl,1,-phi__fl,delta(t)*x__fl+y__fl-t__f],[mu(t),phi__fl,1,-R__f+z__fl(t)+h
-],[0,0,0,1]])),(obj)=POINT]);
-CPfr := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__fr(t)],[1]])),(frame)=(
-Matrix(4, 4, [[1,-psi__fr-delta(t),-mu(t),x__fr-delta(t)*y__fr+w-b],[delta(t)+
-psi__fr,1,-phi__fr,delta(t)*x__fr+y__fr+t__f],[mu(t),phi__fr,1,-R__f+z__fr(t)+h
-],[0,0,0,1]])),(obj)=POINT]);
-CPrl := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__rl(t)],[1]])),(frame)=(
-Matrix(4, 4, [[1,-psi__rl,-mu(t),x__rl-b],[psi__rl,1,-phi__rl,y__rl-t__r],[mu(t
-),phi__rl,1,-R__r+z__rl(t)+h],[0,0,0,1]])),(obj)=POINT]);
-CPrr := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__rr(t)],[1]])),(frame)=(
-Matrix(4, 4, [[1,-psi__rr,-mu(t),x__rr-b],[psi__rr,1,-phi__rr,y__rr+t__r],[mu(t
-),phi__rr,1,-R__r+z__rr(t)+h],[0,0,0,1]])),(obj)=POINT]);
+CPfl := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__fl(t)],[1]])),(obj)=POINT,(
+frame)=(Matrix(4, 4, [[1,-psi__fl-delta(t),-mu(t),x__fl-delta(t)*y__fl+w-b],[
+delta(t)+psi__fl,1,-phi__fl,delta(t)*x__fl+y__fl-t__f],[mu(t),phi__fl,1,-R__f+
+z__fl(t)+h],[0,0,0,1]]))]);
+CPfr := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__fr(t)],[1]])),(obj)=POINT,(
+frame)=(Matrix(4, 4, [[1,-psi__fr-delta(t),-mu(t),x__fr-delta(t)*y__fr+w-b],[
+delta(t)+psi__fr,1,-phi__fr,delta(t)*x__fr+y__fr+t__f],[mu(t),phi__fr,1,-R__f+
+z__fr(t)+h],[0,0,0,1]]))]);
+CPrl := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__rl(t)],[1]])),(obj)=POINT,(
+frame)=(Matrix(4, 4, [[1,-psi__rl,-mu(t),x__rl-b],[psi__rl,1,-phi__rl,y__rl-
+t__r],[mu(t),phi__rl,1,-R__r+z__rl(t)+h],[0,0,0,1]]))]);
+CPrr := table([(coords)=(Matrix(4, 1, [[0],[0],[rr__rr(t)],[1]])),(obj)=POINT,(
+frame)=(Matrix(4, 4, [[1,-psi__rr,-mu(t),x__rr-b],[psi__rr,1,-phi__rr,y__rr+
+t__r],[mu(t),phi__rr,1,-R__r+z__rr(t)+h],[0,0,0,1]]))]);
 frontTyreAngles := [ca__fl = phi__fl+phi(t), ca__fr = phi__fr+phi(t)];
 rearTyreAngles := [ca__rl = phi__rl+phi(t), ca__rr = phi__rr+phi(t)];
-W__fl := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4
-, [[1,-psi__fl-delta(t),mu__fl,x__fl-delta(t)*y__fl+w-b],[delta(t)+psi__fl,1,-
-phi__fl,delta(t)*x__fl+y__fl-t__f],[-mu__fl,phi__fl,1,-R__f+z__fl(t)+h],[0,0,0,
-1]])),(obj)=POINT]);
-W__fr := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4
-, [[1,-psi__fr-delta(t),mu__fr,x__fr-delta(t)*y__fr+w-b],[delta(t)+psi__fr,1,-
-phi__fr,delta(t)*x__fr+y__fr+t__f],[-mu__fr,phi__fr,1,-R__f+z__fr(t)+h],[0,0,0,
-1]])),(obj)=POINT]);
-W__rl := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4
-, [[1,-psi__rl,mu__rl,x__rl-b],[psi__rl,1,-phi__rl,y__rl-t__r],[-mu__rl,phi__rl
-,1,-R__r+z__rl(t)+h],[0,0,0,1]])),(obj)=POINT]);
-W__rr := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4, 4
-, [[1,-psi__rr,mu__rr,x__rr-b],[psi__rr,1,-phi__rr,y__rr+t__r],[-mu__rr,phi__rr
-,1,-R__r+z__rr(t)+h],[0,0,0,1]])),(obj)=POINT]);
+W__fl := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=
+(Matrix(4, 4, [[1,-psi__fl-delta(t),mu__fl,x__fl-delta(t)*y__fl+w-b],[delta(t)+
+psi__fl,1,-phi__fl,delta(t)*x__fl+y__fl-t__f],[-mu__fl,phi__fl,1,-R__f+z__fl(t)
++h],[0,0,0,1]]))]);
+W__fr := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=
+(Matrix(4, 4, [[1,-psi__fr-delta(t),mu__fr,x__fr-delta(t)*y__fr+w-b],[delta(t)+
+psi__fr,1,-phi__fr,delta(t)*x__fr+y__fr+t__f],[-mu__fr,phi__fr,1,-R__f+z__fr(t)
++h],[0,0,0,1]]))]);
+W__rl := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=
+(Matrix(4, 4, [[1,-psi__rl,mu__rl,x__rl-b],[psi__rl,1,-phi__rl,y__rl-t__r],[-
+mu__rl,phi__rl,1,-R__r+z__rl(t)+h],[0,0,0,1]]))]);
+W__rr := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)=
+(Matrix(4, 4, [[1,-psi__rr,mu__rr,x__rr-b],[psi__rr,1,-phi__rr,y__rr+t__r],[-
+mu__rr,phi__rr,1,-R__r+z__rr(t)+h],[0,0,0,1]]))]);
 T__R := Matrix(4, 4, [[1,0,-mu(t),-b+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t)-
 h)],[mu(t),-phi(t),1,-mu(t)*b-z(t)+h],[0,0,0,1]], attributes = [T__R]);
 T__P := Matrix(4, 4, [[1,0,-mu(t),-b+d+mu(t)*(z(t)-h)],[0,1,phi(t),-phi(t)*(z(t
 )-h)],[mu(t),-phi(t),1,-mu(t)*(b-d)-z(t)+h],[0,0,0,1]]);
 T__V := Matrix(4, 4, [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]], attributes = [
 T__V]);
-G__all := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(frame)=(Matrix(4,
-4, [[1,0,0,0],[0,1,0,0],[0,0,1,(z__fl(t)*m__fu+z__fr(t)*m__fu+z__rr(t)*m__ru+
-z__rl(t)*m__ru)/m],[0,0,0,1]])),(obj)=POINT]);
-I__all := Matrix(3, 3, [[((-m__fu*(m__fu-m)*z__fl(t)^2-2*(z__fr(t)*m__fu+z__rl(
-t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-\
-2*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fr(t)-m__ru*((m__ru-m)*
+G__all := table([(coords)=(Matrix(4, 1, [[0],[0],[0],[1]])),(obj)=POINT,(frame)
+=(Matrix(4, 4, [[1,0,0,0],[0,1,0,0],[0,0,1,(z__rr(t)*m__ru+z__fl(t)*m__fu+z__fr
+(t)*m__fu+z__rl(t)*m__ru)/m],[0,0,0,1]]))]);
+I__all := Matrix(3, 3, [[((-m__fu*(m__fu-m)*z__fl(t)^2-2*m__fu*(z__fr(t)*m__fu+
+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-\
+2*m__fu*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fr(t)-m__ru*((m__ru-m)*
 z__rl(t)^2+(2*z__rr(t)*m__ru-2*m*(-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-
 R__r+h))*z__rr(t)))*phi(t)^2-2*m__fu*delta(t)*m*(x__fl*z__fl(t)+x__fr*z__fr(t))
 *phi(t)-m__fu*(m__fu-m)*z__fl(t)^2+2*m__fu*(-z__fr(t)*m__fu-z__rl(t)*m__ru-
-z__rr(t)*m__ru+m*((b-w-x__fl)*mu(t)+h-R__f))*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^
-2+2*m__fu*(-z__rl(t)*m__ru-z__rr(t)*m__ru+m*((b-w-x__fr)*mu(t)+h-R__f))*z__fr(t
-)-m__ru*(m__ru-m)*z__rl(t)^2+2*(-z__rr(t)*m__ru+m*((b-x__rl)*mu(t)+h-R__r))*
-m__ru*z__rl(t)-m__ru*(m__ru-m)*z__rr(t)^2+2*m*((b-x__rr)*mu(t)+h-R__r)*m__ru*
-z__rr(t)+2*m*(i__fy*(psi__fl+psi__fr)*delta(t)+1/2*I__xx))/m,(((-m__fu*(m__fu-m
-)*z__fl(t)^2-2*(z__fr(t)*m__fu+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu
-*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+
-h))*m__fu*z__fr(t)-m__ru*((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*m__ru-m*(-R__r+h))*
-z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-R__r+h))*z__rr(t)))*mu(t)-m*(m__fu*(delta(t)
-*y__fl+b-w-x__fl)*z__fl(t)+m__fu*(delta(t)*y__fr+b-w-x__fr)*z__fr(t)+m__ru*((b-
-x__rl)*z__rl(t)+z__rr(t)*(b-x__rr))))*phi(t)-2*m*(1/2*(m__fu*(delta(t)*x__fl+
-y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+((y__rl-t__r)*
-z__rl(t)+z__rr(t)*(y__rr+t__r))*m__ru)*mu(t)+i__fy*delta(t)))/m,(-m*(m__fu*(b-w
+z__rr(t)*m__ru+((b-w-x__fl)*mu(t)+h-R__f)*m)*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^
+2+2*(-z__rl(t)*m__ru-z__rr(t)*m__ru+((b-w-x__fr)*mu(t)+h-R__f)*m)*m__fu*z__fr(t
+)-m__ru*(m__ru-m)*z__rl(t)^2+2*m__ru*(-z__rr(t)*m__ru+((b-x__rl)*mu(t)+h-R__r)*
+m)*z__rl(t)-m__ru*(m__ru-m)*z__rr(t)^2+2*m__ru*m*((b-x__rr)*mu(t)+h-R__r)*z__rr
+(t)+2*(i__fy*(psi__fl+psi__fr)*delta(t)+1/2*I__xx)*m)/m,(((-m__fu*(m__fu-m)*
+z__fl(t)^2-2*m__fu*(z__fr(t)*m__fu+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*
+z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2*m__fu*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-
+R__f+h))*z__fr(t)-m__ru*((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*m__ru-m*(-R__r+h))*
+z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-R__r+h))*z__rr(t)))*mu(t)-(m__fu*(delta(t)*
+y__fl+b-x__fl-w)*z__fl(t)+m__fu*(delta(t)*y__fr+b-x__fr-w)*z__fr(t)+m__ru*((b-
+x__rl)*z__rl(t)+z__rr(t)*(b-x__rr)))*m)*phi(t)-2*(1/2*(m__fu*(delta(t)*x__fl+
+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+m__ru*((y__rl-
+t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r)))*mu(t)+i__fy*delta(t))*m)/m,(-(m__fu*(b-w
 -x__fl)*z__fl(t)+m__fu*(b-w-x__fr)*z__fr(t)+m__ru*((b-x__rl)*z__rl(t)+z__rr(t)*
-(b-x__rr)))*mu(t)^2+(m__fu*(m__fu-m)*z__fl(t)^2+2*m__fu*(z__fr(t)*m__fu+z__rl(t
-)*m__ru+z__rr(t)*m__ru-1/2*m*((-t__f+y__fl)*phi(t)+2*h-2*R__f))*z__fl(t)+m__fu*
-(m__fu-m)*z__fr(t)^2+2*(z__rl(t)*m__ru+z__rr(t)*m__ru-1/2*m*(phi(t)*(t__f+y__fr
-)+2*h-2*R__f))*m__fu*z__fr(t)+((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*m__ru-m*(1/2*
-phi(t)*(y__rl-t__r)+h-R__r))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(1/2*phi(t)*(
-y__rr+t__r)+h-R__r))*z__rr(t))*m__ru)*mu(t)+m*(m__fu*(delta(t)*y__fl+b-w-x__fl)
-*z__fl(t)+m__fu*(delta(t)*y__fr+b-w-x__fr)*z__fr(t)+m__ru*(b-x__rl)*z__rl(t)+
-m__ru*(b-x__rr)*z__rr(t)-i__fy*(phi__fl+phi__fr)*delta(t)-I__xz))/m],[(((-m__fu
-*(m__fu-m)*z__fl(t)^2-2*(z__fr(t)*m__fu+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+
-h))*m__fu*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2*(z__rl(t)*m__ru+z__rr(t)*m__ru-
-m*(-R__f+h))*m__fu*z__fr(t)-m__ru*((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*m__ru-m*(-
-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-R__r+h))*z__rr(t)))*mu(t)-m*(m__fu*
-(delta(t)*y__fl+b-w-x__fl)*z__fl(t)+m__fu*(delta(t)*y__fr+b-w-x__fr)*z__fr(t)+
-m__ru*((b-x__rl)*z__rl(t)+z__rr(t)*(b-x__rr))))*phi(t)-2*m*(1/2*(m__fu*(delta(t
-)*x__fl+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+((y__rl
--t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r))*m__ru)*mu(t)+i__fy*delta(t)))/m,((m__fu*
-(m-m__fu)*z__fl(t)^2+2*(-z__fr(t)*m__fu-z__rl(t)*m__ru-z__rr(t)*m__ru+m*(-R__f+
-h))*m__fu*z__fl(t)+m__fu*(m-m__fu)*z__fr(t)^2+2*m__fu*(-z__rl(t)*m__ru-z__rr(t)
-*m__ru+m*(-R__f+h))*z__fr(t)+2*m__ru*(1/2*(-m__ru+m)*z__rl(t)^2+(-z__rr(t)*
-m__ru+m*(-R__r+h))*z__rl(t)+z__rr(t)*(1/2*(-m__ru+m)*z__rr(t)+m*(-R__r+h))))*mu
-(t)^2-2*delta(t)*m*m__fu*(z__fl(t)*y__fl+y__fr*z__fr(t))*mu(t)+m__fu*(m-m__fu)*
-z__fl(t)^2+2*(-z__fr(t)*m__fu-z__rl(t)*m__ru-z__rr(t)*m__ru+m*((-t__f+y__fl)*
-phi(t)+h-R__f))*m__fu*z__fl(t)+m__fu*(m-m__fu)*z__fr(t)^2+2*m__fu*(-z__rl(t)*
-m__ru-z__rr(t)*m__ru+m*(phi(t)*(t__f+y__fr)+h-R__f))*z__fr(t)-m__ru*(m__ru-m)*
-z__rl(t)^2+2*(-z__rr(t)*m__ru+(phi(t)*(y__rl-t__r)+h-R__r)*m)*m__ru*z__rl(t)-
-m__ru*(m__ru-m)*z__rr(t)^2+2*(phi(t)*(y__rr+t__r)+h-R__r)*m*m__ru*z__rr(t)+
-I__yy*m)/m,(m*(m__fu*(-t__f+y__fl)*z__fl(t)+m__fu*(t__f+y__fr)*z__fr(t)+((y__rl
--t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r))*m__ru)*phi(t)^2+(-m__fu*(m__fu-m)*z__fl(
-t)^2+(-2*z__fr(t)*m__fu-2*z__rl(t)*m__ru-2*z__rr(t)*m__ru+m*((b-w-x__fl)*mu(t)+
-2*h-2*R__f))*m__fu*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2+m__fu*(-2*z__rl(t)*m__ru
--2*z__rr(t)*m__ru+m*((b-w-x__fr)*mu(t)+2*h-2*R__f))*z__fr(t)+((-m__ru+m)*z__rl(
-t)^2+(-2*z__rr(t)*m__ru+m*((b-x__rl)*mu(t)+2*h-2*R__r))*z__rl(t)+((-m__ru+m)*
-z__rr(t)+m*((b-x__rr)*mu(t)+2*h-2*R__r))*z__rr(t))*m__ru)*phi(t)-m*(m__fu*(
-delta(t)*x__fl+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+
-((y__rl-t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r))*m__ru))/m],[(-m*(m__fu*(b-w-x__fl
-)*z__fl(t)+m__fu*(b-w-x__fr)*z__fr(t)+m__ru*((b-x__rl)*z__rl(t)+z__rr(t)*(b-
-x__rr)))*mu(t)^2+(m__fu*(m__fu-m)*z__fl(t)^2+2*m__fu*(z__fr(t)*m__fu+z__rl(t)*
-m__ru+z__rr(t)*m__ru-1/2*m*((-t__f+y__fl)*phi(t)+2*h-2*R__f))*z__fl(t)+m__fu*(
-m__fu-m)*z__fr(t)^2+2*(z__rl(t)*m__ru+z__rr(t)*m__ru-1/2*m*(phi(t)*(t__f+y__fr)
-+2*h-2*R__f))*m__fu*z__fr(t)+((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*m__ru-m*(1/2*phi
-(t)*(y__rl-t__r)+h-R__r))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(1/2*phi(t)*(y__rr+
-t__r)+h-R__r))*z__rr(t))*m__ru)*mu(t)+m*(m__fu*(delta(t)*y__fl+b-w-x__fl)*z__fl
-(t)+m__fu*(delta(t)*y__fr+b-w-x__fr)*z__fr(t)+m__ru*(b-x__rl)*z__rl(t)+m__ru*(b
--x__rr)*z__rr(t)-i__fy*(phi__fl+phi__fr)*delta(t)-I__xz))/m,(m*(m__fu*(-t__f+
-y__fl)*z__fl(t)+m__fu*(t__f+y__fr)*z__fr(t)+((y__rl-t__r)*z__rl(t)+z__rr(t)*(
-y__rr+t__r))*m__ru)*phi(t)^2+(-m__fu*(m__fu-m)*z__fl(t)^2+(-2*z__fr(t)*m__fu-2*
-z__rl(t)*m__ru-2*z__rr(t)*m__ru+m*((b-w-x__fl)*mu(t)+2*h-2*R__f))*m__fu*z__fl(t
-)-m__fu*(m__fu-m)*z__fr(t)^2+m__fu*(-2*z__rl(t)*m__ru-2*z__rr(t)*m__ru+m*((b-w-
-x__fr)*mu(t)+2*h-2*R__f))*z__fr(t)+((-m__ru+m)*z__rl(t)^2+(-2*z__rr(t)*m__ru+m*
-((b-x__rl)*mu(t)+2*h-2*R__r))*z__rl(t)+((-m__ru+m)*z__rr(t)+m*((b-x__rr)*mu(t)+
-2*h-2*R__r))*z__rr(t))*m__ru)*phi(t)-m*(m__fu*(delta(t)*x__fl+y__fl-t__f)*z__fl
-(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+((y__rl-t__r)*z__rl(t)+z__rr(t)*
-(y__rr+t__r))*m__ru))/m,((-m__fu*(m__fu-m)*z__fl(t)^2-2*(z__fr(t)*m__fu+z__rl(t
-)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2
-*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fr(t)-m__ru*((m__ru-m)*
-z__rl(t)^2+(2*z__rr(t)*m__ru-2*m*(-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-
-R__r+h))*z__rr(t)))*mu(t)^2-2*m*(m__fu*(delta(t)*y__fl+b-w-x__fl)*z__fl(t)+
-m__fu*(delta(t)*y__fr+b-w-x__fr)*z__fr(t)+m__ru*((b-x__rl)*z__rl(t)+z__rr(t)*(b
--x__rr)))*mu(t)+(-m__fu*(m__fu-m)*z__fl(t)^2-2*(z__fr(t)*m__fu+z__rl(t)*m__ru+
-z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2*(z__rl(
-t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*m__fu*z__fr(t)-m__ru*((m__ru-m)*z__rl(t)^2
-+(2*z__rr(t)*m__ru-2*m*(-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-R__r+h))*
-z__rr(t)))*phi(t)^2-2*m*(m__fu*(delta(t)*x__fl+y__fl-t__f)*z__fl(t)+m__fu*(
-delta(t)*x__fr+y__fr+t__f)*z__fr(t)+((y__rl-t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r
-))*m__ru)*phi(t)+I__zz*m)/m]]);
-CA := table([(coords)=(Matrix(4, 1, [[b__A],[0],[-h__A],[1]])),(frame)=(Matrix(\
-4, 4, [[1,0,-mu(t),-b+1/2*x__rl+1/2*x__rr-1/2*(rr__rr(t)+rr__rl(t))*mu(t)],[0,1
-,phi(t),1/2*y__rl+1/2*y__rr-1/2*rr__rl(t)*phi__rl-1/2*rr__rr(t)*phi__rr],[mu(t)
-,-phi(t),1,h+1/2*rr__rl(t)+1/2*rr__rr(t)-R__r+1/2*z__rl(t)+1/2*z__rr(t)],[0,0,0
-,1]])),(obj)=POINT]);
+(b-x__rr)))*m*mu(t)^2+(m__fu*(m__fu-m)*z__fl(t)^2+2*(z__fr(t)*m__fu+z__rl(t)*
+m__ru+z__rr(t)*m__ru-1/2*((-t__f+y__fl)*phi(t)+2*h-2*R__f)*m)*m__fu*z__fl(t)+
+m__fu*(m__fu-m)*z__fr(t)^2+2*(z__rl(t)*m__ru+z__rr(t)*m__ru-1/2*(phi(t)*(t__f+
+y__fr)+2*h-2*R__f)*m)*m__fu*z__fr(t)+m__ru*((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*
+m__ru-(1/2*phi(t)*(y__rl-t__r)+h-R__r)*m)*z__rl(t)+z__rr(t)*((m__ru-m)*z__rr(t)
+-2*(1/2*phi(t)*(y__rr+t__r)+h-R__r)*m)))*mu(t)+(m__fu*(delta(t)*y__fl+b-x__fl-w
+)*z__fl(t)+m__fu*(delta(t)*y__fr+b-x__fr-w)*z__fr(t)+m__ru*(b-x__rl)*z__rl(t)+
+m__ru*(b-x__rr)*z__rr(t)-i__fy*(phi__fl+phi__fr)*delta(t)-I__xz)*m)/m],[(((-
+m__fu*(m__fu-m)*z__fl(t)^2-2*m__fu*(z__fr(t)*m__fu+z__rl(t)*m__ru+z__rr(t)*
+m__ru-m*(-R__f+h))*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2-2*m__fu*(z__rl(t)*m__ru+
+z__rr(t)*m__ru-m*(-R__f+h))*z__fr(t)-m__ru*((m__ru-m)*z__rl(t)^2+2*(z__rr(t)*
+m__ru-m*(-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(t)-2*m*(-R__r+h))*z__rr(t)))*mu(t)
+-(m__fu*(delta(t)*y__fl+b-x__fl-w)*z__fl(t)+m__fu*(delta(t)*y__fr+b-x__fr-w)*
+z__fr(t)+m__ru*((b-x__rl)*z__rl(t)+z__rr(t)*(b-x__rr)))*m)*phi(t)-2*(1/2*(m__fu
+*(delta(t)*x__fl+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t
+)+m__ru*((y__rl-t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r)))*mu(t)+i__fy*delta(t))*m)
+/m,((m__fu*(m-m__fu)*z__fl(t)^2+2*m__fu*(-z__fr(t)*m__fu-z__rl(t)*m__ru-z__rr(t
+)*m__ru+m*(-R__f+h))*z__fl(t)+m__fu*(m-m__fu)*z__fr(t)^2+2*m__fu*(-z__rl(t)*
+m__ru-z__rr(t)*m__ru+m*(-R__f+h))*z__fr(t)+2*m__ru*(1/2*(-m__ru+m)*z__rl(t)^2+(
+-z__rr(t)*m__ru+m*(-R__r+h))*z__rl(t)+z__rr(t)*(1/2*(-m__ru+m)*z__rr(t)+m*(-
+R__r+h))))*mu(t)^2-2*delta(t)*m*m__fu*(y__fl*z__fl(t)+y__fr*z__fr(t))*mu(t)+
+m__fu*(m-m__fu)*z__fl(t)^2+2*m__fu*(-z__fr(t)*m__fu-z__rl(t)*m__ru-z__rr(t)*
+m__ru+((-t__f+y__fl)*phi(t)+h-R__f)*m)*z__fl(t)+m__fu*(m-m__fu)*z__fr(t)^2+2*
+m__fu*(-z__rl(t)*m__ru-z__rr(t)*m__ru+m*(phi(t)*(t__f+y__fr)+h-R__f))*z__fr(t)-
+m__ru*(m__ru-m)*z__rl(t)^2+2*(-z__rr(t)*m__ru+m*(phi(t)*(y__rl-t__r)+h-R__r))*
+m__ru*z__rl(t)-m__ru*(m__ru-m)*z__rr(t)^2+2*m*m__ru*(phi(t)*(y__rr+t__r)+h-R__r
+)*z__rr(t)+I__yy*m)/m,(m*(m__fu*(-t__f+y__fl)*z__fl(t)+m__fu*(t__f+y__fr)*z__fr
+(t)+m__ru*((y__rl-t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r)))*phi(t)^2+(-m__fu*(
+m__fu-m)*z__fl(t)^2+m__fu*(-2*z__fr(t)*m__fu-2*z__rl(t)*m__ru-2*z__rr(t)*m__ru+
+((b-w-x__fl)*mu(t)+2*h-2*R__f)*m)*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2+m__fu*(-2
+*z__rl(t)*m__ru-2*z__rr(t)*m__ru+((b-w-x__fr)*mu(t)+2*h-2*R__f)*m)*z__fr(t)+
+m__ru*((-m__ru+m)*z__rl(t)^2+(-2*z__rr(t)*m__ru+((b-x__rl)*mu(t)+2*h-2*R__r)*m)
+*z__rl(t)+((-m__ru+m)*z__rr(t)+((b-x__rr)*mu(t)+2*h-2*R__r)*m)*z__rr(t)))*phi(t
+)-m*(m__fu*(delta(t)*x__fl+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+
+t__f)*z__fr(t)+m__ru*((y__rl-t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r))))/m],[(-(
+m__fu*(b-w-x__fl)*z__fl(t)+m__fu*(b-w-x__fr)*z__fr(t)+m__ru*((b-x__rl)*z__rl(t)
++z__rr(t)*(b-x__rr)))*m*mu(t)^2+(m__fu*(m__fu-m)*z__fl(t)^2+2*(z__fr(t)*m__fu+
+z__rl(t)*m__ru+z__rr(t)*m__ru-1/2*((-t__f+y__fl)*phi(t)+2*h-2*R__f)*m)*m__fu*
+z__fl(t)+m__fu*(m__fu-m)*z__fr(t)^2+2*(z__rl(t)*m__ru+z__rr(t)*m__ru-1/2*(phi(t
+)*(t__f+y__fr)+2*h-2*R__f)*m)*m__fu*z__fr(t)+m__ru*((m__ru-m)*z__rl(t)^2+2*(
+z__rr(t)*m__ru-(1/2*phi(t)*(y__rl-t__r)+h-R__r)*m)*z__rl(t)+z__rr(t)*((m__ru-m)
+*z__rr(t)-2*(1/2*phi(t)*(y__rr+t__r)+h-R__r)*m)))*mu(t)+(m__fu*(delta(t)*y__fl+
+b-x__fl-w)*z__fl(t)+m__fu*(delta(t)*y__fr+b-x__fr-w)*z__fr(t)+m__ru*(b-x__rl)*
+z__rl(t)+m__ru*(b-x__rr)*z__rr(t)-i__fy*(phi__fl+phi__fr)*delta(t)-I__xz)*m)/m,
+(m*(m__fu*(-t__f+y__fl)*z__fl(t)+m__fu*(t__f+y__fr)*z__fr(t)+m__ru*((y__rl-t__r
+)*z__rl(t)+z__rr(t)*(y__rr+t__r)))*phi(t)^2+(-m__fu*(m__fu-m)*z__fl(t)^2+m__fu*
+(-2*z__fr(t)*m__fu-2*z__rl(t)*m__ru-2*z__rr(t)*m__ru+((b-w-x__fl)*mu(t)+2*h-2*
+R__f)*m)*z__fl(t)-m__fu*(m__fu-m)*z__fr(t)^2+m__fu*(-2*z__rl(t)*m__ru-2*z__rr(t
+)*m__ru+((b-w-x__fr)*mu(t)+2*h-2*R__f)*m)*z__fr(t)+m__ru*((-m__ru+m)*z__rl(t)^2
++(-2*z__rr(t)*m__ru+((b-x__rl)*mu(t)+2*h-2*R__r)*m)*z__rl(t)+((-m__ru+m)*z__rr(
+t)+((b-x__rr)*mu(t)+2*h-2*R__r)*m)*z__rr(t)))*phi(t)-m*(m__fu*(delta(t)*x__fl+
+y__fl-t__f)*z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+m__ru*((y__rl-
+t__r)*z__rl(t)+z__rr(t)*(y__rr+t__r))))/m,((-m__fu*(m__fu-m)*z__fl(t)^2-2*m__fu
+*(z__fr(t)*m__fu+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fl(t)-m__fu*(
+m__fu-m)*z__fr(t)^2-2*m__fu*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fr(t
+)-m__ru*((m__ru-m)*z__rl(t)^2+(2*z__rr(t)*m__ru-2*m*(-R__r+h))*z__rl(t)+((m__ru
+-m)*z__rr(t)-2*m*(-R__r+h))*z__rr(t)))*mu(t)^2-2*(m__fu*(delta(t)*y__fl+b-x__fl
+-w)*z__fl(t)+m__fu*(delta(t)*y__fr+b-x__fr-w)*z__fr(t)+m__ru*((b-x__rl)*z__rl(t
+)+z__rr(t)*(b-x__rr)))*m*mu(t)+(-m__fu*(m__fu-m)*z__fl(t)^2-2*m__fu*(z__fr(t)*
+m__fu+z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fl(t)-m__fu*(m__fu-m)*z__fr
+(t)^2-2*m__fu*(z__rl(t)*m__ru+z__rr(t)*m__ru-m*(-R__f+h))*z__fr(t)-m__ru*((
+m__ru-m)*z__rl(t)^2+(2*z__rr(t)*m__ru-2*m*(-R__r+h))*z__rl(t)+((m__ru-m)*z__rr(
+t)-2*m*(-R__r+h))*z__rr(t)))*phi(t)^2-2*(m__fu*(delta(t)*x__fl+y__fl-t__f)*
+z__fl(t)+m__fu*(delta(t)*x__fr+y__fr+t__f)*z__fr(t)+m__ru*((y__rl-t__r)*z__rl(t
+)+z__rr(t)*(y__rr+t__r)))*m*phi(t)+I__zz*m)/m]]);
+CA := table([(coords)=(Matrix(4, 1, [[b__A],[0],[-h__A],[1]])),(obj)=POINT,(
+frame)=(Matrix(4, 4, [[1,0,-mu(t),-b+1/2*x__rl+1/2*x__rr-1/2*(rr__rr(t)+rr__rl(
+t))*mu(t)],[0,1,phi(t),1/2*y__rl+1/2*y__rr-1/2*rr__rl(t)*phi__rl-1/2*rr__rr(t)*
+phi__rr],[mu(t),-phi(t),1,h+1/2*rr__rl(t)+1/2*rr__rr(t)-R__r+1/2*z__rl(t)+1/2*
+z__rr(t)],[0,0,0,1]]))]);
 xifl_eqn := [xi__fl(t) = R__f-rr__fl(t)];
 xifr_eqn := [xi__fr(t) = R__f-rr__fr(t)];
 xirl_eqn := [xi__rl(t) = R__r-rr__rl(t)];
@@ -245,274 +246,274 @@ V__x(t), V__z(t), V__y(t), delta__dot(t), Omega__z(t), Omega__x(t), Omega__y(t)
 , z__fldot(t), z__frdot(t), z__rldot(t), z__rrdot(t), omega__fl(t), omega__fr(t
 ), omega__rl(t), omega__rr(t), rr__fl(t), rr__fr(t), rr__rl(t), rr__rr(t)];
 uu := [delta__ddot(t), Tau__fl(t), Tau__fr(t), Tau__rl(t), Tau__rr(t)];
-xx_eqns := [-Omega__x(t)+omega__x(t)-mu(t)*Omega__z(t)+diff(phi(t),t), omega__y
-(t)-Omega__y(t)+phi(t)*Omega__z(t)+diff(mu(t),t), -(b-d)*omega__y(t)+V__x(t)*mu
-(t)-V__y(t)*phi(t)-V__z(t)+v__w(t)+diff(z(t),t), -delta__dot(t)+diff(delta(t),t
+xx_eqns := [omega__x(t)-Omega__x(t)-mu(t)*Omega__z(t)+diff(phi(t),t), -Omega__y
+(t)+omega__y(t)+phi(t)*Omega__z(t)+diff(mu(t),t), -(b-d)*omega__y(t)+V__x(t)*mu
+(t)-phi(t)*V__y(t)-V__z(t)+v__w(t)+diff(z(t),t), -delta__dot(t)+diff(delta(t),t
 ), -delta__ddot(t)+diff(delta__dot(t),t), -z__fldot(t)+diff(z__fl(t),t), -
 z__frdot(t)+diff(z__fr(t),t), -z__rldot(t)+diff(z__rl(t),t), -z__rrdot(t)+diff(
-z__rr(t),t), (z__fl(t)*m__fu+z__fr(t)*m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*diff
-(Omega__y(t),t)+2*z__fldot(t)*Omega__y(t)*m__fu+2*Omega__y(t)*z__frdot(t)*m__fu
-+2*Omega__y(t)*z__rldot(t)*m__ru+2*Omega__y(t)*z__rrdot(t)*m__ru+diff(V__x(t),t
-)*m+V__z(t)*Omega__y(t)*m+(z__fl(t)*Omega__x(t)*m__fu+Omega__x(t)*z__fr(t)*
-m__fu+Omega__x(t)*z__rr(t)*m__ru+Omega__x(t)*z__rl(t)*m__ru-V__y(t)*m)*Omega__z
-(t)-g__x*m-X__fl(t)-X__fr(t)-X__rl(t)-X__rr(t)-F__Ax-F__x+Y__fl(t)*psi__fl+
-Y__fr(t)*psi__fr+psi__rl*Y__rl(t)+psi__rr*Y__rr(t)+(Y__fr(t)+Y__fl(t))*delta(t)
-+(g__z*m-N__fl(t)-N__fr(t)-N__rl(t)-N__rr(t)+F__Az+F__z)*mu(t), -(z__fl(t)*
-m__fu+z__fr(t)*m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*diff(Omega__x(t),t)-2*
-z__fldot(t)*Omega__x(t)*m__fu-2*Omega__x(t)*z__frdot(t)*m__fu-2*Omega__x(t)*
-z__rldot(t)*m__ru-2*Omega__x(t)*z__rrdot(t)*m__ru+diff(V__y(t),t)*m-V__z(t)*
-Omega__x(t)*m+(z__fl(t)*Omega__y(t)*m__fu+Omega__y(t)*z__fr(t)*m__fu+Omega__y(t
-)*z__rr(t)*m__ru+Omega__y(t)*z__rl(t)*m__ru+V__x(t)*m)*Omega__z(t)-g__y*m-Y__fl
-(t)-Y__fr(t)-Y__rl(t)-Y__rr(t)-F__Ay-F__y-X__fl(t)*psi__fl-X__fr(t)*psi__fr-
-X__rl(t)*psi__rl-X__rr(t)*psi__rr-(X__fr(t)+X__fl(t))*delta(t)-phi(t)*(g__z*m-
-N__fl(t)-N__fr(t)-N__rl(t)-N__rr(t)+F__Az+F__z), diff(z__fldot(t),t)*m__fu+diff
-(z__frdot(t),t)*m__fu+diff(z__rldot(t),t)*m__ru+diff(z__rrdot(t),t)*m__ru+diff(
-V__z(t),t)*m+(g__y*m+Y__fl(t)+Y__fr(t)+Y__rl(t)+Y__rr(t)+F__y+F__Ay)*phi(t)-mu(
-t)*(g__x*m+X__fl(t)+X__fr(t)+X__rl(t)+X__rr(t)+F__x+F__Ax)-(z__fl(t)*m__fu+
-z__fr(t)*m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*Omega__x(t)^2+V__y(t)*Omega__x(t)
-*m-(z__fl(t)*m__fu+z__fr(t)*m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*Omega__y(t)^2-
-V__x(t)*Omega__y(t)*m-g__z*m-F__Az+N__fl(t)+N__fr(t)+N__rl(t)+N__rr(t)-F__z, -(
--h+R__r)*Y__rl(t)-T__frx-(-h+R__r)*Y__rr(t)+(X__rr(t)*z__rr(t)+rr__rr(t)*X__rr(
-t)-X__rr(t)*R__r+X__rr(t)*h+i__ry*diff(omega__rr(t),t)+T__rry)*psi__rr+(X__fl(t
-)*z__fl(t)+rr__fl(t)*X__fl(t)-X__fl(t)*R__f+X__fl(t)*h+i__fy*diff(omega__fl(t),
-t)+T__fly)*psi__fl+1/2*(-2*i__ry*omega__rr(t)*Omega__y(t)+F__Az*rr__rr(t)-2*
-N__rr(t)*rr__rr(t))*phi__rr-(i__fy*omega__fr(t)*Omega__y(t)+N__fr(t)*rr__fr(t))
-*phi__fr+1/2*(-2*i__ry*omega__rl(t)*Omega__y(t)+F__Az*rr__rl(t)-2*rr__rl(t)*
-N__rl(t))*phi__rl-(i__fy*omega__fl(t)*Omega__y(t)+N__fl(t)*rr__fl(t))*phi__fl+(
-X__fr(t)*z__fr(t)+rr__fr(t)*X__fr(t)-X__fr(t)*R__f+X__fr(t)*h+i__fy*diff(
-omega__fr(t),t)+T__fry)*psi__fr+(rr__rl(t)*X__rl(t)+X__rl(t)*z__rl(t)-X__rl(t)*
-R__r+X__rl(t)*h+i__ry*diff(omega__rl(t),t)+T__rly)*psi__rl+(Omega__x(t)*V__z(t)
-*m__fu+g__y*m__fu+Y__fr(t))*z__fr(t)+(Omega__x(t)*V__z(t)*m__fu+g__y*m__fu+
-Y__fl(t))*z__fl(t)-F__Ay*h__A+(-z__fl(t)*Omega__y(t)^2*m__fu*x__fl-z__fr(t)*
-Omega__y(t)^2*m__fu*x__fr+Omega__x(t)*z__fl(t)*Omega__y(t)*m__fu*y__fl+Omega__x
-(t)*z__fr(t)*Omega__y(t)*m__fu*y__fr+T__fry+2*Omega__z(t)*i__fy*Omega__x(t)+
-X__fr(t)*z__fr(t)-X__fr(t)*R__f+X__fr(t)*h+N__fr(t)*x__fr+z__fl(t)*Omega__z(t)^
-2*m__fu*x__fl+z__fr(t)*Omega__z(t)^2*m__fu*x__fr+X__fl(t)*z__fl(t)-X__fl(t)*
-R__f+X__fl(t)*h+N__fl(t)*x__fl+m__fu*diff(z__fldot(t),t)*x__fl+diff(z__frdot(t)
-,t)*m__fu*x__fr+rr__fl(t)*X__fl(t)+rr__fr(t)*X__fr(t)+z__fl(t)*diff(Omega__z(t)
-,t)*m__fu*y__fl+z__fr(t)*diff(Omega__z(t),t)*m__fu*y__fr-2*i__fy*diff(Omega__y(
-t),t)+i__fy*diff(omega__fl(t),t)+i__fy*diff(omega__fr(t),t)+T__fly)*delta(t)+(2
-*z__fl(t)*Omega__z(t)*m__fu*y__fl+2*z__fr(t)*Omega__z(t)*m__fu*y__fr-2*i__fy*
-Omega__y(t)+i__fy*omega__fl(t)+i__fy*omega__fr(t))*delta__dot(t)+N__fr(t)*(t__f
-+y__fr)+V__z(t)*m__ru*(z__rl(t)+z__rr(t))*Omega__x(t)-F__Ay*R__r-T__rlx+(-R__f+
-h+rr__fl(t))*Y__fl(t)+(-R__f+h+rr__fr(t))*Y__fr(t)-T__rrx+1/2*(F__Ay+2*Y__rl(t)
-)*rr__rl(t)-1/2*F__Az*(y__rl+y__rr)+(m__fu*z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-
-z__fr(t)*m__fu*t__f-z__fr(t)*m__fu*y__fr+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*
-y__rl-m__ru*z__rr(t)*t__r-m__ru*z__rr(t)*y__rr)*Omega__y(t)^2-(-z__fl(t)*
-Omega__x(t)*b*m__fu+z__fl(t)*Omega__x(t)*m__fu*w+z__fl(t)*Omega__x(t)*m__fu*
-x__fl-z__fr(t)*Omega__x(t)*b*m__fu+z__fr(t)*Omega__x(t)*m__fu*w+z__fr(t)*
-Omega__x(t)*m__fu*x__fr-z__rl(t)*Omega__x(t)*b*m__ru+z__rl(t)*Omega__x(t)*m__ru
-*x__rl-z__rr(t)*Omega__x(t)*b*m__ru+z__rr(t)*Omega__x(t)*m__ru*x__rr-2*z__fl(t)
-*Omega__z(t)*R__f*m__fu+2*z__fl(t)*Omega__z(t)*h*m__fu-2*z__fr(t)*Omega__z(t)*
-R__f*m__fu+2*z__fr(t)*Omega__z(t)*h*m__fu-2*z__rl(t)*Omega__z(t)*R__r*m__ru+2*
-z__rl(t)*Omega__z(t)*h*m__ru-2*z__rr(t)*Omega__z(t)*R__r*m__ru+2*z__rr(t)*
-Omega__z(t)*h*m__ru+I__yy*Omega__z(t)+Omega__z(t)*i__tg+z__fl(t)^2*Omega__z(t)*
-m__fu+z__fr(t)^2*Omega__z(t)*m__fu+z__rl(t)^2*Omega__z(t)*m__ru+z__rr(t)^2*
-Omega__z(t)*m__ru-I__zz*Omega__z(t)+I__xz*Omega__x(t))*Omega__y(t)-M__x-N__fl(t
-)*(t__f-y__fl)+1/2*(2*g__y*m__ru+F__Ay+2*Y__rr(t))*z__rr(t)-(t__f-y__fl)*m__fu*
-diff(z__fldot(t),t)+m__fu*(t__f+y__fr)*diff(z__frdot(t),t)-m__ru*(-y__rl+t__r)*
-diff(z__rldot(t),t)+m__ru*(y__rr+t__r)*diff(z__rrdot(t),t)-m__fu*(x__fl*z__fl(t
-)+x__fr*z__fr(t))*delta__ddot(t)+2*m__fu*Omega__x(t)*(-R__f+z__fl(t)+h)*
-z__fldot(t)+2*m__fu*Omega__x(t)*(-R__f+z__fr(t)+h)*z__frdot(t)+2*Omega__x(t)*
-m__ru*(-R__r+z__rl(t)+h)*z__rldot(t)+2*Omega__x(t)*m__ru*(-R__r+z__rr(t)+h)*
-z__rrdot(t)-(z__fl(t)*m__fu+z__fr(t)*m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*diff(
-V__y(t),t)+N__rr(t)*(y__rr+t__r)-N__rl(t)*(-y__rl+t__r)+1/2*(2*g__y*m__ru+F__Ay
-+2*Y__rl(t))*z__rl(t)-z(t)*F__y+1/2*(2*Y__fl(t)*y__fl-2*N__rr(t)*rr__rr(t)+2*
-z__rr(t)*g__z*m__ru-2*N__fr(t)*z__fr(t)+2*N__fr(t)*R__f-2*N__fr(t)*h+2*Y__fr(t)
-*t__f+2*Y__fr(t)*y__fr-2*rr__rl(t)*N__rl(t)+F__Az*rr__rl(t)+F__Az*rr__rr(t)+
-F__Ay*y__rl+F__Ay*y__rr+2*z__rl(t)*g__z*m__ru+2*F__Az*h-2*F__Az*R__r+F__Az*
-z__rr(t)+F__Az*z__rl(t)-2*N__fl(t)*z__fl(t)+2*N__fl(t)*R__f-2*N__fl(t)*h-2*
-Y__fl(t)*t__f-2*N__fl(t)*rr__fl(t)-2*N__rr(t)*z__rr(t)+2*N__rr(t)*R__r-2*N__rr(
-t)*h+2*z__fr(t)*g__z*m__fu+2*z__fl(t)*g__z*m__fu+2*Y__rr(t)*t__r+2*Y__rr(t)*
-y__rr-2*N__rl(t)*z__rl(t)+2*N__rl(t)*R__r-2*N__rl(t)*h-2*Y__rl(t)*t__r+2*Y__rl(
-t)*y__rl-2*N__fr(t)*rr__fr(t))*phi(t)+1/2*(F__Ay+2*Y__rr(t))*rr__rr(t)-(m__fu*
-z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-z__fr(t)*m__fu*t__f-z__fr(t)*m__fu*y__fr+
-z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-m__ru*z__rr(t)*t__r-m__ru*z__rr(t)*
-y__rr)*Omega__z(t)^2-M__Ax+(m__fu*z__fl(t)^2-2*m__fu*z__fl(t)*R__f+2*m__fu*
-z__fl(t)*h+m__fu*z__fr(t)^2-2*z__fr(t)*m__fu*R__f+2*z__fr(t)*m__fu*h+z__rl(t)^2
-*m__ru-2*z__rl(t)*m__ru*R__r+2*z__rl(t)*m__ru*h+z__rr(t)^2*m__ru-2*m__ru*z__rr(
-t)*R__r+2*m__ru*z__rr(t)*h+I__xx)*diff(Omega__x(t),t)-(-m__fu*z__fl(t)*b+m__fu*
-z__fl(t)*w+m__fu*z__fl(t)*x__fl-z__fr(t)*m__fu*b+z__fr(t)*m__fu*w+z__fr(t)*
-m__fu*x__fr-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-m__ru*z__rr(t)*b+m__ru*z__rr(
-t)*x__rr+I__xz)*diff(Omega__z(t),t)-T__flx-1/2*(F__Ax*y__rl+F__Ax*y__rr-2*F__Ay
-*b__A+2*F__y*b-2*F__y*d-2*X__fl(t)*t__f+2*X__fl(t)*y__fl+2*X__fr(t)*t__f+2*
-X__fr(t)*y__fr+2*X__rr(t)*t__r+2*X__rr(t)*y__rr-2*X__rl(t)*t__r+2*X__rl(t)*
-y__rl-2*M__Az-2*M__z-2*T__flz-2*T__frz-2*T__rlz-2*T__rrz)*mu(t)-1/2*(2*V__x(t)*
-z__fl(t)*m__fu+2*z__fr(t)*V__x(t)*m__fu+2*z__rl(t)*V__x(t)*m__ru+2*z__rr(t)*
-V__x(t)*m__ru-2*i__fy*omega__fl(t)-2*i__fy*omega__fr(t)-2*i__ry*omega__rl(t)-
-omega__rl(t)*i__tg-2*omega__rr(t)*i__ry-omega__rr(t)*i__tg)*Omega__z(t)+(F__Ay+
-F__y)*h, -T__fry-(-R__r+rr__rl(t)+h)*X__rl(t)-(-m__fu*z__fl(t)*b+m__fu*z__fl(t)
-*w+m__fu*z__fl(t)*x__fl-z__fr(t)*m__fu*b+z__fr(t)*m__fu*w+z__fr(t)*m__fu*x__fr-
-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-m__ru*z__rr(t)*b+m__ru*z__rr(t)*x__rr+
-I__xz)*Omega__z(t)^2+m__ru*V__z(t)*(z__rl(t)+z__rr(t))*Omega__y(t)+F__Ax*R__r+
-N__fr(t)*(b-w-x__fr)+F__Ax*h__A+F__Az*b__A+1/2*F__Az*x__rl+1/2*F__Az*x__rr+(-
-z__fl(t)*Omega__x(t)^2*m__fu*y__fl-z__fr(t)*Omega__x(t)^2*m__fu*y__fr-T__frx+
-Y__fr(t)*z__fr(t)-Y__fr(t)*R__f+Y__fr(t)*h+N__fr(t)*y__fr+Y__fl(t)*z__fl(t)-
-Y__fl(t)*R__f+Y__fl(t)*h+Omega__y(t)*z__fl(t)*Omega__x(t)*m__fu*x__fl+Omega__y(
-t)*z__fr(t)*Omega__x(t)*m__fu*x__fr+N__fl(t)*y__fl+m__fu*diff(z__fldot(t),t)*
-y__fl+diff(z__frdot(t),t)*m__fu*y__fr-2*Omega__y(t)*Omega__z(t)*i__fy+z__fl(t)*
-Omega__z(t)^2*m__fu*y__fl+z__fr(t)*Omega__z(t)^2*m__fu*y__fr+Y__fl(t)*rr__fl(t)
-+Y__fr(t)*rr__fr(t)+Omega__z(t)*i__fy*omega__fl(t)+Omega__z(t)*i__fy*omega__fr(
-t)-z__fl(t)*diff(Omega__z(t),t)*m__fu*x__fl-z__fr(t)*diff(Omega__z(t),t)*m__fu*
-x__fr-2*i__fy*diff(Omega__x(t),t)-T__flx)*delta(t)-2*(z__fl(t)*Omega__z(t)*
-m__fu*x__fl+z__fr(t)*Omega__z(t)*m__fu*x__fr+i__fy*Omega__x(t))*delta__dot(t)+(
-Omega__z(t)*i__fy*omega__fr(t)+Y__fr(t)*z__fr(t)+Y__fr(t)*rr__fr(t)-Y__fr(t)*
-R__f+Y__fr(t)*h-T__frx)*psi__fr+(Omega__z(t)*omega__rl(t)*i__ry+Y__rl(t)*rr__rl
-(t)+Y__rl(t)*z__rl(t)-Y__rl(t)*R__r+Y__rl(t)*h-T__rlx)*psi__rl+(Omega__z(t)*
-i__fy*omega__fl(t)+Y__fl(t)*z__fl(t)+Y__fl(t)*rr__fl(t)-Y__fl(t)*R__f+Y__fl(t)*
-h-T__flx)*psi__fl+(Omega__z(t)*omega__rr(t)*i__ry+Y__rr(t)*z__rr(t)+Y__rr(t)*
-rr__rr(t)-Y__rr(t)*R__r+Y__rr(t)*h-T__rrx)*psi__rr-(-R__f+h+rr__fl(t))*X__fl(t)
--(-R__f+h+rr__fr(t))*X__fr(t)+(Omega__y(t)*V__z(t)*m__fu-g__x*m__fu-X__fr(t))*
-z__fr(t)+(Omega__y(t)*V__z(t)*m__fu-g__x*m__fu-X__fl(t))*z__fl(t)-T__rly+1/2*(2
-*F__Ay*b-2*F__Ay*b__A-F__Ay*x__rl-F__Ay*x__rr+2*F__y*b-2*F__y*d+2*Y__fr(t)*b-2*
-Y__fr(t)*w-2*Y__fr(t)*x__fr+2*Y__fl(t)*b-2*Y__fl(t)*w-2*Y__fl(t)*x__fl+2*Y__rl(
-t)*b-2*Y__rl(t)*x__rl+2*Y__rr(t)*b-2*Y__rr(t)*x__rr-2*M__Az-2*M__z-2*T__flz-2*
-T__frz-2*T__rlz-2*T__rrz)*phi(t)-V__y(t)*(z__fl(t)*m__fu+z__fr(t)*m__fu+z__rr(t
-)*m__ru+z__rl(t)*m__ru)*Omega__z(t)-T__rry-(F__Az+F__z)*b-(F__Ax+F__x)*h+N__fl(
-t)*(b-w-x__fl)-M__y+(b-w-x__fl)*m__fu*diff(z__fldot(t),t)+m__fu*(b-w-x__fr)*
-diff(z__frdot(t),t)+m__ru*(b-x__rl)*diff(z__rldot(t),t)+m__ru*(b-x__rr)*diff(
-z__rrdot(t),t)-m__fu*(z__fl(t)*y__fl+y__fr*z__fr(t))*delta__ddot(t)+N__rr(t)*(b
--x__rr)+F__z*d+F__x*z(t)+2*m__fu*Omega__y(t)*(-R__f+z__fl(t)+h)*z__fldot(t)+2*
-m__fu*Omega__y(t)*(-R__f+z__fr(t)+h)*z__frdot(t)+2*m__ru*Omega__y(t)*(-R__r+
-z__rl(t)+h)*z__rldot(t)+2*m__ru*Omega__y(t)*(-R__r+z__rr(t)+h)*z__rrdot(t)-1/2*
-F__Ax*rr__rl(t)-1/2*F__Ax*rr__rr(t)-1/2*(2*g__x*m__ru+F__Ax+2*X__rr(t))*z__rr(t
-)-1/2*(-2*X__fl(t)*x__fl-2*z__rr(t)*g__z*m__ru+2*N__fr(t)*z__fr(t)-2*N__fr(t)*
-R__f+2*N__fr(t)*h+2*X__fr(t)*b-2*X__fr(t)*w-2*X__fr(t)*x__fr-2*z__rl(t)*g__z*
-m__ru-2*F__Az*h+2*F__Az*R__r+2*F__Ax*b-F__Ax*x__rl-F__Ax*x__rr-F__Az*z__rr(t)-
-F__Az*z__rl(t)+2*N__fl(t)*z__fl(t)-2*N__fl(t)*R__f+2*N__fl(t)*h+2*X__fl(t)*b-2*
-X__fl(t)*w+2*N__rr(t)*z__rr(t)-2*N__rr(t)*R__r+2*N__rr(t)*h-2*z__fr(t)*g__z*
-m__fu-2*z__fl(t)*g__z*m__fu+2*X__rr(t)*b-2*X__rr(t)*x__rr+2*N__rl(t)*z__rl(t)-2
-*N__rl(t)*R__r+2*N__rl(t)*h+2*X__rl(t)*b-2*X__rl(t)*x__rl)*mu(t)+Omega__x(t)*
-phi__fl*i__fy*omega__fl(t)+Omega__x(t)*phi__fr*i__fy*omega__fr(t)+Omega__x(t)*
-phi__rl*i__ry*omega__rl(t)+Omega__x(t)*phi__rr*i__ry*omega__rr(t)+N__rl(t)*(b-
-x__rl)-1/2*(2*g__x*m__ru+F__Ax+2*X__rl(t))*z__rl(t)+(-m__fu*z__fl(t)*b+m__fu*
-z__fl(t)*w+m__fu*z__fl(t)*x__fl-z__fr(t)*m__fu*b+z__fr(t)*m__fu*w+z__fr(t)*
-m__fu*x__fr-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-m__ru*z__rr(t)*b+m__ru*z__rr(
-t)*x__rr+I__xz)*Omega__x(t)^2-(-R__r+h+rr__rr(t))*X__rr(t)-M__Ay+(z__fl(t)^2*
-Omega__z(t)*m__fu-z__fl(t)*Omega__y(t)*m__fu*t__f+z__fl(t)*Omega__y(t)*m__fu*
-y__fl-2*z__fl(t)*Omega__z(t)*R__f*m__fu+2*z__fl(t)*Omega__z(t)*h*m__fu+z__fr(t)
-^2*Omega__z(t)*m__fu+z__fr(t)*Omega__y(t)*m__fu*t__f+z__fr(t)*Omega__y(t)*m__fu
-*y__fr-2*z__fr(t)*Omega__z(t)*R__f*m__fu+2*z__fr(t)*Omega__z(t)*h*m__fu+z__rl(t
-)^2*Omega__z(t)*m__ru-z__rl(t)*Omega__y(t)*m__ru*t__r+z__rl(t)*Omega__y(t)*
-m__ru*y__rl-2*z__rl(t)*Omega__z(t)*R__r*m__ru+2*z__rl(t)*Omega__z(t)*h*m__ru+
-z__rr(t)^2*Omega__z(t)*m__ru+z__rr(t)*Omega__y(t)*m__ru*t__r+z__rr(t)*Omega__y(
-t)*m__ru*y__rr-2*z__rr(t)*Omega__z(t)*R__r*m__ru+2*z__rr(t)*Omega__z(t)*h*m__ru
-+I__xx*Omega__z(t)-I__zz*Omega__z(t))*Omega__x(t)+(z__fl(t)*m__fu+z__fr(t)*
-m__fu+z__rr(t)*m__ru+z__rl(t)*m__ru)*diff(V__x(t),t)+(m__fu*z__fl(t)^2-2*m__fu*
-z__fl(t)*R__f+2*m__fu*z__fl(t)*h+m__fu*z__fr(t)^2-2*z__fr(t)*m__fu*R__f+2*z__fr
-(t)*m__fu*h+z__rl(t)^2*m__ru-2*z__rl(t)*m__ru*R__r+2*z__rl(t)*m__ru*h+z__rr(t)^
-2*m__ru-2*m__ru*z__rr(t)*R__r+2*m__ru*z__rr(t)*h+I__yy+i__tg)*diff(Omega__y(t),
-t)+(m__fu*z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-z__fr(t)*m__fu*t__f-z__fr(t)*m__fu
-*y__fr+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-m__ru*z__rr(t)*t__r-m__ru*z__rr
-(t)*y__rr)*diff(Omega__z(t),t)-1/2*(2*i__ry+i__tg)*diff(omega__rl(t),t)-1/2*(2*
+z__rr(t),t), (z__rr(t)*m__ru+z__fl(t)*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*diff
+(Omega__y(t),t)+2*z__fldot(t)*Omega__y(t)*m__fu+2*z__frdot(t)*Omega__y(t)*m__fu
++2*z__rldot(t)*Omega__y(t)*m__ru+2*z__rrdot(t)*Omega__y(t)*m__ru+diff(V__x(t),t
+)*m+Omega__y(t)*V__z(t)*m+Omega__z(t)*(z__rr(t)*Omega__x(t)*m__ru+z__fl(t)*
+Omega__x(t)*m__fu+z__fr(t)*Omega__x(t)*m__fu+Omega__x(t)*z__rl(t)*m__ru-V__y(t)
+*m)-g__x*m-X__fl(t)-X__fr(t)-X__rl(t)-X__rr(t)-F__Ax-F__x+Y__fl(t)*psi__fl+
+Y__fr(t)*psi__fr+psi__rl*Y__rl(t)+psi__rr*Y__rr(t)+(Y__fl(t)+Y__fr(t))*delta(t)
++(g__z*m-N__fl(t)-N__fr(t)-N__rl(t)-N__rr(t)+F__Az+F__z)*mu(t), -(z__rr(t)*
+m__ru+z__fl(t)*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*diff(Omega__x(t),t)-2*
+z__fldot(t)*Omega__x(t)*m__fu-2*z__frdot(t)*Omega__x(t)*m__fu-2*z__rldot(t)*
+Omega__x(t)*m__ru-2*z__rrdot(t)*Omega__x(t)*m__ru+diff(V__y(t),t)*m-Omega__x(t)
+*V__z(t)*m+(z__rr(t)*Omega__y(t)*m__ru+z__fl(t)*Omega__y(t)*m__fu+z__fr(t)*
+Omega__y(t)*m__fu+z__rl(t)*Omega__y(t)*m__ru+V__x(t)*m)*Omega__z(t)-g__y*m-
+Y__fl(t)-Y__fr(t)-Y__rl(t)-Y__rr(t)-F__Ay-F__y-X__fl(t)*psi__fl-X__fr(t)*
+psi__fr-X__rl(t)*psi__rl-X__rr(t)*psi__rr-(X__fl(t)+X__fr(t))*delta(t)-phi(t)*(
+g__z*m-N__fl(t)-N__fr(t)-N__rl(t)-N__rr(t)+F__Az+F__z), diff(z__fldot(t),t)*
+m__fu+diff(z__frdot(t),t)*m__fu+diff(z__rldot(t),t)*m__ru+diff(z__rrdot(t),t)*
+m__ru+diff(V__z(t),t)*m+(g__y*m+Y__fl(t)+Y__fr(t)+Y__rl(t)+Y__rr(t)+F__y+F__Ay)
+*phi(t)-mu(t)*(g__x*m+X__fl(t)+X__fr(t)+X__rl(t)+X__rr(t)+F__x+F__Ax)-(z__rr(t)
+*m__ru+z__fl(t)*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*Omega__x(t)^2+V__y(t)*
+Omega__x(t)*m-(z__rr(t)*m__ru+z__fl(t)*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*
+Omega__y(t)^2-V__x(t)*Omega__y(t)*m-g__z*m-F__Az+N__fl(t)+N__fr(t)+N__rl(t)+
+N__rr(t)-F__z, -(-h+R__r)*Y__rl(t)-(i__fy*omega__fl(t)*Omega__y(t)+N__fl(t)*
+rr__fl(t))*phi__fl-(i__fy*omega__fr(t)*Omega__y(t)+N__fr(t)*rr__fr(t))*phi__fr+
+1/2*(-2*i__ry*omega__rl(t)*Omega__y(t)+F__Az*rr__rl(t)-2*N__rl(t)*rr__rl(t))*
+phi__rl+1/2*(-2*omega__rr(t)*i__ry*Omega__y(t)+F__Az*rr__rr(t)-2*N__rr(t)*
+rr__rr(t))*phi__rr+(rr__fl(t)*X__fl(t)+X__fl(t)*z__fl(t)-X__fl(t)*R__f+X__fl(t)
+*h+i__fy*diff(omega__fl(t),t)+T__fly)*psi__fl+(rr__fr(t)*X__fr(t)+X__fr(t)*
+z__fr(t)-X__fr(t)*R__f+X__fr(t)*h+i__fy*diff(omega__fr(t),t)+T__fry)*psi__fr+(
+X__rl(t)*z__rl(t)+rr__rl(t)*X__rl(t)+diff(omega__rl(t),t)*i__ry-X__rl(t)*R__r+
+X__rl(t)*h+T__rly)*psi__rl+(rr__rr(t)*X__rr(t)+diff(omega__rr(t),t)*i__ry+X__rr
+(t)*z__rr(t)-X__rr(t)*R__r+X__rr(t)*h+T__rry)*psi__rr+1/2*(-2*z__rl(t)*V__x(t)*
+m__ru-2*V__x(t)*z__rr(t)*m__ru-2*z__fl(t)*V__x(t)*m__fu-2*V__x(t)*z__fr(t)*
+m__fu+2*i__fy*omega__fl(t)+2*i__fy*omega__fr(t)+2*i__ry*omega__rl(t)+omega__rl(
+t)*i__tg+2*omega__rr(t)*i__ry+omega__rr(t)*i__tg)*Omega__z(t)+N__rr(t)*(y__rr+
+t__r)+1/2*(2*g__y*m__ru+F__Ay+2*Y__rr(t))*z__rr(t)-(z__rr(t)*m__ru+z__fl(t)*
+m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*diff(V__y(t),t)+1/2*(-2*N__rr(t)*z__rr(t)+
+2*N__rr(t)*R__r-2*N__rr(t)*h+2*Y__rr(t)*t__r+2*Y__rr(t)*y__rr+2*z__rr(t)*g__z*
+m__ru-2*N__rl(t)*z__rl(t)+2*N__rl(t)*R__r-2*N__rl(t)*h+2*Y__fr(t)*y__fr+2*Y__fr
+(t)*t__f-2*Y__rl(t)*t__r+2*Y__rl(t)*y__rl+2*z__fl(t)*g__z*m__fu+2*N__fl(t)*R__f
+-2*N__fl(t)*h-2*N__fr(t)*z__fr(t)+2*N__fr(t)*R__f-2*N__fr(t)*h-2*N__rr(t)*
+rr__rr(t)+2*Y__fl(t)*y__fl-2*Y__fl(t)*t__f+2*z__rl(t)*g__z*m__ru+F__Ay*y__rl+
+F__Ay*y__rr+F__Az*rr__rl(t)+F__Az*rr__rr(t)-2*N__fl(t)*rr__fl(t)+F__Az*z__rr(t)
++F__Az*z__rl(t)+2*F__Az*h-2*F__Az*R__r+2*z__fr(t)*g__z*m__fu-2*N__fl(t)*z__fl(t
+)-2*N__rl(t)*rr__rl(t)-2*N__fr(t)*rr__fr(t))*phi(t)+(Omega__z(t)^2*z__fl(t)*
+m__fu*x__fl+Omega__z(t)^2*z__fr(t)*m__fu*x__fr+z__fl(t)*diff(Omega__z(t),t)*
+m__fu*y__fl+rr__fr(t)*X__fr(t)+diff(z__fldot(t),t)*m__fu*x__fl+diff(z__frdot(t)
+,t)*m__fu*x__fr+T__fry-Omega__y(t)^2*z__fl(t)*m__fu*x__fl-Omega__y(t)^2*z__fr(t
+)*m__fu*x__fr+X__fl(t)*z__fl(t)-X__fl(t)*R__f+X__fl(t)*h+N__fr(t)*x__fr+T__fly+
+X__fr(t)*z__fr(t)-X__fr(t)*R__f+X__fr(t)*h+2*Omega__z(t)*i__fy*Omega__x(t)+
+rr__fl(t)*X__fl(t)+N__fl(t)*x__fl+diff(Omega__z(t),t)*z__fr(t)*m__fu*y__fr-2*
+i__fy*diff(Omega__y(t),t)+i__fy*diff(omega__fl(t),t)+i__fy*diff(omega__fr(t),t)
++Omega__x(t)*Omega__y(t)*z__fl(t)*m__fu*y__fl+Omega__x(t)*Omega__y(t)*z__fr(t)*
+m__fu*y__fr)*delta(t)-(-2*z__fl(t)*Omega__z(t)*m__fu*y__fl-2*Omega__z(t)*z__fr(
+t)*m__fu*y__fr+2*i__fy*Omega__y(t)-i__fy*omega__fl(t)-i__fy*omega__fr(t))*
+delta__dot(t)-T__rlx-T__rrx+1/2*(F__Ay+2*Y__rr(t))*rr__rr(t)-1/2*(F__Ax*y__rl+
+F__Ax*y__rr-2*F__Ay*b__A+2*F__y*b-2*F__y*d-2*X__fl(t)*t__f+2*X__fl(t)*y__fl+2*
+X__fr(t)*t__f+2*X__fr(t)*y__fr-2*X__rl(t)*t__r+2*X__rl(t)*y__rl+2*X__rr(t)*t__r
++2*X__rr(t)*y__rr-2*M__Az-2*M__z-2*T__flz-2*T__frz-2*T__rlz-2*T__rrz)*mu(t)+1/2
+*(2*g__y*m__ru+F__Ay+2*Y__rl(t))*z__rl(t)-M__x-(-h+R__r)*Y__rr(t)-(m__fu*z__fl(
+t)*t__f-m__fu*z__fl(t)*y__fl-m__fu*z__fr(t)*t__f-m__fu*z__fr(t)*y__fr+z__rl(t)*
+m__ru*t__r-z__rl(t)*m__ru*y__rl-z__rr(t)*m__ru*t__r-z__rr(t)*m__ru*y__rr)*
+Omega__z(t)^2+N__fr(t)*(t__f+y__fr)+V__z(t)*m__ru*(z__rl(t)+z__rr(t))*Omega__x(
+t)-F__Ay*R__r+(m__fu*z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-m__fu*z__fr(t)*t__f-
+m__fu*z__fr(t)*y__fr+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-z__rr(t)*m__ru*
+t__r-z__rr(t)*m__ru*y__rr)*Omega__y(t)^2-(-I__zz*Omega__z(t)+I__yy*Omega__z(t)+
+Omega__z(t)*i__tg+I__xz*Omega__x(t)+Omega__z(t)*z__fl(t)^2*m__fu+Omega__z(t)*
+z__fr(t)^2*m__fu+Omega__z(t)*z__rl(t)^2*m__ru+Omega__z(t)*z__rr(t)^2*m__ru-
+Omega__x(t)*z__rr(t)*b*m__ru+Omega__x(t)*z__rr(t)*m__ru*x__rr-Omega__x(t)*z__fl
+(t)*b*m__fu+Omega__x(t)*z__fl(t)*m__fu*w+Omega__x(t)*z__fl(t)*m__fu*x__fl-
+Omega__x(t)*z__fr(t)*b*m__fu+Omega__x(t)*z__fr(t)*m__fu*w+Omega__x(t)*z__fr(t)*
+m__fu*x__fr-Omega__x(t)*z__rl(t)*b*m__ru+Omega__x(t)*z__rl(t)*m__ru*x__rl-2*
+Omega__z(t)*z__fl(t)*R__f*m__fu+2*Omega__z(t)*z__fl(t)*h*m__fu-2*Omega__z(t)*
+z__fr(t)*R__f*m__fu+2*Omega__z(t)*z__fr(t)*h*m__fu-2*Omega__z(t)*z__rl(t)*R__r*
+m__ru+2*Omega__z(t)*z__rl(t)*h*m__ru-2*Omega__z(t)*z__rr(t)*R__r*m__ru+2*
+Omega__z(t)*z__rr(t)*h*m__ru)*Omega__y(t)+(V__z(t)*Omega__x(t)*m__fu+g__y*m__fu
++Y__fr(t))*z__fr(t)+(V__z(t)*Omega__x(t)*m__fu+g__y*m__fu+Y__fl(t))*z__fl(t)-z(
+t)*F__y-(t__f-y__fl)*m__fu*diff(z__fldot(t),t)+m__fu*(t__f+y__fr)*diff(z__frdot
+(t),t)-m__ru*(-y__rl+t__r)*diff(z__rldot(t),t)+m__ru*(y__rr+t__r)*diff(z__rrdot
+(t),t)-m__fu*(x__fl*z__fl(t)+x__fr*z__fr(t))*delta__ddot(t)-M__Ax-T__frx+(-R__f
++h+rr__fl(t))*Y__fl(t)+(-R__f+h+rr__fr(t))*Y__fr(t)+(F__Ay+F__y)*h-N__fl(t)*(
+t__f-y__fl)-1/2*F__Az*(y__rl+y__rr)+1/2*(F__Ay+2*Y__rl(t))*rr__rl(t)-F__Ay*h__A
+-T__flx-N__rl(t)*(-y__rl+t__r)+2*m__fu*Omega__x(t)*(-R__f+z__fl(t)+h)*z__fldot(
+t)+2*m__fu*Omega__x(t)*(-R__f+z__fr(t)+h)*z__frdot(t)+2*Omega__x(t)*m__ru*(-
+R__r+z__rl(t)+h)*z__rldot(t)+2*Omega__x(t)*m__ru*(-R__r+z__rr(t)+h)*z__rrdot(t)
++(m__fu*z__fl(t)^2-2*m__fu*z__fl(t)*R__f+2*m__fu*z__fl(t)*h+m__fu*z__fr(t)^2-2*
+m__fu*z__fr(t)*R__f+2*m__fu*z__fr(t)*h+z__rl(t)^2*m__ru-2*z__rl(t)*m__ru*R__r+2
+*z__rl(t)*m__ru*h+z__rr(t)^2*m__ru-2*z__rr(t)*m__ru*R__r+2*z__rr(t)*m__ru*h+
+I__xx)*diff(Omega__x(t),t)-(-m__fu*z__fl(t)*b+m__fu*z__fl(t)*w+m__fu*z__fl(t)*
+x__fl-m__fu*z__fr(t)*b+m__fu*z__fr(t)*w+m__fu*z__fr(t)*x__fr-z__rl(t)*m__ru*b+
+z__rl(t)*m__ru*x__rl-z__rr(t)*m__ru*b+z__rr(t)*m__ru*x__rr+I__xz)*diff(Omega__z
+(t),t), -1/2*(2*g__x*m__ru+F__Ax+2*X__rr(t))*z__rr(t)-(-R__r+h+rr__rr(t))*X__rr
+(t)+m__ru*V__z(t)*(z__rl(t)+z__rr(t))*Omega__y(t)+N__rr(t)*(b-x__rr)+(N__fl(t)*
+y__fl-z__fl(t)*diff(Omega__z(t),t)*m__fu*x__fl-diff(Omega__z(t),t)*z__fr(t)*
+m__fu*x__fr+Y__fr(t)*rr__fr(t)-Omega__x(t)^2*z__fl(t)*m__fu*y__fl-Omega__x(t)^2
+*z__fr(t)*m__fu*y__fr+Y__fr(t)*z__fr(t)-Y__fr(t)*R__f+Y__fr(t)*h+diff(z__fldot(
+t),t)*m__fu*y__fl+diff(z__frdot(t),t)*m__fu*y__fr+Omega__z(t)*i__fy*omega__fr(t
+)+Omega__z(t)*i__fy*omega__fl(t)-T__frx-2*Omega__y(t)*Omega__z(t)*i__fy+
+Omega__z(t)^2*z__fl(t)*m__fu*y__fl+Omega__z(t)^2*z__fr(t)*m__fu*y__fr-T__flx+
+Y__fl(t)*z__fl(t)-Y__fl(t)*R__f+Y__fl(t)*h+Y__fl(t)*rr__fl(t)+Omega__y(t)*
+Omega__x(t)*z__fl(t)*m__fu*x__fl+Omega__y(t)*Omega__x(t)*z__fr(t)*m__fu*x__fr+
+N__fr(t)*y__fr-2*i__fy*diff(Omega__x(t),t))*delta(t)-2*(z__fl(t)*Omega__z(t)*
+m__fu*x__fl+Omega__z(t)*z__fr(t)*m__fu*x__fr+i__fy*Omega__x(t))*delta__dot(t)+
+Omega__x(t)*phi__rr*i__ry*omega__rr(t)+Omega__x(t)*i__fy*phi__fl*omega__fl(t)+
+Omega__x(t)*i__fy*phi__fr*omega__fr(t)+Omega__x(t)*phi__rl*i__ry*omega__rl(t)-
+T__rly+(-m__fu*z__fl(t)*b+m__fu*z__fl(t)*w+m__fu*z__fl(t)*x__fl-m__fu*z__fr(t)*
+b+m__fu*z__fr(t)*w+m__fu*z__fr(t)*x__fr-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-
+z__rr(t)*m__ru*b+z__rr(t)*m__ru*x__rr+I__xz)*Omega__x(t)^2+(-Omega__y(t)*z__fl(
+t)*m__fu*t__f+Omega__y(t)*z__fl(t)*m__fu*y__fl+Omega__y(t)*z__fr(t)*m__fu*t__f+
+Omega__y(t)*z__fr(t)*m__fu*y__fr-Omega__y(t)*z__rl(t)*m__ru*t__r+Omega__y(t)*
+z__rl(t)*m__ru*y__rl+Omega__y(t)*z__rr(t)*m__ru*t__r+Omega__y(t)*z__rr(t)*m__ru
+*y__rr+Omega__z(t)*z__fl(t)^2*m__fu-2*Omega__z(t)*z__fl(t)*R__f*m__fu+2*
+Omega__z(t)*z__fl(t)*h*m__fu+Omega__z(t)*z__fr(t)^2*m__fu-2*Omega__z(t)*z__fr(t
+)*R__f*m__fu+2*Omega__z(t)*z__fr(t)*h*m__fu+Omega__z(t)*z__rl(t)^2*m__ru-2*
+Omega__z(t)*z__rl(t)*R__r*m__ru+2*Omega__z(t)*z__rl(t)*h*m__ru+Omega__z(t)*
+z__rr(t)^2*m__ru-2*Omega__z(t)*z__rr(t)*R__r*m__ru+2*Omega__z(t)*z__rr(t)*h*
+m__ru+I__xx*Omega__z(t)-I__zz*Omega__z(t))*Omega__x(t)+(z__rr(t)*m__ru+z__fl(t)
+*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*diff(V__x(t),t)-T__rry-M__y-1/2*(2*g__x*
+m__ru+F__Ax+2*X__rl(t))*z__rl(t)+N__rl(t)*(b-x__rl)+N__fr(t)*(b-w-x__fr)-(-R__f
++h+rr__fl(t))*X__fl(t)-(-R__f+h+rr__fr(t))*X__fr(t)+(Omega__z(t)*omega__rl(t)*
+i__ry+Y__rl(t)*z__rl(t)+Y__rl(t)*rr__rl(t)-Y__rl(t)*R__r+Y__rl(t)*h-T__rlx)*
+psi__rl+(Omega__z(t)*omega__rr(t)*i__ry+Y__rr(t)*rr__rr(t)+Y__rr(t)*z__rr(t)-
+Y__rr(t)*R__r+Y__rr(t)*h-T__rrx)*psi__rr+(Omega__z(t)*i__fy*omega__fr(t)+Y__fr(
+t)*rr__fr(t)+Y__fr(t)*z__fr(t)-Y__fr(t)*R__f+Y__fr(t)*h-T__frx)*psi__fr+(
+Omega__z(t)*i__fy*omega__fl(t)+Y__fl(t)*rr__fl(t)+Y__fl(t)*z__fl(t)-Y__fl(t)*
+R__f+Y__fl(t)*h-T__flx)*psi__fl+F__Ax*R__r+(b-w-x__fl)*m__fu*diff(z__fldot(t),t
+)+(b-w-x__fr)*m__fu*diff(z__frdot(t),t)+m__ru*(b-x__rl)*diff(z__rldot(t),t)+
+m__ru*(b-x__rr)*diff(z__rrdot(t),t)-m__fu*(y__fl*z__fl(t)+y__fr*z__fr(t))*
+delta__ddot(t)-M__Ay-T__fry-1/2*(2*N__rr(t)*z__rr(t)-2*N__rr(t)*R__r+2*N__rr(t)
+*h+2*X__rr(t)*b-2*X__rr(t)*x__rr-2*z__rr(t)*g__z*m__ru+2*N__rl(t)*z__rl(t)-2*
+N__rl(t)*R__r+2*N__rl(t)*h-2*X__fr(t)*x__fr+2*X__fr(t)*b-2*X__fr(t)*w+2*X__rl(t
+)*b-2*X__rl(t)*x__rl-2*z__fl(t)*g__z*m__fu-2*N__fl(t)*R__f+2*N__fl(t)*h+2*N__fr
+(t)*z__fr(t)-2*N__fr(t)*R__f+2*N__fr(t)*h-2*X__fl(t)*x__fl+2*X__fl(t)*b-2*X__fl
+(t)*w-2*z__rl(t)*g__z*m__ru+2*F__Ax*b-F__Ax*x__rl-F__Ax*x__rr-F__Az*z__rr(t)-
+F__Az*z__rl(t)-2*F__Az*h+2*F__Az*R__r-2*z__fr(t)*g__z*m__fu+2*N__fl(t)*z__fl(t)
+)*mu(t)-(-m__fu*z__fl(t)*b+m__fu*z__fl(t)*w+m__fu*z__fl(t)*x__fl-m__fu*z__fr(t)
+*b+m__fu*z__fr(t)*w+m__fu*z__fr(t)*x__fr-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-
+z__rr(t)*m__ru*b+z__rr(t)*m__ru*x__rr+I__xz)*Omega__z(t)^2-1/2*F__Ax*rr__rr(t)+
+F__Ax*h__A+F__Az*b__A+1/2*F__Az*x__rl+1/2*F__Az*x__rr-1/2*F__Ax*rr__rl(t)-V__y(
+t)*(z__rr(t)*m__ru+z__fl(t)*m__fu+z__fr(t)*m__fu+z__rl(t)*m__ru)*Omega__z(t)+
+F__z*d+F__x*z(t)-T__fly+N__fl(t)*(b-w-x__fl)+(Omega__y(t)*V__z(t)*m__fu-g__x*
+m__fu-X__fl(t))*z__fl(t)+(Omega__y(t)*V__z(t)*m__fu-g__x*m__fu-X__fr(t))*z__fr(
+t)-(-R__r+h+rr__rl(t))*X__rl(t)-(F__Az+F__z)*b-(F__Ax+F__x)*h+2*m__fu*Omega__y(
+t)*(-R__f+z__fl(t)+h)*z__fldot(t)+2*m__fu*Omega__y(t)*(-R__f+z__fr(t)+h)*
+z__frdot(t)+2*m__ru*Omega__y(t)*(-R__r+z__rl(t)+h)*z__rldot(t)+2*m__ru*Omega__y
+(t)*(-R__r+z__rr(t)+h)*z__rrdot(t)+(m__fu*z__fl(t)^2-2*m__fu*z__fl(t)*R__f+2*
+m__fu*z__fl(t)*h+m__fu*z__fr(t)^2-2*m__fu*z__fr(t)*R__f+2*m__fu*z__fr(t)*h+
+z__rl(t)^2*m__ru-2*z__rl(t)*m__ru*R__r+2*z__rl(t)*m__ru*h+z__rr(t)^2*m__ru-2*
+z__rr(t)*m__ru*R__r+2*z__rr(t)*m__ru*h+I__yy+i__tg)*diff(Omega__y(t),t)+(m__fu*
+z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-m__fu*z__fr(t)*t__f-m__fu*z__fr(t)*y__fr+
+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-z__rr(t)*m__ru*t__r-z__rr(t)*m__ru*
+y__rr)*diff(Omega__z(t),t)-1/2*(2*i__ry+i__tg)*diff(omega__rl(t),t)-1/2*(2*
 i__ry+i__tg)*diff(omega__rr(t),t)-i__fy*diff(omega__fl(t),t)-i__fy*diff(
-omega__fr(t),t)-T__fly, -1/2*F__Ay*x__rl-1/2*F__Ay*x__rr+(F__Ay+F__y)*b+Y__fl(t
-)*(b-w-x__fl)-X__fl(t)*(t__f-y__fl)-1/2*(-2*z__fl(t)*Omega__z(t)*m__fu*t__f+2*
-z__fl(t)*Omega__z(t)*m__fu*y__fl+2*z__fr(t)*Omega__z(t)*m__fu*t__f+2*z__fr(t)*
-Omega__z(t)*m__fu*y__fr-2*z__rl(t)*Omega__z(t)*m__ru*t__r+2*z__rl(t)*Omega__z(t
-)*m__ru*y__rl+2*z__rr(t)*Omega__z(t)*m__ru*t__r+2*z__rr(t)*Omega__z(t)*m__ru*
-y__rr+2*i__ry*omega__rl(t)+omega__rl(t)*i__tg+2*i__fy*omega__fl(t)+2*i__fy*
-omega__fr(t)+2*omega__rr(t)*i__ry+omega__rr(t)*i__tg)*Omega__x(t)-T__frz-F__y*d
--(z__fl(t)*Omega__y(t)*Omega__z(t)*m__fu*y__fl+z__fr(t)*Omega__y(t)*Omega__z(t)
-*m__fu*y__fr+Omega__x(t)*z__fl(t)*Omega__z(t)*m__fu*x__fl+Omega__x(t)*z__fr(t)*
-Omega__z(t)*m__fu*x__fr+2*Omega__y(t)*z__frdot(t)*m__fu*x__fr+2*Omega__y(t)*
-z__fldot(t)*m__fu*x__fl-z__fl(t)*diff(Omega__x(t),t)*m__fu*y__fl+z__fl(t)*diff(
-Omega__y(t),t)*m__fu*x__fl-z__fr(t)*diff(Omega__x(t),t)*m__fu*y__fr+z__fr(t)*
-diff(Omega__y(t),t)*m__fu*x__fr-2*Omega__x(t)*z__frdot(t)*m__fu*y__fr-2*
-Omega__x(t)*z__fldot(t)*m__fu*y__fl+i__fy*omega__fl(t)*Omega__y(t)-2*Omega__y(t
-)^2*i__fy+i__fy*omega__fr(t)*Omega__y(t)+2*i__fy*Omega__x(t)^2-X__fr(t)*b+X__fr
-(t)*w+Y__fr(t)*t__f-Y__fl(t)*t__f-X__fl(t)*b+X__fl(t)*w)*delta(t)+Y__fr(t)*(b-w
--x__fr)+X__fr(t)*(t__f+y__fr)-(i__ry*omega__rl(t)*Omega__y(t)-X__rl(t)*b+X__rl(
-t)*x__rl-Y__rl(t)*t__r+Y__rl(t)*y__rl)*psi__rl-(rr__fl(t)*X__fl(t)+i__fy*diff(
-omega__fl(t),t))*phi__fl-(i__fy*omega__fr(t)*Omega__y(t)+Y__fr(t)*t__f+Y__fr(t)
-*y__fr-X__fr(t)*b+X__fr(t)*w+X__fr(t)*x__fr)*psi__fr-1/2*(F__Ax*rr__rl(t)+2*
-rr__rl(t)*X__rl(t)+2*i__ry*diff(omega__rl(t),t))*phi__rl-(i__ry*omega__rr(t)*
-Omega__y(t)+Y__rr(t)*t__r+Y__rr(t)*y__rr-X__rr(t)*b+X__rr(t)*x__rr)*psi__rr-1/2
-*(F__Ax*rr__rr(t)+2*rr__rr(t)*X__rr(t)+2*i__ry*diff(omega__rr(t),t))*phi__rr-(
-i__fy*omega__fl(t)*Omega__y(t)-Y__fl(t)*t__f+Y__fl(t)*y__fl-X__fl(t)*b+X__fl(t)
-*w+X__fl(t)*x__fl)*psi__fl-(rr__fr(t)*X__fr(t)+i__fy*diff(omega__fr(t),t))*
-phi__fr-T__rlz-T__rrz-F__Ay*b__A+1/2*F__Ax*y__rl+1/2*F__Ax*y__rr-M__z-2*(
+omega__fr(t),t)+1/2*(2*F__Ay*b-2*F__Ay*b__A-F__Ay*x__rl-F__Ay*x__rr+2*F__y*b-2*
+F__y*d+2*Y__fl(t)*b-2*Y__fl(t)*w-2*Y__fl(t)*x__fl+2*Y__fr(t)*b-2*Y__fr(t)*w-2*
+Y__fr(t)*x__fr+2*Y__rl(t)*b-2*Y__rl(t)*x__rl+2*Y__rr(t)*b-2*Y__rr(t)*x__rr-2*
+M__Az-2*M__z-2*T__flz-2*T__frz-2*T__rlz-2*T__rrz)*phi(t), -(Omega__z(t)*z__fl(t
+)*b*m__fu-Omega__z(t)*z__fl(t)*m__fu*w-z__fl(t)*Omega__z(t)*m__fu*x__fl+
+Omega__z(t)*z__fr(t)*b*m__fu-Omega__z(t)*z__fr(t)*m__fu*w-Omega__z(t)*z__fr(t)*
+m__fu*x__fr+Omega__z(t)*z__rl(t)*b*m__ru-Omega__z(t)*z__rl(t)*m__ru*x__rl+
+Omega__z(t)*z__rr(t)*b*m__ru-Omega__z(t)*z__rr(t)*m__ru*x__rr+I__xx*Omega__x(t)
+-I__xz*Omega__z(t)-Omega__x(t)*I__yy-Omega__x(t)*i__tg)*Omega__y(t)+Y__rr(t)*(b
+-x__rr)+X__rr(t)*(y__rr+t__r)+(-Omega__y(t)*Omega__z(t)*z__fl(t)*m__fu*y__fl-
+Omega__y(t)*Omega__z(t)*z__fr(t)*m__fu*y__fr-Omega__x(t)*Omega__z(t)*z__fl(t)*
+m__fu*x__fl-Omega__x(t)*Omega__z(t)*z__fr(t)*m__fu*x__fr-2*Omega__y(t)*z__frdot
+(t)*m__fu*x__fr-2*Omega__y(t)*z__fldot(t)*m__fu*x__fl+2*Omega__x(t)*z__frdot(t)
+*m__fu*y__fr+2*Omega__x(t)*z__fldot(t)*m__fu*y__fl+z__fl(t)*diff(Omega__x(t),t)
+*m__fu*y__fl-z__fl(t)*diff(Omega__y(t),t)*m__fu*x__fl+z__fr(t)*diff(Omega__x(t)
+,t)*m__fu*y__fr-z__fr(t)*diff(Omega__y(t),t)*m__fu*x__fr+2*Omega__y(t)^2*i__fy-
+i__fy*omega__fl(t)*Omega__y(t)-i__fy*omega__fr(t)*Omega__y(t)-2*i__fy*Omega__x(
+t)^2+X__fl(t)*b-X__fl(t)*w+X__fr(t)*b-X__fr(t)*w+Y__fl(t)*t__f-Y__fr(t)*t__f)*
+delta(t)-T__rlz-T__rrz-M__z-1/2*(-2*Omega__z(t)*z__rl(t)*m__ru*t__r+2*Omega__z(
+t)*z__rl(t)*m__ru*y__rl+2*Omega__z(t)*z__rr(t)*m__ru*t__r+2*Omega__z(t)*z__rr(t
+)*m__ru*y__rr-2*Omega__z(t)*z__fl(t)*m__fu*t__f+2*z__fl(t)*Omega__z(t)*m__fu*
+y__fl+2*Omega__z(t)*z__fr(t)*m__fu*t__f+2*Omega__z(t)*z__fr(t)*m__fu*y__fr+2*
+i__fy*omega__fl(t)+2*i__fy*omega__fr(t)+2*i__ry*omega__rl(t)+omega__rl(t)*i__tg
++2*omega__rr(t)*i__ry+omega__rr(t)*i__tg)*Omega__x(t)-(i__fy*omega__fr(t)*
+Omega__y(t)+Y__fr(t)*t__f+Y__fr(t)*y__fr-X__fr(t)*b+X__fr(t)*w+X__fr(t)*x__fr)*
+psi__fr-1/2*(F__Ax*rr__rr(t)+2*rr__rr(t)*X__rr(t)+2*diff(omega__rr(t),t)*i__ry)
+*phi__rr-(rr__fl(t)*X__fl(t)+i__fy*diff(omega__fl(t),t))*phi__fl-(rr__fr(t)*
+X__fr(t)+i__fy*diff(omega__fr(t),t))*phi__fr-1/2*(F__Ax*rr__rl(t)+2*rr__rl(t)*
+X__rl(t)+2*diff(omega__rl(t),t)*i__ry)*phi__rl-(omega__rr(t)*i__ry*Omega__y(t)-
+X__rr(t)*b+X__rr(t)*x__rr+Y__rr(t)*t__r+Y__rr(t)*y__rr)*psi__rr-(i__fy*
+omega__fl(t)*Omega__y(t)-X__fl(t)*b+X__fl(t)*w+X__fl(t)*x__fl-Y__fl(t)*t__f+
+Y__fl(t)*y__fl)*psi__fl+Y__fr(t)*(b-w-x__fr)+2*(Omega__y(t)*t__f-Omega__y(t)*
+y__fl+Omega__x(t)*b-Omega__x(t)*w-Omega__x(t)*x__fl)*m__fu*z__fldot(t)-2*(
 Omega__y(t)*t__f+Omega__y(t)*y__fr-Omega__x(t)*b+Omega__x(t)*w+Omega__x(t)*
-x__fr)*m__fu*z__frdot(t)+2*m__fu*(Omega__x(t)*b-Omega__x(t)*w-Omega__x(t)*x__fl
-+Omega__y(t)*t__f-Omega__y(t)*y__fl)*z__fldot(t)+2*m__ru*(Omega__x(t)*b-
-Omega__x(t)*x__rl+Omega__y(t)*t__r-Omega__y(t)*y__rl)*z__rldot(t)-2*(Omega__y(t
-)*t__r+Omega__y(t)*y__rr-Omega__x(t)*b+Omega__x(t)*x__rr)*m__ru*z__rrdot(t)+
-X__rr(t)*(y__rr+t__r)+Y__rr(t)*(b-x__rr)+Y__rl(t)*(b-x__rl)-X__rl(t)*(-y__rl+
-t__r)-1/2*(-2*T__fry+2*N__fr(t)*b-2*N__fr(t)*w+2*N__fl(t)*b-2*N__fl(t)*w-2*
-N__fr(t)*x__fr+2*F__Ax*h__A-2*F__Az*b+2*F__Az*b__A+F__Az*x__rl+F__Az*x__rr+2*
-N__rl(t)*b-2*N__rl(t)*x__rl-2*T__rly-2*T__rry-2*M__y-2*N__fl(t)*x__fl-2*F__z*b+
-2*F__z*d-2*F__x*h+2*F__x*z(t)-2*M__Ay-2*T__fly+2*N__rr(t)*b-2*N__rr(t)*x__rr)*
-phi(t)+1/2*(-2*T__frx+2*N__fr(t)*t__f-2*N__rl(t)*t__r+2*N__rl(t)*y__rl-2*N__fl(
-t)*t__f+2*Y__rr(t)*rr__rr(t)-2*F__Ay*h__A-F__Az*y__rl-F__Az*y__rr+F__Ay*rr__rl(
-t)+F__Ay*rr__rr(t)+2*N__fr(t)*y__fr-2*T__rlx-2*T__rrx+2*N__fl(t)*y__fl-2*M__x+2
-*Y__rl(t)*rr__rl(t)-2*z(t)*F__y+2*h*F__y+2*Y__fl(t)*rr__fl(t)+2*N__rr(t)*y__rr+
-2*N__rr(t)*t__r+2*Y__fr(t)*rr__fr(t)-2*M__Ax-2*T__flx)*mu(t)-M__Az-(z__fl(t)*
-Omega__z(t)*b*m__fu-z__fl(t)*Omega__z(t)*m__fu*w-z__fl(t)*Omega__z(t)*m__fu*
-x__fl+z__fr(t)*Omega__z(t)*b*m__fu-z__fr(t)*Omega__z(t)*m__fu*w-z__fr(t)*
-Omega__z(t)*m__fu*x__fr+z__rl(t)*Omega__z(t)*b*m__ru-z__rl(t)*Omega__z(t)*m__ru
-*x__rl+z__rr(t)*Omega__z(t)*b*m__ru-z__rr(t)*Omega__z(t)*m__ru*x__rr+I__xx*
-Omega__x(t)-I__xz*Omega__z(t)-Omega__x(t)*I__yy-Omega__x(t)*i__tg)*Omega__y(t)+
-(m__fu*z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-z__fr(t)*m__fu*t__f-z__fr(t)*m__fu*
-y__fr+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-m__ru*z__rr(t)*t__r-m__ru*z__rr(
-t)*y__rr)*diff(Omega__y(t),t)+I__zz*diff(Omega__z(t),t)-T__flz-(-m__fu*z__fl(t)
-*b+m__fu*z__fl(t)*w+m__fu*z__fl(t)*x__fl-z__fr(t)*m__fu*b+z__fr(t)*m__fu*w+
-z__fr(t)*m__fu*x__fr-z__rl(t)*m__ru*b+z__rl(t)*m__ru*x__rl-m__ru*z__rr(t)*b+
-m__ru*z__rr(t)*x__rr+I__xz)*diff(Omega__x(t),t), diff(z__fldot(t),t)*m__fu+(b-w
--x__fl)*m__fu*diff(Omega__y(t),t)-m__fu*(t__f-y__fl)*diff(Omega__x(t),t)+diff(
-V__z(t),t)*m__fu-m__fu*(-R__f+z__fl(t)+h)*Omega__x(t)^2+m__fu*(-Omega__z(t)*b+
-Omega__z(t)*w+Omega__z(t)*x__fl+V__y(t))*Omega__x(t)-m__fu*(-R__f+z__fl(t)+h)*
-Omega__y(t)^2-m__fu*(Omega__z(t)*t__f-Omega__z(t)*y__fl+V__x(t))*Omega__y(t)-
-g__z*m__fu-F__fl(t)+N__fl(t)+(x__fl*Omega__z(t)*Omega__y(t)-Omega__z(t)*y__fl*
-Omega__x(t)+diff(Omega__y(t),t)*y__fl+diff(Omega__x(t),t)*x__fl)*m__fu*delta(t)
--(g__x*m__fu+X__fl(t))*mu(t)+(g__y*m__fu+Y__fl(t))*phi(t)+2*m__fu*(Omega__y(t)*
-y__fl+Omega__x(t)*x__fl)*delta__dot(t)-(phi__fl*D__psi__fl*rr__fl(t)+D__phi__fl
-*psi__fl*rr__fl(t)+D__mu__fl*rr__fl(t)+D__x__fl)*X__fl(t)-(mu__fl*D__psi__fl*
-rr__fl(t)+D__mu__fl*psi__fl*rr__fl(t)-D__phi__fl*rr__fl(t)+D__y__fl)*Y__fl(t)-(
--psi__fl*D__mu__fl+D__phi__fl)*T__flx-(psi__fl*D__phi__fl+D__mu__fl)*T__fly-(
-phi__fl*D__mu__fl+D__psi__fl)*T__flz, diff(z__frdot(t),t)*m__fu+m__fu*(b-w-
-x__fr)*diff(Omega__y(t),t)+m__fu*(t__f+y__fr)*diff(Omega__x(t),t)+diff(V__z(t),
-t)*m__fu-m__fu*(-R__f+z__fr(t)+h)*Omega__x(t)^2-m__fu*(Omega__z(t)*b-Omega__z(t
-)*w-Omega__z(t)*x__fr-V__y(t))*Omega__x(t)-m__fu*(-R__f+z__fr(t)+h)*Omega__y(t)
-^2+m__fu*(Omega__z(t)*t__f+Omega__z(t)*y__fr-V__x(t))*Omega__y(t)-g__z*m__fu-
-F__fr(t)+N__fr(t)+(x__fr*Omega__z(t)*Omega__y(t)-Omega__z(t)*y__fr*Omega__x(t)+
-diff(Omega__y(t),t)*y__fr+diff(Omega__x(t),t)*x__fr)*m__fu*delta(t)-(g__x*m__fu
-+X__fr(t))*mu(t)+(g__y*m__fu+Y__fr(t))*phi(t)+2*(Omega__y(t)*y__fr+Omega__x(t)*
-x__fr)*m__fu*delta__dot(t)-(phi__fr*D__psi__fr*rr__fr(t)+D__phi__fr*psi__fr*
-rr__fr(t)+D__mu__fr*rr__fr(t)+D__x__fr)*X__fr(t)-(mu__fr*D__psi__fr*rr__fr(t)+
-D__mu__fr*psi__fr*rr__fr(t)-D__phi__fr*rr__fr(t)+D__y__fr)*Y__fr(t)-(-psi__fr*
-D__mu__fr+D__phi__fr)*T__frx-(psi__fr*D__phi__fr+D__mu__fr)*T__fry-(phi__fr*
-D__mu__fr+D__psi__fr)*T__frz, diff(z__rldot(t),t)*m__ru-m__ru*(-y__rl+t__r)*
-diff(Omega__x(t),t)+m__ru*(b-x__rl)*diff(Omega__y(t),t)+diff(V__z(t),t)*m__ru-
-m__ru*(-R__r+z__rl(t)+h)*Omega__x(t)^2-(Omega__z(t)*b-Omega__z(t)*x__rl-V__y(t)
-)*m__ru*Omega__x(t)-m__ru*(-R__r+z__rl(t)+h)*Omega__y(t)^2-(Omega__z(t)*t__r-
-Omega__z(t)*y__rl+V__x(t))*m__ru*Omega__y(t)+(g__y*m__ru+Y__rl(t))*phi(t)-(g__x
-*m__ru+X__rl(t))*mu(t)-g__z*m__ru-F__rl(t)+N__rl(t)-(phi__rl*D__psi__rl*rr__rl(
-t)+D__phi__rl*psi__rl*rr__rl(t)+D__mu__rl*rr__rl(t)+D__x__rl)*X__rl(t)-(mu__rl*
-D__psi__rl*rr__rl(t)+D__mu__rl*psi__rl*rr__rl(t)-D__phi__rl*rr__rl(t)+D__y__rl)
-*Y__rl(t)-(-psi__rl*D__mu__rl+D__phi__rl)*T__rlx-(psi__rl*D__phi__rl+D__mu__rl)
-*T__rly-(phi__rl*D__mu__rl+D__psi__rl)*T__rlz, diff(z__rrdot(t),t)*m__ru+m__ru*
-(y__rr+t__r)*diff(Omega__x(t),t)+m__ru*(b-x__rr)*diff(Omega__y(t),t)+diff(V__z(
-t),t)*m__ru-m__ru*(-R__r+z__rr(t)+h)*Omega__x(t)^2-(Omega__z(t)*b-Omega__z(t)*
-x__rr-V__y(t))*m__ru*Omega__x(t)-m__ru*(-R__r+z__rr(t)+h)*Omega__y(t)^2+(
-Omega__z(t)*t__r+Omega__z(t)*y__rr-V__x(t))*m__ru*Omega__y(t)+(g__y*m__ru+Y__rr
-(t))*phi(t)-(g__x*m__ru+X__rr(t))*mu(t)-g__z*m__ru-F__rr(t)+N__rr(t)-(phi__rr*
-D__psi__rr*rr__rr(t)+D__phi__rr*psi__rr*rr__rr(t)+D__mu__rr*rr__rr(t)+D__x__rr)
-*X__rr(t)-(mu__rr*D__psi__rr*rr__rr(t)+D__mu__rr*psi__rr*rr__rr(t)-D__phi__rr*
-rr__rr(t)+D__y__rr)*Y__rr(t)-(-psi__rr*D__mu__rr+D__phi__rr)*T__rrx-(psi__rr*
-D__phi__rr+D__mu__rr)*T__rry-(phi__rr*D__mu__rr+D__psi__rr)*T__rrz, Tau__fl(t)-
-i__fy*diff(omega__fl(t),t)+i__fy*diff(Omega__y(t),t)-rr__fl(t)*X__fl(t)-T__fly+
-(diff(Omega__z(t),t)*i__fy-T__flz)*phi__fl-i__fy*diff(Omega__x(t),t)*psi__fl-
-i__fy*delta__dot(t)*Omega__x(t)-delta(t)*diff(Omega__x(t),t)*i__fy-phi(t)*
-T__flz, Tau__fr(t)-i__fy*diff(omega__fr(t),t)+i__fy*diff(Omega__y(t),t)-rr__fr(
-t)*X__fr(t)-T__fry+(diff(Omega__z(t),t)*i__fy-T__frz)*phi__fr-i__fy*diff(
-Omega__x(t),t)*psi__fr-i__fy*delta__dot(t)*Omega__x(t)-delta(t)*diff(Omega__x(t
-),t)*i__fy-phi(t)*T__frz, Tau__rl(t)-diff(omega__rl(t),t)*i__ta-i__ry*diff(
-omega__rl(t),t)+i__ry*diff(Omega__y(t),t)-rr__rl(t)*X__rl(t)-T__rly+(i__ry*diff
-(Omega__z(t),t)-T__rlz)*phi__rl-i__ry*diff(Omega__x(t),t)*psi__rl-phi(t)*T__rlz
-, Tau__rr(t)-diff(omega__rr(t),t)*i__ta-i__ry*diff(omega__rr(t),t)+i__ry*diff(
-Omega__y(t),t)-rr__rr(t)*X__rr(t)-T__rry+(i__ry*diff(Omega__z(t),t)-T__rrz)*
-phi__rr-i__ry*diff(Omega__x(t),t)*psi__rr-phi(t)*T__rrz, z__fl(t)+rr__fl(t)-
-R__f+z(t)+(b-w-x__fl)*mu(t)-phi(t)*(t__f-y__fl), z__fr(t)+rr__fr(t)-R__f+z(t)+(
-b-w-x__fr)*mu(t)+phi(t)*(t__f+y__fr), rr__rl(t)+z__rl(t)-R__r+z(t)-phi(t)*(-
-y__rl+t__r)+(b-x__rl)*mu(t), rr__rr(t)+z__rr(t)-R__r+z(t)+phi(t)*(y__rr+t__r)+(
-b-x__rr)*mu(t)];
+x__fr)*m__fu*z__frdot(t)+2*m__ru*(Omega__y(t)*t__r-Omega__y(t)*y__rl+Omega__x(t
+)*b-Omega__x(t)*x__rl)*z__rldot(t)-2*(Omega__y(t)*t__r+Omega__y(t)*y__rr-
+Omega__x(t)*b+Omega__x(t)*x__rr)*m__ru*z__rrdot(t)-M__Az-(i__ry*omega__rl(t)*
+Omega__y(t)-X__rl(t)*b+X__rl(t)*x__rl-Y__rl(t)*t__r+Y__rl(t)*y__rl)*psi__rl-
+T__frz+Y__fl(t)*(b-w-x__fl)-X__fl(t)*(t__f-y__fl)-1/2*F__Ay*x__rl-1/2*F__Ay*
+x__rr+Y__rl(t)*(b-x__rl)-X__rl(t)*(-y__rl+t__r)+1/2*F__Ax*y__rl+1/2*F__Ax*y__rr
+-F__Ay*b__A-F__y*d-T__flz+(F__Ay+F__y)*b+X__fr(t)*(t__f+y__fr)+1/2*(2*N__fl(t)*
+y__fl-2*N__rl(t)*t__r+2*N__rl(t)*y__rl+2*N__fr(t)*t__f-2*T__rlx+2*Y__fr(t)*
+rr__fr(t)-2*T__rrx-2*M__x-2*z(t)*F__y+2*F__y*h+2*Y__rr(t)*rr__rr(t)-2*M__Ax-2*
+T__frx+2*N__rr(t)*y__rr+2*N__rr(t)*t__r-2*F__Ay*h__A-F__Az*y__rl-F__Az*y__rr+
+F__Ay*rr__rl(t)+F__Ay*rr__rr(t)-2*T__flx+2*Y__fl(t)*rr__fl(t)+2*N__fr(t)*y__fr+
+2*Y__rl(t)*rr__rl(t)-2*N__fl(t)*t__f)*mu(t)-1/2*(2*N__rr(t)*b-2*N__rr(t)*x__rr+
+2*N__rl(t)*b-2*N__rl(t)*x__rl-2*T__rly-2*T__rry-2*M__y-2*M__Ay-2*T__fry-2*N__fr
+(t)*x__fr+2*F__Ax*h__A-2*F__Az*b+2*F__Az*b__A+F__Az*x__rl+F__Az*x__rr-2*F__z*b+
+2*F__z*d-2*F__x*h+2*F__x*z(t)-2*T__fly+2*N__fl(t)*b-2*N__fl(t)*w+2*N__fr(t)*b-2
+*N__fr(t)*w-2*N__fl(t)*x__fl)*phi(t)-(-m__fu*z__fl(t)*b+m__fu*z__fl(t)*w+m__fu*
+z__fl(t)*x__fl-m__fu*z__fr(t)*b+m__fu*z__fr(t)*w+m__fu*z__fr(t)*x__fr-z__rl(t)*
+m__ru*b+z__rl(t)*m__ru*x__rl-z__rr(t)*m__ru*b+z__rr(t)*m__ru*x__rr+I__xz)*diff(
+Omega__x(t),t)+(m__fu*z__fl(t)*t__f-m__fu*z__fl(t)*y__fl-m__fu*z__fr(t)*t__f-
+m__fu*z__fr(t)*y__fr+z__rl(t)*m__ru*t__r-z__rl(t)*m__ru*y__rl-z__rr(t)*m__ru*
+t__r-z__rr(t)*m__ru*y__rr)*diff(Omega__y(t),t)+I__zz*diff(Omega__z(t),t), diff(
+z__fldot(t),t)*m__fu+(b-w-x__fl)*m__fu*diff(Omega__y(t),t)-m__fu*(t__f-y__fl)*
+diff(Omega__x(t),t)+diff(V__z(t),t)*m__fu-m__fu*(-R__f+z__fl(t)+h)*Omega__x(t)^
+2-m__fu*(Omega__z(t)*b-Omega__z(t)*w-Omega__z(t)*x__fl-V__y(t))*Omega__x(t)-
+m__fu*(-R__f+z__fl(t)+h)*Omega__y(t)^2-m__fu*(Omega__z(t)*t__f-Omega__z(t)*
+y__fl+V__x(t))*Omega__y(t)-g__z*m__fu-F__fl(t)+N__fl(t)+2*m__fu*(Omega__x(t)*
+x__fl+Omega__y(t)*y__fl)*delta__dot(t)+(x__fl*Omega__z(t)*Omega__y(t)-Omega__z(
+t)*y__fl*Omega__x(t)+diff(Omega__x(t),t)*x__fl+diff(Omega__y(t),t)*y__fl)*m__fu
+*delta(t)-(g__x*m__fu+X__fl(t))*mu(t)+(g__y*m__fu+Y__fl(t))*phi(t)-(phi__fl*
+D__psi__fl*rr__fl(t)+D__phi__fl*psi__fl*rr__fl(t)+D__mu__fl*rr__fl(t)+D__x__fl)
+*X__fl(t)-(mu__fl*D__psi__fl*rr__fl(t)+D__mu__fl*psi__fl*rr__fl(t)-D__phi__fl*
+rr__fl(t)+D__y__fl)*Y__fl(t)-(-psi__fl*D__mu__fl+D__phi__fl)*T__flx-(psi__fl*
+D__phi__fl+D__mu__fl)*T__fly-(phi__fl*D__mu__fl+D__psi__fl)*T__flz, diff(
+z__frdot(t),t)*m__fu+m__fu*(b-w-x__fr)*diff(Omega__y(t),t)+m__fu*(t__f+y__fr)*
+diff(Omega__x(t),t)+diff(V__z(t),t)*m__fu-m__fu*(-R__f+z__fr(t)+h)*Omega__x(t)^
+2-m__fu*(Omega__z(t)*b-Omega__z(t)*w-Omega__z(t)*x__fr-V__y(t))*Omega__x(t)-
+m__fu*(-R__f+z__fr(t)+h)*Omega__y(t)^2+m__fu*(Omega__z(t)*t__f+Omega__z(t)*
+y__fr-V__x(t))*Omega__y(t)-g__z*m__fu-F__fr(t)+N__fr(t)+2*m__fu*(Omega__x(t)*
+x__fr+Omega__y(t)*y__fr)*delta__dot(t)+m__fu*(x__fr*Omega__z(t)*Omega__y(t)-
+Omega__z(t)*y__fr*Omega__x(t)+diff(Omega__y(t),t)*y__fr+diff(Omega__x(t),t)*
+x__fr)*delta(t)-(g__x*m__fu+X__fr(t))*mu(t)+(g__y*m__fu+Y__fr(t))*phi(t)-(
+phi__fr*D__psi__fr*rr__fr(t)+D__phi__fr*psi__fr*rr__fr(t)+D__mu__fr*rr__fr(t)+
+D__x__fr)*X__fr(t)-(mu__fr*D__psi__fr*rr__fr(t)+D__mu__fr*psi__fr*rr__fr(t)-
+D__phi__fr*rr__fr(t)+D__y__fr)*Y__fr(t)-(-psi__fr*D__mu__fr+D__phi__fr)*T__frx-
+(psi__fr*D__phi__fr+D__mu__fr)*T__fry-(phi__fr*D__mu__fr+D__psi__fr)*T__frz, 
+diff(z__rldot(t),t)*m__ru-m__ru*(-y__rl+t__r)*diff(Omega__x(t),t)+m__ru*(b-
+x__rl)*diff(Omega__y(t),t)+diff(V__z(t),t)*m__ru-m__ru*(-R__r+z__rl(t)+h)*
+Omega__x(t)^2-m__ru*(Omega__z(t)*b-Omega__z(t)*x__rl-V__y(t))*Omega__x(t)-m__ru
+*(-R__r+z__rl(t)+h)*Omega__y(t)^2-m__ru*(Omega__z(t)*t__r-Omega__z(t)*y__rl+
+V__x(t))*Omega__y(t)+(g__y*m__ru+Y__rl(t))*phi(t)-(g__x*m__ru+X__rl(t))*mu(t)-
+g__z*m__ru-F__rl(t)+N__rl(t)-(phi__rl*D__psi__rl*rr__rl(t)+D__phi__rl*psi__rl*
+rr__rl(t)+D__mu__rl*rr__rl(t)+D__x__rl)*X__rl(t)-(mu__rl*D__psi__rl*rr__rl(t)+
+D__mu__rl*psi__rl*rr__rl(t)-D__phi__rl*rr__rl(t)+D__y__rl)*Y__rl(t)-(-psi__rl*
+D__mu__rl+D__phi__rl)*T__rlx-(psi__rl*D__phi__rl+D__mu__rl)*T__rly-(phi__rl*
+D__mu__rl+D__psi__rl)*T__rlz, diff(z__rrdot(t),t)*m__ru+m__ru*(y__rr+t__r)*diff
+(Omega__x(t),t)+m__ru*(b-x__rr)*diff(Omega__y(t),t)+diff(V__z(t),t)*m__ru-m__ru
+*(-R__r+z__rr(t)+h)*Omega__x(t)^2-m__ru*(Omega__z(t)*b-Omega__z(t)*x__rr-V__y(t
+))*Omega__x(t)-m__ru*(-R__r+z__rr(t)+h)*Omega__y(t)^2+m__ru*(Omega__z(t)*t__r+
+Omega__z(t)*y__rr-V__x(t))*Omega__y(t)+(g__y*m__ru+Y__rr(t))*phi(t)-(g__x*m__ru
++X__rr(t))*mu(t)-g__z*m__ru-F__rr(t)+N__rr(t)-(phi__rr*D__psi__rr*rr__rr(t)+
+D__phi__rr*psi__rr*rr__rr(t)+D__mu__rr*rr__rr(t)+D__x__rr)*X__rr(t)-(mu__rr*
+D__psi__rr*rr__rr(t)+D__mu__rr*psi__rr*rr__rr(t)-D__phi__rr*rr__rr(t)+D__y__rr)
+*Y__rr(t)-(-psi__rr*D__mu__rr+D__phi__rr)*T__rrx-(psi__rr*D__phi__rr+D__mu__rr)
+*T__rry-(phi__rr*D__mu__rr+D__psi__rr)*T__rrz, Tau__fl(t)-i__fy*diff(omega__fl(
+t),t)+i__fy*diff(Omega__y(t),t)-rr__fl(t)*X__fl(t)-T__fly+(i__fy*diff(Omega__z(
+t),t)-T__flz)*phi__fl-i__fy*diff(Omega__x(t),t)*psi__fl-delta(t)*diff(Omega__x(
+t),t)*i__fy-i__fy*delta__dot(t)*Omega__x(t)-phi(t)*T__flz, Tau__fr(t)-i__fy*
+diff(omega__fr(t),t)+i__fy*diff(Omega__y(t),t)-rr__fr(t)*X__fr(t)-T__fry+(i__fy
+*diff(Omega__z(t),t)-T__frz)*phi__fr-i__fy*diff(Omega__x(t),t)*psi__fr-delta(t)
+*diff(Omega__x(t),t)*i__fy-i__fy*delta__dot(t)*Omega__x(t)-phi(t)*T__frz, 
+Tau__rl(t)-diff(omega__rl(t),t)*i__ta-diff(omega__rl(t),t)*i__ry+i__ry*diff(
+Omega__y(t),t)-rr__rl(t)*X__rl(t)-T__rly+(i__ry*diff(Omega__z(t),t)-T__rlz)*
+phi__rl-i__ry*psi__rl*diff(Omega__x(t),t)-phi(t)*T__rlz, Tau__rr(t)-diff(
+omega__rr(t),t)*i__ta-diff(omega__rr(t),t)*i__ry+i__ry*diff(Omega__y(t),t)-
+rr__rr(t)*X__rr(t)-T__rry+(i__ry*diff(Omega__z(t),t)-T__rrz)*phi__rr-i__ry*diff
+(Omega__x(t),t)*psi__rr-phi(t)*T__rrz, z__fl(t)+rr__fl(t)-R__f+z(t)+(b-w-x__fl)
+*mu(t)-phi(t)*(t__f-y__fl), z__fr(t)+rr__fr(t)-R__f+z(t)+(b-w-x__fr)*mu(t)+phi(
+t)*(t__f+y__fr), rr__rl(t)+z__rl(t)-R__r+z(t)-phi(t)*(-y__rl+t__r)+(b-x__rl)*mu
+(t), rr__rr(t)+z__rr(t)-R__r+z(t)+phi(t)*(y__rr+t__r)+(b-x__rr)*mu(t)];

@@ -1,5 +1,5 @@
 
-# Steady state motorcycle model
+# Steady state car model
 restart:
 # MBSdir := cat(currentdir(),"\\MBSymba");
 # MBSdir := "C:\\MBSymba\\lib";

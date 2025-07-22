@@ -9,18 +9,18 @@ car = load('data/myCarData');
 V0 = 10 : 5 : 105;
 
 % total gravity (g)
-g0 = 1;
+g0 = 0.6 : 0.1 : 1.4;
 
 % options
 opts = struct();
-% opts.mex = true; % mex function to speed up
+opts.mex = true; % mex function to speed up
 opts.GGshift = @(V) -3e-5*V^2; % g-g shift function handle
 
 % call to ggmap
 res = carfm.ggmap(car, V0, g0, opts);
 
 % save gg
-% save('gg-2d.mat','-struct','res');
+% save('gg-fm.mat','-struct','res');
 
 % g-g plot
 if ~(numel(V0)==1 && numel(g0)>1)

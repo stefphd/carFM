@@ -8,7 +8,7 @@ addpath('data')
 car = load('data/myCarData');
 
 % speed (m/s)
-V0 = 80;
+V0 = 60;
 
 % total gravity (g)
 g0 = 1.0;

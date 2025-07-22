@@ -30,13 +30,12 @@ kr__r   = car.rearTyreStiffness;
 cr__r   = car.rearTyreDamping;
 tau__g  = car.gearboxRatios(:); % column vector
 omegar__s = car.gearboxSwitchingSpeeds(:); % column vector
-k__d = car.differentialStiffness;
-gamma__d = car.driveRatio;
 gamma__b = car.brakeRatio;
 
 % struct variables
 aero = car.aero;
 engine = car.engine;
+transmission = car.transmission;
 frontSuspension = car.frontSuspension;
 rearSuspension  = car.rearSuspension;
 frontTyre = car.frontTyre;

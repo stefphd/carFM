@@ -285,31 +285,27 @@ end
 % Tau__t0: total torque w.r.t. engine brake, i.e. it is 0 in coast-down,
 % i.e. prop to throttle/brake pedal
 Taueps = opts.Taueps;
-% Tau__tb + Tau__te = Tau__t
+% Split Tau__t into total driving (i.e. engine) torque Tau__td (positive part) 
+% and total braking torque Tau__tb (negative part)
+% Note that Tau__td includes engine drag, i.e. eventually negative in coast-down
 Tau__tb = ( Tau__t0 - sqrt(Tau__t0^2 + Taueps^2))/2; % negative part
-Tau__te = ( Tau__t0 + sqrt(Tau__t0^2 + Taueps^2))/2 - Tau__b*eta__t/abs(tau__t); % positive part - engine brake
-% split negative part depending on brake ratio, equally between left/right
+Tau__td = ( Tau__t0 + sqrt(Tau__t0^2 + Taueps^2))/2 - Tau__b*eta__t/abs(tau__t); % positive part
+% Split braking torque on front/rear depending on brake ratio, equally between left/right
 Tau__fb = gamma__b*Tau__tb;
-Tau__rb = Tau__tb - Tau__fb; % 0.5*(1-gamma__b)*Tau__tb
+Tau__rb = Tau__tb - Tau__fb; % (1-gamma__b)*Tau__tb
 Tau__flb = 0.5*Tau__fb;
 Tau__frb = 0.5*Tau__fb;
 Tau__rlb = 0.5*Tau__rb;
 Tau__rrb = 0.5*Tau__rb;
-% split positive part depending on drive ratio (front/rear) and
-% differential stiffness (right/left)
-% front/rear differential stiffness must be separated, otherwise
-% non-physical results on front torque when turning with e.g. gamma__d=0 (i.e. RWD)
-Tau__fe = gamma__d*Tau__te;
-Tau__re = Tau__te - Tau__fe; % 0.5*(1-gamma__d)*Tau__te
-Tau__fle = 0.5*Tau__fe + Tau__fe*k__d*(omega__fl0-omega__fr0);
-Tau__fre = 0.5*Tau__fe - Tau__fe*k__d*(omega__fl0-omega__fr0);
-Tau__rle = 0.5*Tau__re + Tau__re*k__d*(omega__rl0-omega__rr0);
-Tau__rre = 0.5*Tau__re - Tau__re*k__d*(omega__rl0-omega__rr0);
-% sum all
-Tau__fl0 = Tau__flb + Tau__fle;
-Tau__fr0 = Tau__frb + Tau__fre;
-Tau__rl0 = Tau__rlb + Tau__rle;
-Tau__rr0 = Tau__rrb + Tau__rre;
+% Call user-function transmission.Torques to split total driving torque
+% into front/rear, left/right wheels
+[Tau__fld, Tau__frd, Tau__rld, Tau__rrd] = transmission.Torques(transmission, ...
+    omega__fl0, omega__fr0, omega__rl0, omega__rr0, Tau__td);
+% Total = brake + drive
+Tau__fl0 = Tau__flb + Tau__fld;
+Tau__fr0 = Tau__frb + Tau__frd;
+Tau__rl0 = Tau__rlb + Tau__rld;
+Tau__rr0 = Tau__rrb + Tau__rrd;
 
 %% External force and torque
 % ext force applied to the ref point P
@@ -469,8 +465,8 @@ if nargout > 1
     output.rotaryInertia = i__ta;
     output.rotaryTorque  = i__ta*omega__dotr0;
     % ICE
-    output.engineTorque     = Tau__te*abs(tau__t)/eta__t;
-    output.engineTorqueWheel= Tau__te;
+    output.engineTorque     = Tau__td*abs(tau__t)/eta__t;
+    output.engineTorqueWheel= Tau__td;
     output.engineMaxTorque  = Tau__p__max;
     output.engineMaxTorqueWheel = Tau__p__max/abs(tau__t);
     output.engineBrakeTorque = Tau__b;

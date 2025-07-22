@@ -21,8 +21,6 @@ function checkCarStruct(bike)
         'rearWheelSpinInertia' 'double'
         'transmissionInertia' 'double'
         'transmissionEfficiency' 'double'
-        'differentialStiffness' 'double'
-        'driveRatio' 'double'
         'brakeRatio' 'double'
         'aeroH' 'double'
         'aeroB' 'double'
@@ -31,6 +29,7 @@ function checkCarStruct(bike)
         'rearTyreStiffness' 'double'
         'rearTyreDamping' 'double'
         'engine' 'struct'
+        'transmission' 'struct'
         'frontSuspension' 'struct'
         'rearSuspension' 'struct'
         'aero' 'struct'
@@ -151,6 +150,15 @@ function checkCarStruct(bike)
     catch ME
         eid = 'carfm:unableEval';
         msg = 'Unable to evaluate engine.Torques function.';
+        err = MException(eid, msg);   
+        throw(err);
+    end
+    %transmission
+    try
+        [~, ~]= bike.transmission.Torques(bike.transmission, 10,10,10,10,10);
+    catch ME
+        eid = 'carfm:unableEval';
+        msg = 'Unable to evaluate transmission.Torques function.';
         err = MException(eid, msg);   
         throw(err);
     end

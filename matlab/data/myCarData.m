@@ -36,15 +36,30 @@ rearUnsprungMass = 20;
 rearWheelSpinInertia = 1.3;
 
 %% Transmission
+% <transmission.Torques> definition and usage
+% [Tfl,Tfr,Trl,Trr] = transmission.Torques(transmission, omegafl, omegafr, omegarl, omegarr, Td)
+%
+% INPUT
+% transmission: structure containing transmission constants
+% omegaij:      wheel angular velocities (ij=fl,fr,rl,rr) (rad/s)
+% Td:           total driving torque, including engine brake, i.e. eventually
+%               negative in coast-down (Nm)
+%
+% OUTPUT
+% Tij:          wheel torque (ij=fl,fr,rl,rr) (Nm)
+
 gearboxRatios = 1; % from 1st to highest gear - no gear ratios considered
 % switching angular velocity of rear tyre in rad/s from gear k-th to (k+1)-th.
 % The last value is the top angular velocity in rad/s.
 gearboxSwitchingSpeeds = 1000;
 transmissionInertia = 0; % neglected
 transmissionEfficiency = 1.00;
-differentialStiffness = 0; % normalized differential sitffness (0=open)
-driveRatio = 0; % define as front drive torque / total drive torque (0=RWD, 1=AWD)
 brakeRatio = 0.58; % defined as front braking torque / total braking torque
+% dataset
+transmission.gammad = 0; % drive ratio, defined as front torque/total torque (0=RWD)
+transmission.kd = 0; % differential stiffness (0=open) (Nms/rad)
+% user-function that gives wheel torques
+transmission.Torques = @basicTransmission;
 
 %% Engine
 % <engine.Torques> definition and usage
@@ -57,6 +72,7 @@ brakeRatio = 0.58; % defined as front braking torque / total braking torque
 % OUTPUT
 % propulsionTorque: propulsion engine torque at the crankshaft
 % brakingTorque: braking engine torque at the crankshaft
+
 % dataset
 engine.Pmax = 415e3;
 engine.Pbrake = 0e3;

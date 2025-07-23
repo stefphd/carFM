@@ -120,13 +120,19 @@ Iall_comps:=simplify(linearize(subs(S0,[I__all[1][1], I__all[2][2], I__all[3][3]
 AP_xycomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__xP=comp_X(AP, T__P), a__yP=comp_Y(AP, T__P)])))),{mu0,phi0}):<%>;
 AP_tncomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__tP=comp_X(AP, T__P*rotate('Z',lambda__P(t))), a__nP=comp_Y(AP, T__P*rotate('Z',lambda__P(t)))])))),{mu0,phi0}):<%>;
 # Find omegaidot from kappaidot=0 and omega as a function of kappa
-# Use definition kappa = -(1-omega*R/Vs), with R the unloaded tyre radius (which is similar to the effective radius)
+# Note that this is only an internal definition of kappa, which is not seen by the end user
+### eqkappa := simplify(subs(velocity_eqns, [
+###    kappa__fl(t)=-(1+VNfl/VSfl),
+###    kappa__fr(t)=-(1+VNfr/VSfr),
+###    kappa__rl(t)=-(1+VNrl/VSrl),
+###    kappa__rr(t)=-(1+VNrr/VSrr)
+### ])):   # using Vr (i.e. omega * R loaded) to calculate kappa
 eqkappa := simplify(subs(velocity_eqns, [
-kappa__fl(t)=-(1-omega__fl(t)*R__f/VSfl),
-kappa__fr(t)=-(1-omega__fr(t)*R__f/VSfr),
-kappa__rl(t)=-(1-omega__rl(t)*R__r/VSrl),
-kappa__rr(t)=-(1-omega__rr(t)*R__r/VSrr)
-])):
+   kappa__fl(t)=omega__fl(t)*R__f/VSfl-1,
+   kappa__fr(t)=omega__fr(t)*R__f/VSfr-1,
+   kappa__rl(t)=omega__rl(t)*R__r/VSrl-1,
+   kappa__rr(t)=omega__rr(t)*R__r/VSrr-1
+])):   # using omega * R unloaded to calculate kappa (more similar to R effetive)
 eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))):
 eqkappa0 := linearize(subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqkappa))))),{mu0,phi0,delta0}):
 eqomegadot0 := linearize(simplify(expand(subs(S0,S0plus, diff(eqomega,t)))),{mu0,phi0,delta0}):<%>;

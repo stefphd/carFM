@@ -83,6 +83,17 @@ function checkOptStruct(opts)
                     msg = 'Value of field "maxLatJerk" must be greater than 0.';
                     error(eid,msg)
                 end
+            case 'useLatJerk'
+                if ~isequal(size(opts.useLatJerk),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "useLatJerk" must be [1,1].';
+                    error(eid,msg);
+                end
+                if ~islogical(opts.useLatJerk)
+                    eid = 'carfm:incorrectType';
+                    msg = 'Type of field "useLatJerk" must be logical.';
+                    error(eid,msg);
+                end
             case 'sscale'
                 if ~isequal(size(opts.sscale),[1,1])
                     eid = 'carfm:notEqual';

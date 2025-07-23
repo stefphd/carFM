@@ -40,6 +40,8 @@ aux.track.xl = aux.track.x;
 aux.track.yl = aux.track.y;
 aux.track.xr = aux.track.x;
 aux.track.yr = aux.track.y;
+aux.track.rwl = @(zeta) 0;
+aux.track.rwr = @(zeta) 0;
 if aux.track.isTrack3D
     aux.track.mu = aux.track.sigma;
     aux.track.phi = aux.track.beta;
@@ -47,8 +49,6 @@ if aux.track.isTrack3D
     aux.track.Omegay = aux.track.Gammay;
     aux.track.zl = aux.track.z;
     aux.track.zr = aux.track.z;
-    aux.track.rwl = @(zeta) 0;
-    aux.track.rwr = @(zeta) 0;
 end
 
 % Find zetai and zetaf
@@ -83,13 +83,26 @@ un = casadi.MX.sym('un', nu); % final control
 % l: Lagrange term
 s = t*opts.sscale;
 V = x(1)*opts.xscale(1);
+at = x(2)*opts.xscale(4);
 an = aux.track.Gammaz(s)*V^2;
+if opts.useLatJerk
+    if ~aux.track.isGammazp 
+       % Reset and exit
+       clearvars -except filepath err
+       carfm.common.setEnvironment(filepath, false);
+       error('carfm:notFound', 'Gammazp is required when useLatJerk=true.');
+    end
+    jn = aux.track.Gammazp(s)*V^3+aux.track.Gammaz(s)*2*V*at;
+else
+    jn = 0; % not included in penalty 
+end
 xa = [x(1); 0; 0; x(2); an/opts.xscale(5)]; % augmented state
-ua = [u(1); 0]; % augmented control
+ua = [u(1); jn/opts.uscale(2)]; % augmented control
 getAugVars = casadi.Function('getAugState', {t,x,u},{xa,ua});
 [xadot, ca, l] = carfm.ggmlts.ocpEquations(t,xa,ua,aux,opts);
 xdot = [xadot(1); xadot(4)];
 c = ca(3:end); % exclude road constraints
+c = [jn/opts.uscale(2); c]; % add jerk constraint (possibly 0) 
 nc = numel(c);
 % bcs
 try
@@ -248,8 +261,8 @@ lbx = [gg(1).V(1) -4*opts.g]   ./ opts.xscale([1 4]); % lower state bound
 ubx = [gg(1).V(end) +4*opts.g] ./ opts.xscale([1 4]); % upper state bound
 lbu = opts.minLongJerk*opts.g ./ opts.uscale(1);
 ubu = opts.maxLongJerk*opts.g ./ opts.uscale(1);
-lbc = [-1, min(gg(1).g)] ./ opts.cscale(end-1 : end);
-ubc = [1, max(gg(1).g)] ./ opts.cscale(end-1 : end);
+lbc = [ -opts.maxLatJerk*opts.g/opts.uscale(2), [-1, min(gg(1).g)] ./ opts.cscale(end-1 : end) ] ;
+ubc = [ +opts.maxLatJerk*opts.g/opts.uscale(2), [1, max(gg(1).g)] ./ opts.cscale(end-1 : end) ];
 lbb = zeros(nb,1);
 ubb = zeros(nb,1);
 % fix lbc,ubc for geq/g constraint in the case of 2D g-g is provided

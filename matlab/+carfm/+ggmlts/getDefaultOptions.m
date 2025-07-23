@@ -34,6 +34,7 @@ function opts = getDefaultOptions(opts)
     default_opts.maxLongJerk = 8; % max longitudinal jerk (g/s)
     default_opts.minLongJerk = -8; % min longitudinal jerk (g/s)
     default_opts.maxLatJerk = 8; % max lateral jerk (g/s)
+    default_opts.useLatJerk = false; % include lateral jerk penalty and bounds in ggmltsfixed (Gammazp required)
     % Solving options
     default_opts.problemName = 'ggmlts'; % Name of the problem
     default_opts.sRange = [-inf, inf]; % Initial and final travelled distance

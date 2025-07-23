@@ -54,6 +54,14 @@ for k = 1 : numel(optional_fields)
     output.(field) = interpField(traj, backend, 'zeta', field, method);
 end
 
+% Interp Gammazp field
+field = 'Gammazp';
+output.isGammazp = false;
+if any(strcmp(field, traj_fields))
+    output.isGammazp = true;
+    output.(field) = interpField(traj, backend, 'zeta', field, 'linear');
+end
+
 end
 
 function output = interpField(data, backend, xfield, yfield, method)   

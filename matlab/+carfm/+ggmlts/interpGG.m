@@ -53,7 +53,10 @@ for l = 1 : numel(gg)
     gg(l).V = [gg(l).V(1)-dV, gg(l).V, gg(l).V(end)+dV];
     for k0 = 1 : numel(varargin)
         field = varargin{k0};
-        gg(l).(field) = cat(2,gg(l).(field)(:,1,:,:), gg(l).(field), gg(l).(field)(:,end,:,:));
+        gg(l).(field) = cat(2,...
+            gg(l).(field)(:,1,:,:) - ( gg(l).(field)(:,2,:,:) - gg(l).(field)(:,1,:,:) ), ...
+            gg(l).(field), ...
+            gg(l).(field)(:,end,:,:) + ( gg(l).(field)(:,end,:,:) - gg(l).(field)(:,end-1,:,:) ) );
     end
 
     % Add more gz points at the boundary
@@ -75,7 +78,10 @@ for l = 1 : numel(gg)
     gg(l).g = [gg(l).g(1)-dg, gg(l).g, gg(l).g(end)+dg];
     for k0 = 1 : numel(varargin)
         field = varargin{k0};
-        gg(l).(field) = cat(3,gg(l).(field)(:,:,1,:), gg(l).(field), gg(l).(field)(:,:,end,:));
+        gg(l).(field) = cat(3, ...
+            gg(l).(field)(:,:,1,:) - ( gg(l).(field)(:,:,2,:) - gg(l).(field)(:,:,1,:) ), ...
+            gg(l).(field), ...
+            gg(l).(field)(:,:,end,:) + ( gg(l).(field)(:,:,end,:) - gg(l).(field)(:,:,end-1,:) ) );
     end
 
     % Repeat G-G cyclically to add points at the boundaries

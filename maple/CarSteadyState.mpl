@@ -5,6 +5,8 @@ restart:
 # MBSdir := "C:\\MBSymba\\lib";
 # libname := MBSdir, libname:
 with(MBSymba_r6):
+with(codegen,cost,optimize);# 
+;
 read( "CarModel.mla"):
 interface(rtablesize=30)
 ;
@@ -149,12 +151,12 @@ rear_right_kin0 := subs(S0,
 # aerodynamic center
 CA_coords:=linearize(subs(S0,[comp_XYZ(CA, T__P)]),{mu0,phi0}): Vector(%);
 # Optimize to reduce cpu cost
-with(codegen,cost,optimize);
 optimizeProc := proc(expr) local c1, c2, dc, expropt; c1 := cost(expr); print("Original cost", c1); expropt := simplify(expr, trig); expropt := optimize(expropt); c2 := cost(expropt); print("Optimized cost ", c2); dc := c1 - c2; print("Difference cost", dc); return expropt; end proc;
 for k from 1 to nops(ss_eqns) do 
-ss_eqns[k] := steadyStateRes[k] = ss_eqns[k]:
+   ss_eqns[k] := steadyStateRes[k] = ss_eqns[k]:
 end:
-ss_eqns:=optimizeProc(ss_eqns):
+ss_eqns:=optimizeProc(ss_eqns):# 
+;
 front_tyre_kinematics := optimizeProc(front_left_kin0 union front_right_kin0):
 rear_tyre_kinematics := optimizeProc(rear_left_kin0 union rear_right_kin0):
 for k from 1 to nops(CPfl_coords) do 
@@ -191,8 +193,8 @@ ffclose := fd    -> if not(print2screen) then fclose(fd); end;
 # Steady Sate Equations residuals
 #print2screen := true:
 fd := ffopen(cat(dirname,"steadyStateResiduals.m"), WRITE):
-fprintf(fd,"%% Steady State Equations  *** DO NOT EDIT ***\n"):
-fprintf(fd,"%s", CodeGeneration[Matlab]([ss_eqns], optimize=false, output=string)):
+fprintf(fd,"%% Steady State Equations  *** DO NOT EDIT ***\n"):# a
+fprintf(fd,"%s", CodeGeneration[Matlab]([ss_eqns], optimize=false, output=string)):# a
 ffclose(fd);
 # Front tyre kinematics
 #print2screen := true:

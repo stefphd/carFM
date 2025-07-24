@@ -132,17 +132,17 @@ end
 %      F__fl, F__fr, F__rl, F__rr, Tau__t
 %      ]
 lbz = [0; % rho
-       -15/180*pi; -15/180*pi; -0.25; -30/180*pi; -0.5; -0.5; -0.5; -0.5; -30/180*pi; % phi, mu, z, delta, z__fl, z__fr, z__rl, z__rr, lambda,
-       -opts.kappaLim/opts.xscale(8); -opts.kappaLim/opts.xscale(9); -opts.kappaLim/opts.xscale(9); -opts.kappaLim/opts.xscale(9); % kappa__fl, kappa__fr, kappa__rl, kappa__rr
-       -10; -10; -10; -10; -10; -10; -10; -10; 0; 0; 0; 0; % X__fl,X__fr,X__rl,X__rr,Y__fl,Y__fr,Y__rl,Y__rr,N__fl,N__fr,N__rl,N__rr
-       -10; -10; -10; -10; -10; % F__fl, F__fr, F__rl, F__rr, Tau__t
-       ]; % lower bound for z
+       [-15/180*pi; -15/180*pi; -0.25; -30/180*pi; -0.5; -0.5; -0.5; -0.5; -30/180*pi; % phi, mu, z, delta, z__fl, z__fr, z__rl, z__rr, lambda,
+       -opts.kappaLim; -opts.kappaLim; -opts.kappaLim; -opts.kappaLim; % kappa__fl, kappa__fr, kappa__rl, kappa__rr
+       -10e3; -10e3; -10e3; -10e3; -10e3; -10e3; -10e3; -10e3; 0; 0; 0; 0; % X__fl,X__fr,X__rl,X__rr,Y__fl,Y__fr,Y__rl,Y__rr,N__fl,N__fr,N__rl,N__rr
+       -10e3; -10e3; -10e3; -10e3; -10e3; % F__fl, F__fr, F__rl, F__rr, Tau__t
+       ]./opts.xscale(1:30)']; % lower bound for z
 ubz = [5; % rho
-       +15/180*pi; +15/180*pi; +0.25; +30/180*pi; +0.5; +0.5; +0.5; +0.5; +30/180*pi; % phi, mu, z, delta, z__fl, z__fr, z__rl, z__rr, lambda,
-       +opts.kappaLim/opts.xscale(8); +opts.kappaLim/opts.xscale(9); +opts.kappaLim/opts.xscale(9); +opts.kappaLim/opts.xscale(9); % kappa__fl, kappa__fr, kappa__rl, kappa__rr
-       10; 10; 10; 10; 10; 10; 10; 10; 10; 10; 10; 10; % X__fl,X__fr,X__rl,X__rr,Y__fl,Y__fr,Y__rl,Y__rr,N__fl,N__fr,N__rl,N__rr
-       10; 10; 10; 10; 10; % F__fl, F__fr, F__rl, F__rr, Tau__t
-       ]; % upper bound for z
+       [+15/180*pi; +15/180*pi; +0.25; +30/180*pi; +0.5; +0.5; +0.5; +0.5; +30/180*pi; % phi, mu, z, delta, z__fl, z__fr, z__rl, z__rr, lambda,
+       +opts.kappaLim; +opts.kappaLim; +opts.kappaLim; +opts.kappaLim; % kappa__fl, kappa__fr, kappa__rl, kappa__rr
+       10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; 10e3; % X__fl,X__fr,X__rl,X__rr,Y__fl,Y__fr,Y__rl,Y__rr,N__fl,N__fr,N__rl,N__rr
+       10e3; 10e3; 10e3; 10e3; 10e3; % F__fl, F__fr, F__rl, F__rr, Tau__t
+       ]./opts.xscale(1:30)']; % upper bound for z
 
 % Mex
 % for mex=true, force build if buildOnly=true, regardless usePrebuilt

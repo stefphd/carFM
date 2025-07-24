@@ -8,7 +8,7 @@ addpath('data')
 car = load('data/myCarData');
 
 % G-G map
-gg = load('gg-2d'); % full G-G
+gg = load('gg-fm'); % full G-G
 
 % MLTS result
 mlts = load('ggmlts-fm-free');

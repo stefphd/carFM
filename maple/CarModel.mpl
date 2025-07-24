@@ -29,14 +29,12 @@ PDEtools[declare](
 
 prime=t,quiet);
 # Small variables
-linear_modeling(  {delta(t), phi(t), mu(t),
-### Omega__x(t),Omega__y(t),omega__x(t),omega__y(t),   # Not necessary
-
-psi__fl, phi__fl, mu__fl,
-psi__fr, phi__fr, mu__fr,
-psi__rl, phi__rl, mu__rl,
-psi__rr, phi__rr, mu__rr
-} );   # non linear-steer has some problem with the tyre module
+linear_modeling(  {delta(t),
+   psi__fl, phi__fl, mu__fl,
+   psi__fr, phi__fr, mu__fr,
+   psi__rl, phi__rl, mu__rl,
+   psi__rr, phi__rr, mu__rr
+} );
 # Tracking the point P
 # (distance 'd' from rear wheel at road level, in nominal condition)
 TP0 := translate(x(t),y(t),zz(t)) * rotate('Z',psi(t)) * rotate('Y',sigma(t)) * rotate('X',beta(t)); # frame atached to P, expressed in ground
@@ -56,7 +54,7 @@ T__V := master_frame;
 # 
 
 # Transformation T1 moves from the car CoG to the road
-T1 := translate(-d,0,0) * translate(b,0,z(t)-h) * rotate('X',phi(t)) * rotate('Y',mu(t)): 
+T1 := translate(-d,0,0) * translate(b,0,z(t)-h)* rotate('X',phi(t)) * rotate('Y',mu(t)):
 # T__P reference frame is at road level, at the reference point P, SAE convention
 T__P := inv_frame(T1);
 T__R := T__P * translate(-d,0,0);  # same of T__P but at rear axle
@@ -102,6 +100,9 @@ t_forces := [ X__fl(t),Y__fl(t), N__fl(t), X__fr(t),Y__fr(t), N__fr(t), X__rl(t)
 nominal := x -> collect( simplify(eval(subs(nominal_conditions, eval(x)))) , t_forces):
 ### T2 = nominal(T__R); # also, T2=T__R in nominal conditions
 ;
+my_linearize := x -> linearize(x, {
+   mu(t), phi(t)
+});
 # Bodies
 # utilities
 anti_body := proc(BB::BODY)
@@ -260,8 +261,8 @@ show(project(_gravity,master_frame));
 simplify(1/2 * ( comp_X(CPrl,T__R) + comp_X(CPrr,T__R) ) ),
 simplify(1/2 * ( comp_Y(CPrl,T__R) + comp_Y(CPrr,T__R) ) ),
 simplify(1/2 * ( comp_Z(CPrl,T__R) + comp_Z(CPrr,T__R) ) ) :  # coords of point at the middle of the rear axle, at road level
-T__R * translate(%);   # aligned with T__R at rear axle middle, at road level
-CA := make_POINT(%, b__A,0,-h__A): show(nominal(project(CA,T__R)));  # point of application of aerodynamic forces
+T__R * translate(%):  # aligned with T__R at rear axle middle, at road level
+CA := make_POINT(%, b__A,0,-h__A):show(nominal(CA));  # point of application of aerodynamic forces
 aero_force  := make_FORCE (T__R, F__Ax, F__Ay, F__Az, CA, car_body): show(%);  # aero forces in SAE, applied at CA
 aero_torque := make_TORQUE(T__R, M__Ax, M__Ay, M__Az, car_body): show(%);# aero moments in SAE
 ;
@@ -306,6 +307,7 @@ eqns_N := project(newton_equations(full_car),T2): show(eqns_N):
 nominal(comp_X(eqns_N)); nominal(comp_Y(eqns_N)); nominal(comp_Z(eqns_N));
 #eqns_EA := euler_equations(full_car, origin(T__R)): codegen[cost](comp_XYZ(eqns_EA));
 eqns_EG := euler_equations(full_car, G): codegen[cost](comp_XYZ(eqns_EG));
+eqns_EG := simplify(eqns_EG): codegen[cost](comp_XYZ(eqns_EG));
 eqns_E := eqns_EG: 
 #comp_X(eqns_E); comp_Y(eqns_E); comp_Z(eqns_E);
 nominal(comp_X(eqns_E)); nominal(comp_Y(eqns_E)); nominal(comp_Z(eqns_E));

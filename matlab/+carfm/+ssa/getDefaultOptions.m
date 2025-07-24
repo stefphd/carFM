@@ -64,8 +64,8 @@ function opts = getDefaultOptions(opts)
     default_opts.gearSharpness = 5; % sharpness factor for gear shift
     default_opts.Taueps = 10; % torque epsilon for regularization (Nm)
     default_opts.Neps = 0.02; % zero vertical load (in units of m*g)
-    default_opts.extForce  = [0 0 0]; % x,y,z external force applied to the motorcycle in ref. point P (N)
-    default_opts.extTorque = [0 0 0]; % x,y,z external torque applied to the motorcycle
+    default_opts.extForce  = [0 0 0]; % x,y,z external force applied to the car in ref. point P (N)
+    default_opts.extTorque = [0 0 0]; % x,y,z external torque applied to the car
     % SSA options
     default_opts.ssaMexName = 'ssaSolver'; % mex filename for ssa solver
     default_opts.ssActiveLongInputs = [true true false]; % active longitudinal inputs: V, a__t Tau__fl+Tau__fr+Tau__rl+Tau__rr

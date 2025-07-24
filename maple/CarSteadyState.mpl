@@ -5,7 +5,7 @@ restart:
 # MBSdir := "C:\\MBSymba\\lib";
 # libname := MBSdir, libname:
 with(MBSymba_r6):
-with(codegen,cost,optimize);
+with(codegen,cost,optimize):
 read( "CarModel.mla"):
 interface(rtablesize=30)
 ;
@@ -45,14 +45,13 @@ pos; vel; #<velocity_eqns>;
 ang_vel := op(simplify(solve(velocity_eqns[3..5], vel[5..7]))): #<ang_vel>; # full expressions
 ang_vel0 := subs(diff(psi(t),t)=yaw__rate0, S0, ang_vel): <ang_vel0>;
 # CoG velocity
-show(VG); # full expression
+show(project(VG,T__R)); # full expression
 # steady state
 [comp_X(VP, T__P)=V__P(t)*cos(lambda__P(t)), comp_Y(VP, T__P)=V__P(t)*sin(lambda__P(t)), comp_Z(VP, T__P)=0]:
 op(solve(%, [V__x(t),V__y(t),V__z(t)])):
-G_vel := simplify(%): 
-G_vel0 := linearize(simplify(expand(subs(S0,ang_vel0,%))), {mu0,phi0}): <%>;
-G_veldot0 := linearize(simplify(expand(subs(V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)=V__z0+V__dotz0*t,S0,ang_vel0,diff(G_vel,t)))),
-{mu0,phi0}):<%>;
+G_vel := simplify(%):
+G_vel0 := simplify(expand(subs(S0,ang_vel0,%))): <%>;
+G_veldot0 := simplify(expand(subs(V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)=V__z0+V__dotz0*t,S0,ang_vel0,diff(G_vel,t)))):<%>;
 # Check: G_veldot0 gives z__ddot = 0
 velocity_eqns[6]; # z__ddot
 
@@ -66,12 +65,13 @@ simplify(expand(subs(V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)
 ;
 # Solve radii
 xx_eqns[-4..-1]: <%>:
-S0rr := subs(S0, op(solve(%, [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)]))):<%>;
+S0rr := simplify(subs(S0, op(solve(%, [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)])))):<%>;
 # all togheter
 S0plus := ang_vel0 union G_vel0: <%>;
 # steady state equations
-map(simplify,subs(S0,S0plus,S0rr,xx_eqns)):
-xx_eqns0 := subs(t=0,linearize(%, {mu0,phi0})):
+simplify(subs(S0,S0plus,xx_eqns[1..-5])):   # exclude radii eqns
+
+xx_eqns0 := subs(t=0,%):
 # check the presence of unwanted acceleration terms
 if ( norm(<diff(xx_eqns0,t,t)>) <> 0 or norm(<subs(omega__dotfl0=0,omega__dotrl0=0,omega__dotrl0=0,omega__dotrr0=0,a__t0=0,diff(xx_eqns0,t))>) <>0 )
 then error("Steady State Equations still depend on time!"); end;
@@ -91,31 +91,31 @@ z__fl0=0,z__fr0=0,z__rl0=0,z__rr0=0];
 for k from 1 to nops(ss_eqns) do k = collect(simplify(subs(ssnc,ss_eqns[k])),V0); end;
 # Matlab code
 # tyre kinematics
-linearize(subs(t=0,simplify(eval(subs(S0,S0plus, [VSfl0 = VSfl, VNfl0 = VNfl, VRfl0 = VRfl] )))),{mu0, phi0}):
+subs(t=0,simplify(eval(subs(S0,S0plus, [VSfl0 = VSfl, VNfl0 = VNfl, VRfl0 = VRfl] )))):
 front_left_kin0 := %:
 <front_left_kin0>;
-linearize(subs(t=0,simplify(eval(subs(S0,S0plus, [VSfr0 = VSfr, VNfr0 = VNfr, VRfr0 = VRfr] )))),{mu0, phi0}):
+subs(t=0,simplify(eval(subs(S0,S0plus, [VSfr0 = VSfr, VNfr0 = VNfr, VRfr0 = VRfr] )))):
 front_right_kin0 := %:
 <front_right_kin0>;
-linearize(subs(t=0,simplify(eval(subs(S0,S0plus, [VSrl0 = VSrl, VNrl0 = VNrl, VRrl0 = VRrl] )))),{mu0, phi0}):
+subs(t=0,simplify(eval(subs(S0,S0plus, [VSrl0 = VSrl, VNrl0 = VNrl, VRrl0 = VRrl] )))):
 rear_left_kin0 := %:
 <rear_left_kin0>;
-linearize(subs(t=0,simplify(eval(subs(S0,S0plus, [VSrr0 = VSrr, VNrr0 = VNrr, VRrr0 = VRrr] )))),{mu0, phi0}):
+subs(t=0,simplify(eval(subs(S0,S0plus, [VSrr0 = VSrr, VNrr0 = VNrr, VRrr0 = VRrr] )))):
 rear_right_kin0 := %:
 <rear_right_kin0>;
 # wheel points
-CPfl_coords:=linearize(subs(S0,[comp_XYZ(CPfl, T__P)]),{mu0,phi0}):Vector(%):# 
-CPfr_coords:=linearize(subs(S0,[comp_XYZ(CPfr, T__P)]),{mu0,phi0}):Vector(%):
-CPrl_coords:=linearize(subs(S0,[comp_XYZ(CPrl, T__P)]),{mu0,phi0}):Vector(%):# 
-CPrr_coords:=linearize(subs(S0,[comp_XYZ(CPrr, T__P)]),{mu0,phi0}):Vector(%):
-Wfl_coords:=linearize(subs(S0,[comp_XYZ(W__fl, T__P)]),{mu0,phi0}):Vector(%):
-Wfr_coords:=linearize(subs(S0,[comp_XYZ(W__fr, T__P)]),{mu0,phi0}):Vector(%):
-Wrl_coords:=linearize(subs(S0,[comp_XYZ(W__rl, T__P)]),{mu0,phi0}):Vector(%):
-Wrr_coords:=linearize(subs(S0,[comp_XYZ(W__rr, T__P)]),{mu0,phi0}):Vector(%):
+CPfl_coords:=subs(S0,[comp_XYZ(CPfl, T__P)]): <%>:# 
+CPfr_coords:=subs(S0,[comp_XYZ(CPfr, T__P)]): <%>:
+CPrl_coords:=subs(S0,[comp_XYZ(CPrl, T__P)]): <%>:# 
+CPrr_coords:=subs(S0,[comp_XYZ(CPrr, T__P)]): <%>:
+Wfl_coords:=subs(S0,[comp_XYZ(W__fl, T__P)]): <%>:
+Wfr_coords:=subs(S0,[comp_XYZ(W__fr, T__P)]): <%>:
+Wrl_coords:=subs(S0,[comp_XYZ(W__rl, T__P)]): <%>:
+Wrr_coords:=subs(S0,[comp_XYZ(W__rr, T__P)]): <%>:
 # ovarall cog
-Gall_coords:=linearize(subs(S0,[comp_XYZ(G__all, T__P)]),{mu0,phi0}):Vector(%);
+Gall_coords:=subs(S0,[comp_XYZ(G__all, T__P)]): <%>;
 # ovarall inertia
-Iall_comps:=simplify(linearize(subs(S0,[I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]]),{mu0,phi0,delta0})):<%>;
+Iall_comps:=simplify(subs(S0,[I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]])):
 # reference point
 AP_xycomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__xP=comp_X(AP, T__P), a__yP=comp_Y(AP, T__P)])))),{mu0,phi0}):<%>;
 AP_tncomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__tP=comp_X(AP, T__P*rotate('Z',lambda__P(t))), a__nP=comp_Y(AP, T__P*rotate('Z',lambda__P(t)))])))),{mu0,phi0}):<%>;
@@ -133,10 +133,10 @@ eqkappa := simplify(subs(velocity_eqns, [
 #    kappa__rl(t)=omega__rl(t)*R__r/VSrl-1,
 #    kappa__rr(t)=omega__rr(t)*R__r/VSrr-1
 # ])):<%>:   # using omega * R unloaded to calculate kappa
-eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))): <%>;
-eqkappa0 := linearize(subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqkappa))))),{mu0,phi0,delta0}):
-eqomegadot0 := linearize(simplify(expand(subs(S0,S0plus, diff(eqomega,t)))),{mu0,phi0,delta0}):<%>;
-eqomega0 := linearize(subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqomega))))),{mu0,delta0,phi0}):<%>;
+eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))):
+eqkappa0 := subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqkappa))))):
+eqomegadot0 := simplify(expand(subs(S0,S0plus, diff(eqomega,t)))):
+eqomega0 := subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqomega))))):
 front_left_kin0 := subs(S0,
     [S0rr[1], op(xifl_eqn), frontTyreAngles[1]]) union
     [eqomega0[1],eqomegadot0[1]] union
@@ -229,4 +229,4 @@ ffclose(fd);
 # Save output equations
 save(ss_eqns, front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarSteadyState.mla");
-NULL;
+

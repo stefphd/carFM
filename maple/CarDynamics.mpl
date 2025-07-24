@@ -11,6 +11,12 @@ with(codegen,cost,optimize):
 with(FileTools): 
 read("CarModel.mla"):
 interface(rtablesize=30):
+linear_modeling(  {delta(t),
+   psi__fl, phi__fl, mu__fl,
+   psi__fr, phi__fr, mu__fr,
+   psi__rl, phi__rl, mu__rl,
+   psi__rr, phi__rr, mu__rr
+} );
 # Create dynamical equations
 xx := [
 phi(t), mu(t), z(t), delta(t),
@@ -43,13 +49,13 @@ velocity_eqns := [
 xi_eqns := xifl_eqn union xifr_eqn union xirl_eqn union xirr_eqn;
 xidot_eqns := subs(velocity_eqns, diff(xi_eqns,t));
 # Solz of velocity VX,VY of G as function of VP,lambdaP
-G_vel := op(simplify(solve(subs(velocity_eqns, [comp_X(VP) = V__P(t)*cos(lambda__P(t)), comp_Y(VP) = V__P(t)*sin(lambda__P(t))]), [V__x(t), V__y(t)]))): <%>;
+op(simplify(solve(subs(velocity_eqns, [comp_X(VP) = V__P(t)*cos(lambda__P(t)), comp_Y(VP) = V__P(t)*sin(lambda__P(t))]), [V__x(t), V__y(t)]))): # a
+G_vel := % :<%>;
 # Solz tyre radii
 rr_solz := op(simplify(solve(subs(xi_eqns,xx_eqns[-4..-1]), [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)]))):<%>;
 rrdot_solz:=simplify(subs(velocity_eqns, G_vel, diff(rr_solz,t))):<%>;
 # Use VP,lambdaP instead of VX,VY
-simplify(subs(G_vel, velocity_eqns)):
-velocity_eqns := subs(phi(t)^2=0,mu(t)^2=0,%):   # remove nonlinear (small) terms
+velocity_eqns := simplify(subs(G_vel, velocity_eqns)):
 VSfl := simplify(subs(G_vel,VSfl)):
 VNfl := simplify(subs(G_vel,VNfl)):
 VRfl := simplify(subs(G_vel,VRfl)):
@@ -108,43 +114,41 @@ VSrr0=VSrr,
 VNrr0=VNrr,
 VRrr0=VRrr])): <%>:
 # Wheel points
-CPfl_coords:=linearize([comp_XYZ(CPfl, T__P)], {phi(t),mu(t)}):<%>:# 
-CPfr_coords:=linearize([comp_XYZ(CPfr, T__P)], {phi(t),mu(t)}):<%>:
-CPrl_coords:=linearize([comp_XYZ(CPrl, T__P)], {phi(t),mu(t)}):<%>:# 
-CPrr_coords:=linearize([comp_XYZ(CPrr, T__P)], {phi(t),mu(t)}):<%>:
-Wfl_coords:=linearize([comp_XYZ(W__fl, T__P)], {phi(t),mu(t)}):<%>:
-Wfr_coords:=linearize([comp_XYZ(W__fr, T__P)], {phi(t),mu(t)}):<%>:
-Wrl_coords:=linearize([comp_XYZ(W__rl, T__P)], {phi(t),mu(t)}):<%>:
-Wrr_coords:=linearize([comp_XYZ(W__rr, T__P)], {phi(t),mu(t)}):<%>:
+CPfl_coords:=[comp_XYZ(CPfl, T__P)]:<%>:# 
+CPfr_coords:=[comp_XYZ(CPfr, T__P)]:<%>:
+CPrl_coords:=[comp_XYZ(CPrl, T__P)]:<%>:# 
+CPrr_coords:=[comp_XYZ(CPrr, T__P)]:<%>:
+Wfl_coords:=[comp_XYZ(W__fl, T__P)]:<%>:
+Wfr_coords:=[comp_XYZ(W__fr, T__P)]:<%>:
+Wrl_coords:=[comp_XYZ(W__rl, T__P)]:<%>:
+Wrr_coords:=[comp_XYZ(W__rr, T__P)]:<%>:
 # Rate of G vel
-G_veldot := simplify(subs(xdot2v,diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t),diff(omega__x(t),t)=omega__xdot(t), diff(omega__y(t),t)=omega__ydot(t), (diff(G_vel,t)) union [V__zdot(t)=diff(V__z(t),t)])):
+G_veldot :=simplify(subs(xdot2v,diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t),diff(omega__x(t),t)=omega__xdot(t), diff(omega__y(t),t)=omega__ydot(t), (diff(G_vel,t)) union [V__zdot(t)=diff(V__z(t),t)])):
 <%>;
 # ovarall cog
-Gall_coords:=linearize([comp_XYZ(G__all, T__P)], {phi(t),mu(t)}):<%>:
+Gall_coords:=[comp_XYZ(G__all, T__P)]:<%>:
 # ovarall inertia
-Iall_comps:=simplify(linearize([I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]],{phi(t),mu(t),delta(t)})):<%>:
+Iall_comps:=simplify([I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]]):<%>:
 # aerodynamic center
-CA_coords:=linearize([comp_XYZ(CA, T__P)],{phi(t),mu(t)}):<%>;
+CA_coords:=[comp_XYZ(CA, T__P)]:<%>:
 # ref point kinematics
-# issue: using small phi,mu gives a (possibly) wrong and longer expressions of a__P
-# In order to get simpler (and NOT approximated) expressions, Omega__x,Omega__y,omega__x,omega__y have to be assumed small: although it seems a semplification, this is not so!
 yawrate := subs(omega__z(t)=yaw__rate(t), velocity_eqns[3]);
 VP_xycomps:=[ 'V__xP'=simplify(subs(G_vel,velocity_eqns, comp_X(VP, T__P))),
               'V__yP'=simplify(subs(G_vel,velocity_eqns, comp_Y(VP, T__P)))]:
 simplify(expand(subs(velocity_eqns, G_vel,[a__xP = comp_X(AP, T__R), a__yP = comp_Y(AP, T__R)]))):
 simplify(subs(velocity_eqns, %)): 
-AP_xycomps :=simplify(linearize(simplify(subs(Omega__z(t) = solve(yawrate, Omega__z(t)), xdot2v, %)), {phi(t),mu(t),omega__x(t),omega__y(t),Omega__x(t),Omega__y(t)})):
+AP_xycomps := simplify(subs(Omega__z(t) = solve(yawrate, Omega__z(t)), xdot2v, %)):<%>;
 T__R1 := T__R * rotate('Z',lambda__P(t)):
 simplify(expand(subs(velocity_eqns, G_vel,[a__tP = comp_X(AP, T__R1), a__nP = comp_Y(AP, T__R1)]))): 
 simplify(subs(velocity_eqns, %)): 
 AP_tncomps := simplify(subs(Omega__z(t) = solve(yawrate, Omega__z(t)), xdot2v, %)):
-ref_point_kin := linearize([yawrate, op(VP_xycomps), op(AP_xycomps), op(AP_tncomps)],{phi(t),mu(t),omega__x(t),omega__y(t),Omega__x(t),Omega__y(t)}): <%>;
+ref_point_kin := [yawrate, op(VP_xycomps), op(AP_xycomps), op(AP_tncomps)]: <%>;
 # get vehice rates: V__z,Omega__i,ft__dot,... as a function of v__z, v__phi, ...
 velocity_eqns[3..6]: # velocity equations omega__z, phi dot, mu dot ...
 subs(xdot2v, 
 op(simplify(solve(%, 
 [V__z(t),Omega__x(t),Omega__y(t),Omega__z(t)])))):
-rates_eqns := linearize(%, {phi(t),mu(t)}): <%>:
+rates_eqns := %: <%>:
 # Solve delta
 rates_eqns := rates_eqns union subs(xdot2v, [rhs(velocity_eqns[7]) = lhs(velocity_eqns[7])]): <%>: 
 # Solve z__ij
@@ -274,4 +278,5 @@ ffclose(fd);
 save(dyna_eqns0, ref_point_kin0, 
 front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarDynamics.mla");
+NULL;
 NULL;

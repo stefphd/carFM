@@ -133,7 +133,7 @@ eqkappa := simplify(subs(velocity_eqns, [
 #    kappa__rl(t)=omega__rl(t)*R__r/VSrl-1,
 #    kappa__rr(t)=omega__rr(t)*R__r/VSrr-1
 # ])):<%>:   # using omega * R unloaded to calculate kappa
-eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))): <%>:
+eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))): <%>;
 eqkappa0 := linearize(subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqkappa))))),{mu0,phi0,delta0}):
 eqomegadot0 := linearize(simplify(expand(subs(S0,S0plus, diff(eqomega,t)))),{mu0,phi0,delta0}):<%>;
 eqomega0 := linearize(subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqomega))))),{mu0,delta0,phi0}):<%>;

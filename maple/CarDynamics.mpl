@@ -24,7 +24,7 @@ vv := [
 v__phi(t), v__mu(t), v__z(t), v__delta(t),
 v__z__fl(t), v__z__fr(t), v__z__rl(t), v__z__rr(t),
 v__V__P(t), v__lambda__P(t), v__V__z(t),
-V__delta__dot(t),
+v__delta__dot(t),
 v__Omega__z(t), v__Omega__x(t), v__Omega__y(t),
 v__z__fldot(t), v__z__frdot(t), v__z__rldot(t), v__z__rrdot(t),
 v__omega__fl(t), v__omega__fr(t), v__omega__rl(t), v__omega__rr(t)];  # state derivatives v=xdot
@@ -146,8 +146,7 @@ op(simplify(solve(%,
 [V__z(t),Omega__x(t),Omega__y(t),Omega__z(t)])))):
 rates_eqns := linearize(%, {phi(t),mu(t)}): <%>:
 # Solve delta
-rates_eqns := rates_eqns union [v__delta(t) = rhs(velocity_eqns[7])]: <%>: 
-rates_eqns := rates_eqns union [v__delta__dot(t) = rhs(velocity_eqns[8])]: <%>:
+rates_eqns := rates_eqns union subs(xdot2v, [rhs(velocity_eqns[7]) = lhs(velocity_eqns[7])]): <%>: 
 # Solve z__ij
 velocity_eqns[9..12]:  # velocity equarions z__ij
 subs(xdot2v, 

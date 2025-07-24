@@ -17,8 +17,8 @@ phi(t), mu(t), z(t), delta(t),
 z__fl(t), z__fr(t), z__rl(t), z__rr(t),
 V__P(t), lambda__P(t), V__z(t),
 delta__dot(t),
-Omega__z(t), Omega__x(t), Omega__y(t),
 z__fldot(t), z__frdot(t), z__rldot(t), z__rrdot(t),
+Omega__z(t), Omega__x(t), Omega__y(t),
 omega__fl(t), omega__fr(t), omega__rl(t), omega__rr(t)];  # states
 vv := [
 v__phi(t), v__mu(t), v__z(t), v__delta(t),
@@ -31,11 +31,12 @@ v__omega__fl(t), v__omega__fr(t), v__omega__rl(t), v__omega__rr(t)];  # state de
 uu;   # control u
 # Convert xdot to v
 xdot2v := [seq(diff(xx[i], t) = vv[i], i = 1 .. nops(xx))];
-velocity_eqns := [op(velocity_eqns),
-diff(rr__fl(t),t)=rr__fldot(t),diff(rr__fr(t),t)=rr__frdot(t),diff(rr__rl(t),t)=rr__rldot(t),diff(rr__rr(t),t)=rr__rrdot(t),   # radii
+velocity_eqns := [
+   op(velocity_eqns),
+   diff(rr__fl(t),t)=rr__fldot(t),diff(rr__fr(t),t)=rr__frdot(t),diff(rr__rl(t),t)=rr__rldot(t),diff(rr__rr(t),t)=rr__rrdot(t),   # radii
 
-diff(xi__fl(t),t)=xi__fldot(t),diff(xi__fr(t),t)=xi__frdot(t),diff(xi__rl(t),t)=xi__rldot(t),diff(xi__rr(t),t)=xi__rrdot(t),   # tyre deflections
-diff(omega__x(t),t)=omega__xdot(t),diff(omega__y(t),t)=omega__ydot(t),diff(omega__z(t),t)=omega__zdot(t),diff(v__w(t),t)=v__wdot(t)   # road quantities
+   diff(xi__fl(t),t)=xi__fldot(t),diff(xi__fr(t),t)=xi__frdot(t),diff(xi__rl(t),t)=xi__rldot(t),diff(xi__rr(t),t)=xi__rrdot(t),   # tyre deflections
+   diff(omega__x(t),t)=omega__xdot(t),diff(omega__y(t),t)=omega__ydot(t),diff(omega__z(t),t)=omega__zdot(t),diff(v__w(t),t)=v__wdot(t)   # road quantities
 
 ]:
 # Tyre deflection equations
@@ -45,7 +46,7 @@ xidot_eqns := subs(velocity_eqns, diff(xi_eqns,t));
 G_vel := op(simplify(solve(subs(velocity_eqns, [comp_X(VP) = V__P(t)*cos(lambda__P(t)), comp_Y(VP) = V__P(t)*sin(lambda__P(t))]), [V__x(t), V__y(t)]))): <%>;
 # Solz tyre radii
 rr_solz := op(simplify(solve(subs(xi_eqns,xx_eqns[-4..-1]), [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)]))):<%>;
-rrdot_solz:=simplify(subs(velocity_eqns, G_vel, diff(rr_solz,t))):<%>;# 
+rrdot_solz:=simplify(subs(velocity_eqns, G_vel, diff(rr_solz,t))):<%>;
 # Use VP,lambdaP instead of VX,VY
 simplify(subs(G_vel, velocity_eqns)):
 velocity_eqns := subs(phi(t)^2=0,mu(t)^2=0,%):   # remove nonlinear (small) terms
@@ -60,7 +61,7 @@ VNrl := simplify(subs(G_vel,VNrl)):
 VRrl := simplify(subs(G_vel,VRrl)):
 VSrr := simplify(subs(G_vel,VSrr)):
 VNrr := simplify(subs(G_vel,VNrr)):
-VRrr := simplify(subs(G_vel,VRrr)):# 
+VRrr := simplify(subs(G_vel,VRrr)):
 # Dynamical equations
 dyna_eqns := subs(G_vel, xx_eqns[1..-5]):
 dyna_eqns := subs(xdot2v, 
@@ -68,7 +69,6 @@ diff(v__w(t),t)=v__wdot(t),
 diff(omega__x(t),t)=omega__xdot(t),
 diff(omega__y(t),t)=omega__ydot(t),
 dyna_eqns):# replace derivatives
-
 has(dyna_eqns, diff(xx,t)); # checks OK
 ;
 has(dyna_eqns, omega__x(t)), has(dyna_eqns, omega__y(t)), has(dyna_eqns, omega__z(t)), has(dyna_eqns, v__w(t)); # checks OK
@@ -76,7 +76,6 @@ has(dyna_eqns, diff(omega__x(t),t)), has(dyna_eqns, diff(omega__y(t),t)),
 has(dyna_eqns, diff(omega__z(t),t)), has(dyna_eqns, diff(v__w(t),t)); # checks OK
 has(dyna_eqns, omega__xdot(t)), has(dyna_eqns, omega__ydot(t)),
 has(dyna_eqns, omega__zdot(t)), has(dyna_eqns, v__wdot(t)); # checks OK
-
 ;
 # Processing
 # Tyre kinematics
@@ -148,7 +147,7 @@ op(simplify(solve(%,
 rates_eqns := linearize(%, {phi(t),mu(t)}): <%>:
 # Solve delta
 rates_eqns := rates_eqns union [v__delta(t) = rhs(velocity_eqns[7])]: <%>: 
-rates_eqns := rates_eqns union [v__delta__dot(t) = rhs(velocity_eqns[8])]: <%>:# 
+rates_eqns := rates_eqns union [v__delta__dot(t) = rhs(velocity_eqns[8])]: <%>:
 # Solve z__ij
 velocity_eqns[9..12]:  # velocity equarions z__ij
 subs(xdot2v, 
@@ -178,8 +177,7 @@ for k from 1 to nops(CPfl_coords0) do
    CPfr_coords0[k] := CPfr[k] = CPfr_coords0[k]:
    CPrl_coords0[k] := CPrl[k] = CPrl_coords0[k]:
    CPrr_coords0[k] := CPrr[k] = CPrr_coords0[k]:
-end:# 
-;
+end:
 Wfl_coords0:=remove_t(Wfl_coords):
 Wfr_coords0:=remove_t(Wfr_coords):
 Wrl_coords0:=remove_t(Wrl_coords):
@@ -189,8 +187,7 @@ for k from 1 to nops(Wfl_coords0) do
    Wfr_coords0[k] := Wfr[k] = Wfr_coords0[k]:
    Wrl_coords0[k] := Wrl[k] = Wrl_coords0[k]:
    Wrr_coords0[k] := Wrr[k] = Wrr_coords0[k]:
-end:# 
-;
+end:
 Gall_coords0:=remove_t(Gall_coords):
 for k from 1 to nops(Gall_coords0) do 
    Gall_coords0[k] := G[k] = Gall_coords0[k]:

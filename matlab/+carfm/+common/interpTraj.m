@@ -3,7 +3,7 @@ function output = interpTraj(traj, backend, method)
 %
 % INPUT:
 % traj: trajectory data struct
-% backend: backend to use ('matlab' or 'casadi') 
+% backend: backend to use ('matlab', 'casadi', 'internal')
 % method: 'linear' or 'bspline'
 %
 % OUTPUT:
@@ -65,8 +65,6 @@ end
 end
 
 function output = interpField(data, backend, xfield, yfield, method)   
-    import casadi.*
-    
     % get data
     xdata = data.(xfield);
     ydata = data.(yfield);
@@ -82,20 +80,25 @@ function output = interpField(data, backend, xfield, yfield, method)
              ydata(end)];
     % create interpolant
     switch backend
-        case 'casadi'
+        case 'casadi' % using casadi.interpolant
             if strcmp(method, 'spline')
                 method = 'bspline';
             end
             if all(ydata==0)
                 method = 'linear'; % workaround for NaN in the case of all zero if 'bspline'
             end
-            output = interpolant(yfield, method, {xdata}, ydata);
-        case 'matlab'
+            output = casadi.interpolant(yfield, method, {xdata}, ydata);
+        case 'internal' % using carfm.common.interpolant
+            if strcmp(method, 'bspline')
+                method = 'spline';
+            end
+            output = carfm.common.interpolant(yfield, {xdata}, ydata, method);
+        case 'matlab' % using matlab griddedInterpolant
             if strcmp(method, 'bspline')
                 method = 'spline';
             end
             output = griddedInterpolant({xdata}, ydata, method);
         otherwise
-            error('mltsfm:invalidType','backend must be either ''matlab'' or ''casadi''');
+            error('carfm:invalidType','backend must be either ''matlab'', ''casadi'', or ''internal''.');
     end
 end

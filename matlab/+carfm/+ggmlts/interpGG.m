@@ -3,7 +3,7 @@ function varargout = interpGG(gg, backend, method, varargin)
 %
 % INPUT:
 % gg: g-g map struct (possibly vector)
-% backend: backend to use ('matlab' or 'casadi') 
+% backend: backend to use ('matlab', 'casadi', 'internal')
 % method: interpolation method ('linear' or 'bspline')
 % varargin: field(s) to interpolate
 %
@@ -111,7 +111,7 @@ for l = 1 : numel(gg)
     for k0 = 1 : numel(varargin)
         field = varargin{k0};
         switch backend
-            case 'casadi'
+            case 'casadi' % using casadi.interpolant
                 if strcmp(method, 'spline')
                     method = 'bspline';
                 end
@@ -119,7 +119,15 @@ for l = 1 : numel(gg)
                     vv = gg(l).(field)(:,:,:,ii);
                     varargout{k0}{l}{ii} = casadi.interpolant(sprintf('gg%d_%s%d', l, field, ii), method, {gg(l).alpha, gg(l).V, gg(l).g}, vv(:));
                 end
-            case 'matlab'
+            case 'internal' % using carfm.common.interpolant
+                if strcmp(method, 'bspline')
+                    method = 'spline';
+                end
+                for ii = 1 : size(gg(l).(field), 4)
+                    vv = gg(l).(field)(:,:,:,ii);
+                    varargout{k0}{l}{ii} = carfm.common.interpolant(sprintf('gg%d_%s%d', l, field, ii), {gg(l).alpha, gg(l).V, gg(l).g}, vv, method);
+                end
+            case 'matlab' % using matlab griddedInterpolant
                 if strcmp(method, 'bspline')
                     method = 'spline';
                 end
@@ -128,7 +136,7 @@ for l = 1 : numel(gg)
                     varargout{k0}{l}{ii} = griddedInterpolant({gg(l).alpha, gg(l).V, gg(l).g}, vv, method);
                 end
             otherwise
-                error('carfm:invalidType','backend must be either ''matlab'' or ''casadi''');
+                error('carfm:invalidType','backend must be either ''matlab'', ''casadi'', or ''internal''.');
         end
     end
 end

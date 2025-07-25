@@ -29,7 +29,7 @@ opts = carfm.ggmlts.getDefaultOptions(opts);
 % Create aux
 traj = carfm.common.checkTrajStruct(traj); % eventually use zeta instead of elap_dist
 aux.track = carfm.common.interpTraj(traj, 'casadi', opts.trackinterpMethod);
-aux.rho = carfm.ggmlts.interpGG(gg, 'casadi', opts.gginterpMethod, 'rho');
+aux.rho = carfm.ggmlts.interpGG(gg, 'internal', opts.gginterpMethod, 'rho');
 aux.shift = {gg.shift};
 aux.g0 = opts.g;
 

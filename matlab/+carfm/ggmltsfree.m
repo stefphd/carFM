@@ -28,7 +28,7 @@ opts = carfm.ggmlts.getDefaultOptions(opts);
 
 % Create aux
 aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod);
-aux.rho = carfm.ggmlts.interpGG(gg, 'casadi', opts.gginterpMethod, 'rho');
+aux.rho = carfm.ggmlts.interpGG(gg, 'internal', opts.gginterpMethod, 'rho');
 aux.shift = {gg.shift};
 aux.g0 = opts.g;
 

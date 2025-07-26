@@ -1,0 +1,20 @@
+% Get rates  *** DO NOT EDIT ***
+t1 = sin(lambda__P);
+t3 = z - h;
+t5 = b - d;
+t8 = sin(phi);
+t12 = cos(phi);
+t15 = cos(mu);
+t17 = cos(lambda__P);
+t22 = sin(mu);
+V__z = t15 * (t8 * (-V__P * t1 + t3 * omega__x - t5 * omega__z) - t12 * (t5 * omega__y - v__w - v__z)) - t22 * (-V__P * t17 - t3 * omega__y);
+t24 = v__phi + omega__x;
+t28 = -t12 * omega__z + t8 * omega__y;
+Omega__x = t15 * t24 + t22 * t28;
+Omega__y = t12 * omega__y + t8 * omega__z + v__mu;
+Omega__z = -t15 * t28 + t22 * t24;
+delta__dot = v__delta;
+z__fldot = v__z__fl;
+z__frdot = v__z__fr;
+z__rldot = v__z__rl;
+z__rrdot = v__z__rr;

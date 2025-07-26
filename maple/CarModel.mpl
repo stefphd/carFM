@@ -253,6 +253,24 @@ xirr_eqn := [xi__rr(t) = R__r - rr__rr(t)];
 # Tire camber angles
 frontTyreAngles := [ca__fl = rhs(front_left_tyre['angles'][2]), ca__fr = rhs(front_right_tyre['angles'][2])]:<%>;  # front 
 rearTyreAngles := [ca__rl = rhs(rear_left_tyre['angles'][2]), ca__rr = rhs(rear_right_tyre['angles'][2])]:<%>;  # rear
+# Internal slip definitions
+# kappa = -(1-Vr/Vs)
+# alpha = -arctan(Vn/Vs)
+# These definitions are only used internally, i.e. not seen and used by the end-users
+eqkappa := [
+  kappa__fl(t)=-(1+VRfl0/VSfl0), kappa__fr(t)=-(1+VRfr0/VSfr0),
+  kappa__rl(t)=-(1+VRrl0/VSrl0), kappa__rr(t)=-(1+VRrr0/VSrr0)
+]: <%>; # using Vr=-omega * R loaded to calculate kappa
+# eqkappa := [
+#   kappa__fl(t)=omega__fl(t)*R__f/VSfl0-1, kappa__fr(t)=omega__fr(t)*R__f/VSfr0-1,
+#   kappa__rl(t)=omega__rl(t)*R__r/VSrl0-1, kappa__rr(t)=omega__rr(t)*R__r/VSrr0-1,
+# ]: <%>; # using omega * R unloaded to calculate kappa
+eqalpha := [
+  alpha__fl(t)=-arctan(VNfl0/VSfl0),
+  alpha__fr(t)=-arctan(VNfr0/VSfr0),
+  alpha__rl=-arctan(VNrl0/VSrl0),
+  alpha__rr=-arctan(VNrr0/VSrr0)
+]: <%>;
 # Force
 # Gravity
 _gravity := make_VECTOR(T__R, g__x,g__y,g__z):
@@ -414,6 +432,9 @@ W__fl,W__fr,W__rl,W__rr,
 T__R,T__P,T__V,
 G__all,I__all,CA,
 xifl_eqn,xifr_eqn,xirl_eqn,xirr_eqn,
-xx,uu,xx_eqns,
+eqkappa, eqalpha,  # slip definitions
+
+xx,uu,xx_eqns,   # state space
+
 "CarModel.mla");
 NULL;

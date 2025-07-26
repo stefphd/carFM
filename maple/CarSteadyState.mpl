@@ -121,18 +121,9 @@ AP_xycomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__xP=comp_X(A
 AP_tncomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__tP=comp_X(AP, T__P*rotate('Z',lambda__P(t))), a__nP=comp_Y(AP, T__P*rotate('Z',lambda__P(t)))])))),{mu0,phi0}):<%>;
 # Find omegaidot from kappaidot=0 and omega as a function of kappa
 # Note that this is only an internal definition of kappa, which is not seen by the end user
-eqkappa := simplify(subs(velocity_eqns, [
-   kappa__fl(t)=-(1+VRfl/VSfl),
-   kappa__fr(t)=-(1+VRfr/VSfr),
-   kappa__rl(t)=-(1+VRrl/VSrl),
-   kappa__rr(t)=-(1+VRrr/VSrr)
-])):<%>:   # using Vr=-omega * R loaded to calculate kappa
-# eqkappa := simplify(subs(velocity_eqns, [
-#    kappa__fl(t)=omega__fl(t)*R__f/VSfl-1,
-#    kappa__fr(t)=omega__fr(t)*R__f/VSfr-1,
-#    kappa__rl(t)=omega__rl(t)*R__r/VSrl-1,
-#    kappa__rr(t)=omega__rr(t)*R__r/VSrr-1
-# ])):<%>:   # using omega * R unloaded to calculate kappa
+eqkappa: <%>; # definition of kappa
+subs([VSfl0 = VSfl, VRfl0 = VRfl],[VSfr0 = VSfr, VRfr0 = VRfr],[VSrl0 = VSrl, VRrl0 = VRrl],[VSrr0 = VSrr, VRrr0 = VRrr],velocity_eqns,eqkappa):
+eqkappa := simplify(%): <%>;
 eqomega := simplify(op(solve(eqkappa, [omega__fl(t),omega__fr(t),omega__rl(t),omega__rr(t)]))):
 eqkappa0 := subs(t=0,simplify(expand(simplify(subs(S0,S0plus,eqkappa))))):
 eqomegadot0 := simplify(expand(subs(S0,S0plus, diff(eqomega,t)))):

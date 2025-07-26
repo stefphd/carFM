@@ -92,28 +92,32 @@ xi_eqns[1], xidot_eqns[1],
 frontTyreAngles[1],
 VSfl0=VSfl,
 VNfl0=VNfl,
-VRfl0=VRfl])): <%>:
+VRfl0=VRfl,
+eqkappa[1], eqalpha[1]])): <%>:
 front_right_kin := simplify(subs(velocity_eqns,[
 rr_solz[2], rrdot_solz[2],
 xi_eqns[2], xidot_eqns[2],
 frontTyreAngles[2],
 VSfr0=VSfr,
 VNfr0=VNfr,
-VRfr0=VRfr])): <%>:
+VRfr0=VRfr,
+eqkappa[2], eqalpha[2]])): <%>:
 rear_left_kin := simplify(subs(velocity_eqns,[
 rr_solz[3], rrdot_solz[3],
 xi_eqns[3], xidot_eqns[3],
 rearTyreAngles[1],
 VSrl0=VSrl,
 VNrl0=VNrl,
-VRrl0=VRrl])): <%>:
+VRrl0=VRrl,
+eqkappa[3], eqalpha[3]])): <%>:
 rear_right_kin := simplify(subs(velocity_eqns,[
 rr_solz[4], rrdot_solz[4],
 xi_eqns[4], xidot_eqns[4],
 rearTyreAngles[2],
 VSrr0=VSrr,
 VNrr0=VNrr,
-VRrr0=VRrr])): <%>:
+VRrr0=VRrr,
+eqkappa[4], eqalpha[4]])): <%>:
 # Wheel points
 CPfl_coords:=[comp_XYZ(CPfl, T__P)]:<%>:# 
 CPfr_coords:=[comp_XYZ(CPfr, T__P)]:<%>:
@@ -279,4 +283,5 @@ ffclose(fd);
 save(dyna_eqns0, ref_point_kin0, 
 front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarDynamics.mla");
+NULL;
 NULL;

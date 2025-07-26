@@ -11,6 +11,7 @@ with(codegen,cost,optimize):
 with(FileTools): 
 read("CarModel.mla"):
 interface(rtablesize=30):
+# Same assumption of CarModel.mw
 linear_modeling(  {delta(t),
    psi__fl, phi__fl, mu__fl,
    psi__fr, phi__fr, mu__fr,
@@ -278,5 +279,4 @@ ffclose(fd);
 save(dyna_eqns0, ref_point_kin0, 
 front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarDynamics.mla");
-NULL;
 NULL;

@@ -29,6 +29,7 @@ PDEtools[declare](
 
 prime=t,quiet);
 # Small variables
+# Small angle for steering and suspension motion
 linear_modeling(  {delta(t),
    psi__fl, phi__fl, mu__fl,
    psi__fr, phi__fr, mu__fr,

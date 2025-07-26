@@ -563,6 +563,10 @@ if nargout > 1
     output.xss         = x;
     output.rss         = steadyStateRes;
     output.residual    = norm(steadyStateRes/numel(steadyStateRes));
+    % internal variables - not documented and used by end users
+    % these variables are typically used to get the dynamical variables (see mltfm.dymlts.getDynVars)
+    output.internal.kappa = [kappa__fl0; kappa__fr0; kappa__rl0; kappa__rr0];
+    output.internal.alpha = [alpha__fl0; alpha__fr0; alpha__rl0; alpha__rr0];
     % steadyState.ssEqnArgs   = {x, u_long, u_lat, opts};
     % exit code & msg
     if isnumeric(x) % numerical eval of this function

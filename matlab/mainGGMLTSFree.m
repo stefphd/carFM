@@ -18,6 +18,25 @@ opts = struct();
 % call to ggmlts
 mltsout = carfm.ggmltsfree(gg, track, opts);
 
+% % Example: init with approx hessian and then use exact (with mex=true)
+% tic;
+% % 1. build a unique dll including exact hessian
+% opts.mex = true;
+% opts.exactHessian = true;
+% opts.buildOnly = true;
+% carfm.ggmltsfree(gg, track, opts); % build only
+% % 2. init using approx hessian with a limited num of iterations
+% opts.exactHessian = false;
+% opts.buildOnly = false;
+% opts.usePrebuilt = true;
+% opts.maxIter = 100;
+% guess = carfm.ggmltsfree(gg, track, opts);
+% % 3. solve with exact hessian
+% opts.exactHessian = true;
+% opts.maxIter = 1000;
+% mltsout = carfm.ggmltsfree(gg, track, opts, guess);
+% toc;
+
 % save
 % save('ggmlts-fm-free.mat','-struct','mltsout');
 

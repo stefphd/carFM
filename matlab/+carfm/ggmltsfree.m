@@ -26,6 +26,9 @@ carfm.common.setMaxNumDir(8); % 8 to speed up cc time
 % Default options and override with user-defined options
 opts = carfm.ggmlts.getDefaultOptions(opts);
 
+% Get undocumented options and override with user-defined options
+opts = carfm.ggmlts.getUndocOptions(opts);
+
 % Create aux
 aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod);
 aux.rho = carfm.ggmlts.interpGG(gg, 'internal', opts.gginterpMethod, 'rho');
@@ -74,14 +77,10 @@ catch err
     carfm.common.setEnvironment(filepath, false);
     error('carfm:unableEval', 'Unable to ealuate "bcsFunc" function handle: %s', err.message);
 end
-% Undocumented feature: relax boundary conditions 'opts.bcsRelax'
-% This feature removes the boundary conditions and adds them into the OCP
-% cost as a Mayer term. This may be usefull when starting from unfeasible
-% BCs, but has not been extensively tested yet, and thus remains undoc.
-% Default is opts.bcsRelax = false, i.e. standard BCs used.
-if ~isfield(opts, 'bcsRelax')
-    opts.bcsRelax = false;
-end
+% Undocumented feature: relax boundary conditions using undocumented 
+% option 'opts.bcsRelax' (default false): BCs are removed and added into 
+% the OCP cost as a Mayer term. This may be usefull when starting from 
+% unfeasible BCs, but has not been extensively tested yet.
 if ~opts.bcsRelax % Default
     m = 0; % no mayer
 else 
@@ -341,17 +340,15 @@ if opts.mex % use OPTra
     problem.mesh = hmesh/sum(hmesh);
     % Call to OPTRA
     sol = carfm.optra.solve(problem);
-    % Undocumented feature: refine the solution using WORHP
-    % This feature refines the solution using using WORHP SQP (requires 
-    % WORHP installed) if mex=true. Default is opts.refineSol = false.
-    if ~isfield(opts, 'refineSol')
-        opts.refineSol = false;
-    end
-    if opts.refineSol
+    % Undocumented feature: refine the solution using undocumented options
+    % opts.refineSolution (default false), opts.refineSolver (default
+    % 'worhp'), and opts.refineMaxIter (default 500).
+    if opts.refineSolution
         problem = sol.next_problem;
+        problem.options.max_iter = opts.refineMaxIter;
         problem.options.sb = true; % suppress banner
-        problem.options.nlp = struct(); % reset NLP options
-        problem.options.nlpsolver = 'worhp'; % use WORHP
+        problem.options.nlp = struct(); % reset NLP options to use defaults
+        problem.options.nlpsolver = opts.refineSolver; % NLP solver to use
         sol = carfm.optra.solve(problem);
     end
     % Get the solution

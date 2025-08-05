@@ -59,8 +59,6 @@ function opts = getDefaultOptions(opts)
     default_opts.debugSolve = false; % plot control figure during solving
     default_opts.numThreads = 1; % number of threads
     default_opts.linearSolver = 'mumps'; % Linear solver in NLP solver
-    % default_opts.preSolve = true; % DEPRECATED pre-solve using approx Hessian (i.e. 'limited-memory' option in IPOPT)
-    % default_opts.preSolveIter = 100; % DEPRECATED pre-solve NLP max iter
     % Solver tolerances
     default_opts.tol = 1e-8; % NLP convergence tol (tol=1e-8 default in IPOPT)
     default_opts.conTol = 1e-7; % NLP constraint tol (constr_viol_tol=1e-4 default in IPOPT)
@@ -72,9 +70,7 @@ function opts = getDefaultOptions(opts)
     default_opts.optTolAccept = 1e-4; % NLP optimality tol for acceptable (acceptable_dual_inf_tol=1e10 default in IPOPT)
     default_opts.complTolAccept = 1e-4; % NLP complementarity tol for acceptable (acceptable_compl_inf_tol=1e-2 default in IPOPT)
     default_opts.objChangeAccept = 5e-6; % NLP objective change for acceptable (acceptable_obj_change_tol=1e20 default in IPOPT)
-    % Undocumented options: these options are for internal use and are hidden to the user
-    % defualt_opts.bcsRelax = false; % Relax the boundary conditions (add them to penalty)
-    % default_opts.refineSol = false; % refine the solution using WORHP SQP (requires WORHP installed) - used only for mex=true
+    % [...]
     % override default options
     opts_fields = fieldnames(opts);
     for k = 1 : numel(opts_fields)

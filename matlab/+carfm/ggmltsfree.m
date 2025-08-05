@@ -330,7 +330,7 @@ if opts.mex % use OPTra
     % General options
     problem.options.print_iterint = opts.printInt;
     problem.options.max_iter = opts.maxIter;
-    problem.options.flag_hessian = ~opts.exactHessian;
+    problem.options.approx_hessian = ~opts.exactHessian;
     problem.options.num_threads = opts.numThreads;
     problem.options.nlp = ipoptopt; % IPOPT-specific options
     problem.options.sb = true; % suppress banner

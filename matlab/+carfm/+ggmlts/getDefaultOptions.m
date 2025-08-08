@@ -39,7 +39,6 @@ function opts = getDefaultOptions(opts)
     default_opts.problemName = 'ggmlts'; % Name of the problem
     default_opts.sRange = [-inf, inf]; % Initial and final travelled distance
     default_opts.bcsFunc = @(xi, xf) xf-xi; % function handle to define the boundary conditions (x=[V,n,chi,ax,ay] for free, x=[V,ax] for fixed)
-    % default_opts.bcsRelax = false; % relax the boundary conditions
     default_opts.numMeshPts = 2000; % number of mesh points
     default_opts.meshStrategy = 'adaptive'; % mesh strategy: 'equally-spaced', 'adaptive', 'manual'
     default_opts.meshRatio = 3; % max/min mesh size for adaptive mesh strategy

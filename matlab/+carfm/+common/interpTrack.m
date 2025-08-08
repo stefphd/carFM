@@ -1,10 +1,11 @@
-function output = interpTrack(track, backend, method)
+function output = interpTrack(track, backend, method, dsmin)
 %INTERPTRACK Interpolate the track using CASADI interpolant.
 %
 % INPUT:
 % track: track data struct
 % backend: backend to use ('matlab', 'casadi', 'internal')
 % method: 'linear' or 'bspline'
+% dsmin: minimum distance for decimation
 %
 % OUTPUT:
 % output: struct containining CASADI interpolant functions
@@ -15,18 +16,21 @@ required_fields = {'s', 'rwl', 'rwr', 'x', 'y', 'theta', 'Omegaz', 'xl', 'yl', '
 optional_fields = {'z', 'zl', 'zr', 'mu', 'phi', 'Omegax', 'Omegay'};
 
 % Reduce mesh to avoid mem overhead
-dsmin = 1; % 1m minimum resampling - HARDCODED
+% dsmin = 1; % 1m minimum resampling - now input argument
 ds = mean(diff(track.s)); % averaged sampling
 if ds < dsmin
     n_ds = round(dsmin/ds);
-    if n_ds <= 1
-        n_ds = 2;
+    if n_ds <= 1 % should this never happends, as ds<dsmin?
+        n_ds = 1;
     end
-    % resample required_fields and optional_fields fields
+    % decimate required_fields and optional_fields fields
     keep_last = rem(numel(track.s)-1, n_ds)~=0;
     for k = 1 : numel(track_fields)
         field = track_fields{k};
-        % resample
+        if ~any(strcmp(field, [required_fields optional_fields]))
+            continue;
+        end
+        % decimate
         last_val = track.(field)(end);
         track.(field) = track.(field)(1:n_ds:end);
         % ensure last point

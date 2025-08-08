@@ -355,17 +355,6 @@ function checkOptStruct(opts)
                     msg = 'Field "scheme" must be either ''euler'', ''trapz'', ''midpoint'' or ''lgr<N>'' (N=2,..,8).';
                     error(eid,msg);
                 end
-            case 'init_iter'
-                if ~isequal(size(opts.init_iter),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "init_iter" must be [1,1].';
-                    error(eid,msg);
-                end
-                if rem(opts.init_iter, 1) ~= 0 || opts.init_iter<0
-                    eid = 'carfm:incorrectType';
-                    msg = 'Field "init_iter" must be a non-negative integer number.';
-                    error(eid,msg);
-                end
             case 'sRange'
                 if ~isequal(size(opts.sRange),[1,2])
                     eid = 'carfm:notEqual';
@@ -381,6 +370,17 @@ function checkOptStruct(opts)
                     eid = 'carfm:incorrectType';
                     msg = '"sRange(2)" must be greater than sRange(1).';
                     error(eid,msg)
+                end
+            case 'minDecLen'
+                if ~isequal(size(opts.minDecLen),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "minDecLen" must be [1,1].';
+                    error(eid,msg);
+                end
+                if opts.minDecLen<0
+                    eid = 'carfm:incorrectType';
+                    msg = 'Field "minDecLen" must be a non-negative number.';
+                    error(eid,msg);
                 end
             case 'bcsFunc'
                 if ~isa(opts.bcsFunc, 'function_handle')
@@ -399,17 +399,6 @@ function checkOptStruct(opts)
                 catch e
                     eid = 'carfm:unableEval';
                     error(eid, 'Unable to evaluate "bcsFunc" function handle: %s', e.message)
-                end
-            case 'bcsRelax'
-                if ~isequal(size(opts.bcsRelax),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "bcsRelax" must be [1,1].';
-                    error(eid,msg);
-                end
-                if ~islogical(opts.bcsRelax)
-                    eid = 'carfm:incorrectType';
-                    msg = 'Type of field "bcsRelax" must be logical.';
-                    error(eid,msg);
                 end
             case 'numThreads'
                 if ~isequal(size(opts.numThreads),[1 1])

@@ -30,7 +30,7 @@ opts = carfm.ggmlts.getDefaultOptions(opts);
 opts = carfm.ggmlts.getUndocOptions(opts);
 
 % Create aux
-aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod);
+aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod, opts.minDecLen);
 aux.rho = carfm.ggmlts.interpGG(gg, 'internal', opts.gginterpMethod, 'rho');
 aux.shift = {gg.shift};
 aux.g0 = opts.g;

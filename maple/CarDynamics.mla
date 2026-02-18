@@ -1,517 +1,537 @@
-dyna_eqns0 := t1 = cos(mu), t3 = sin(mu), dynamicRes[1] = -t1*Omega__x-t3*
-Omega__z+v__phi+omega__x, t5 = tan(phi), t6 = t3*t5, t10 = sec(phi), dynamicRes
-[2] = t1*t5*Omega__z+t10*omega__y-t6*Omega__x+v__mu-Omega__y, t12 = sin(phi), 
+dyna_eqns0 := t1 = sin(mu), t3 = cos(mu), dynamicRes[1] = -t1*Omega__z-t3*
+Omega__x+v__phi+omega__x, t5 = tan(phi), t8 = t1*t5, t10 = sec(phi), dynamicRes
+[2] = t3*t5*Omega__z+t10*omega__y-t8*Omega__x+v__mu-Omega__y, t12 = sin(phi), 
 t13 = cos(lambda__P), t14 = V__P*t13, t15 = -z+h, t16 = omega__y*t15, t17 = -
-t14+t16, t19 = tan(mu), t25 = b-d, t26 = t25*(-t1*Omega__z-t12*omega__y+t3*
-Omega__x), t28 = sec(mu), t30 = V__z*t12*t28, t31 = sin(lambda__P), t32 = V__P*
+t14+t16, t19 = tan(mu), t25 = b-d, t26 = t25*(t1*Omega__x-t12*omega__y-t3*
+Omega__z), t28 = sec(mu), t30 = V__z*t12*t28, t31 = sin(lambda__P), t32 = V__P*
 t31, t33 = t15*omega__x, t36 = cos(phi), dynamicRes[3] = t5*(-t12*t17*t19+t10*
-t26-t30-t32-t33)-t19*(V__z*t3-t14+t16)*t36-V__z*t1*t36-t25*omega__y+v__z+v__w,
+t26-t30-t32-t33)-t19*(V__z*t1-t14+t16)*t36-V__z*t3*t36-t25*omega__y+v__z+v__w,
 dynamicRes[4] = -delta__dot+v__delta, dynamicRes[5] = -delta__ddot+
 v__delta__dot, dynamicRes[6] = -z__fldot+v__z__fl, dynamicRes[7] = -z__frdot+
 v__z__fr, dynamicRes[8] = -z__rldot+v__z__rl, dynamicRes[9] = -z__rrdot+
-v__z__rr, t45 = X__fl*phi__fl, t46 = phi__fr*X__fr, t47 = X__rl*phi__rl, t48 =
-phi__rr*X__rr, t49 = t45+t46+t47+t48, t50 = t49*t5, t51 = t3^2, t53 = Y__fl*
+v__z__rr, t45 = X__fl*phi__fl, t46 = X__fr*phi__fr, t47 = X__rl*phi__rl, t48 =
+X__rr*phi__rr, t49 = t45+t46+t47+t48, t50 = t49*t5, t51 = t1^2, t53 = Y__fl*
 phi__fl, t54 = Y__fr*phi__fr, t55 = Y__rl*phi__rl, t56 = Y__rr*phi__rr, t57 = -
 t53-t54-t55-t56, t59 = delta+psi__fl, t60 = X__fl*t59, t61 = delta+psi__fr, t62
 = X__fr*t61, t63 = X__rl*psi__rl, t64 = X__rr*psi__rr, t66 = (t60+t62+t63+t64)*
-t5, t69 = m*Omega__x, t71 = t10^2, t72 = t71*t25*Omega__z, t73 = t72*t69, t75 =
-g__y*m+F__Ay+F__y+Y__fl+Y__fr+Y__rl+Y__rr, t78 = m*g__z, t79 = t78+F__Az+F__z-
-N__fl-N__fr-N__rl-N__rr, t81 = t28*m, t84 = V__z*t19*v__mu+v__V__z, t88 = Y__fl
-*t59, t89 = Y__fr*t61, t90 = Y__rl*psi__rl, t91 = Y__rr*psi__rr, t93 = t10*(t88
-+t89+t90+t91), t94 = t1^2, t96 = Omega__z^2, t98 = t71*t25, t100 = t28*V__z, 
-t103 = m*g__x, t106 = Omega__z*m, t109 = t71*t25*t12, t111 = -t17, t117 = v__mu
-*t111, t118 = t19*t117, t119 = v__V__P*t13, t121 = V__P*t31*v__lambda__P, t122
-= v__z*omega__y, t123 = omega__ydot*t15, t127 = Omega__y*m, t129 = z__fl+z__fr,
-t131 = z__rl+z__rr, t132 = t131*m__ru, t133 = m__fu*t129+t132, t134 = t133*
-Omega__x, t136 = z__fldot+z__frdot, t137 = 2*t136, t142 = z__rldot+z__rrdot, 
-dynamicRes[10] = t51*t50+t3*(t1*(t10*t57-t66)+t73-t5*t75*t36+t36*t79-t84*t81)+
-t94*t93+t1*(-m*t100*v__mu-m*t96*t98-F__Ax-F__x-X__fl-X__fr-X__rl-X__rr-t103)-
-t109*omega__y*t106+t10*(t111*t12*t19-t30-t32-t33)*t106+t28*(t118+t119-t121+t122
--t123)*m+V__z*t127+Omega__z*t134+m__fu*(t129*v__z__rrdot+t137*Omega__y)+m__ru*(
-t131*v__z__rrdot+2*t142*Omega__y), t149 = t111*t19-t100, t150 = v__phi*t149, 
-t151 = t36^2, t153 = t19^2, t154 = t153*t117, t156 = V__z*t28*v__mu, t159 = t28
-*v__V__z, t163 = V__P*t13*v__lambda__P, t164 = v__V__P*t31, t165 = t25*omega__y
-, t166 = v__phi*t165, t167 = omega__x*v__z, t168 = omega__xdot*h, t169 = z*
-omega__xdot, t172 = t12^2, t176 = 2*t5*v__phi*t165, t178 = t31*V__P*v__phi, 
-t179 = v__phi*t33, t180 = t25*omega__ydot, t187 = -2*t5*v__phi*Omega__z+v__mu*
-Omega__x-v__z__frdot, t194 = (2*t5*v__phi*Omega__x+v__mu*Omega__z+v__z__rldot)*
-t3, t200 = -t75, t210 = V__z*m, t215 = Omega__z*t111, dynamicRes[11] = -t71*m*(
-t151*t150+t36*(t12*(t154+t19*(t119-t156-t121+t122-t123)-t159+t117)-t163-t164-
-t166+t167-t168+t169)+t172*t150+t12*(-t176-t178-t179-t180)+(t1*t187+t194)*t25)+
-t36*t200-t12*t79+t1*(-X__fl*t59-X__fr*t61-t63-t64)+t3*(-t210*t28*Omega__z+t45+
-t46+t47+t48)+t81*t215-Omega__x*t210+Omega__z*Omega__y*t133+Omega__x*(-m__fu*
-t137-2*m__ru*t142)-v__z__rldot*t133, t238 = Omega__x^2, t255 = -m__fu*t129-t132
-, t257 = Omega__y^2, t259 = v__Omega__x+v__Omega__z, dynamicRes[12] = t94*t66+
-t1*(t3*(t93-t50)+t73-t36*(t200*t5+F__Az+F__z-N__fl-N__fr-N__rl-N__rr+t78))+t51*
-t10*t57+t3*(-m*t238*t98+t100*t127-F__Ax-F__x-X__fl-X__fr-X__rl-X__rr-t103)+t109
-*omega__y*t69-t10*(t12*t149-t32-t33)*t69-t28*t111*t127+m*v__V__z+t238*t255+t257
-*t255+m__fu*t259+m__ru*(v__Omega__y+v__z__fldot), t263 = X__fl*psi__fl, t265 =
-X__fr*psi__fr, t275 = rr__rl*t63+rr__rr*t64, t281 = t28*t133, t286 = N__rl*
-psi__rl*rr__rl, t287 = psi__rr*N__rr, t288 = rr__rr*t287, t289 = phi__rl*T__rly
-, t290 = phi__rr*T__rry, t291 = -t286-t288-t289-t290, t294 = x__fl*N__fl, t295
-= x__fr*N__fr, t298 = 2*delta*(t294+t295), t301 = 2*(-N__fl+N__fr)*t__f, t303 =
-F__Ay+2*Y__rl, t304 = t303*rr__rl, t306 = F__Ay+2*Y__rr, t307 = t306*rr__rr, 
-t310 = 2*(-N__rl+N__rr)*t__r, t311 = -y__rl-y__rr, t312 = F__Az*t311, t313 = 
-N__fl*y__fl, t314 = 2*t313, t315 = N__fr*y__fr, t316 = 2*t315, t318 = 2*N__rl*
-y__rl, t320 = 2*N__rr*y__rr, t321 = Y__fl*rr__fl, t322 = 2*t321, t323 = rr__fr*
-Y__fr, t324 = 2*t323, t325 = 2*t291*t3+t298+t301+t304+t307+t310+t312+t314+t316+
-t318+t320+t322+t324, t327 = -T__flx-T__frx, t328 = delta*t327, t330 = t__f*(t45
--t46), t331 = -y__rl+t__r, t334 = y__rr+t__r, t337 = phi__fl*y__fl, t338 = 
-X__fl*t337, t339 = phi__fr*y__fr, t340 = X__fr*t339, t341 = psi__fl*T__flx, 
-t342 = psi__fr*T__frx, t343 = T__rlx*psi__rl, t344 = T__rrx*psi__rr, t348 = 
-rr__rl*phi__rl, t349 = rr__rr*phi__rr, t350 = t348+t349, t351 = t350*F__Ax, 
-t354 = z__fl*t60, t356 = z__fr*t62, t358 = z__rl*t63, t361 = psi__rr*z__rr*
-X__rr, t363 = X__fl+X__fr, t364 = delta*t363, t369 = delta*t363*R__f, t375 = 
-R__r*X__rl, t378 = R__r*X__rr, t382 = 2*h__A*F__Ay, t385 = 2*M__x, t386 = 2*
-M__Ax, t387 = 2*T__flx, t388 = 2*T__frx, t389 = 2*T__rlx, t390 = 2*T__rrx, t391
-= t36*t325+t3*(2*t5*(X__rl*phi__rl*t331-X__rr*phi__rr*t334+t328+t330-t338-t340-
-t341-t342-t343-t344)+t351)+2*t354+2*t356+2*t358+2*t361+2*h*(t364+t263+t265+t63+
-t64+F__y)-2*t369-2*R__f*t263-2*R__f*t265-2*psi__rl*t375-2*psi__rr*t378-t382-2*z
-*F__y-t385-t386-t387-t388-t389-t390, t394 = omega__rl*i__ry, t395 = phi__rl*
-t394, t396 = i__ry*omega__rr, t397 = phi__rr*t396, t398 = phi__fl*omega__fl, 
-t399 = phi__fr*omega__fr, t400 = 2*delta__dot, t405 = rr__fl*t263+rr__fr*t265-
-I__xz*Omega__x*Omega__y+psi__rl*i__ry*v__omega__rl+psi__rr*i__ry*v__omega__rr+
-t151*t275*t51+t172*t275*(t94+t51)-t281*t215+I__xx*v__z__rldot-I__xz*v__z__frdot
-+1/2*t1*t391+Omega__y*(-t395-t397-(t398+t399+t400)*i__fy), t407 = -Omega__y*
-Omega__z+v__z__rldot, t408 = z__fl^2, t411 = delta*x__fl-t__f+y__fl, t413 = 
-R__f*Omega__y, t414 = h*Omega__y, t415 = delta__dot*y__fl, t420 = 2*v__z__rldot
-*h, t421 = b*Omega__y, t422 = delta*y__fl, t423 = t422-w-x__fl, t425 = 2*
-z__fldot, t428 = b*v__z__frdot, t429 = -t411, t431 = delta*v__z__frdot, t433 =
--w-x__fl, t437 = 2*v__z__rldot*R__f, t440 = z__fr^2, t443 = delta*x__fr+t__f+
-y__fr, t445 = delta__dot*y__fr, t449 = delta*y__fr, t450 = t449-w-x__fr, t452 =
-2*z__frdot, t458 = -w-x__fr, t463 = t136*Omega__x, t466 = t136*R__f, t469 = 
-x__fl*v__Omega__z, t470 = x__fr*v__Omega__x, t475 = v__Omega__x*y__fr, t476 = 
-v__Omega__z*y__fl, t479 = T__rlx*phi__rl, t480 = T__rrx*phi__rr, t486 = z__fl*
-t45, t488 = z__fr*t46, t490 = phi__rl*z__rl, t491 = X__rl*t490, t494 = phi__rr*
-z__rr*X__rr, t496 = -t49, t504 = X__fl-X__fr, t505 = t__f*t504, t511 = R__f*
-phi__fl, t515 = R__f*phi__fr, t519 = X__rl-X__rr, t522 = y__rl*X__rl, t524 = 
-y__rr*X__rr, t528 = 2*t281*V__z*Omega__z-2*t486-2*t488-2*t491-2*t494+2*h*t496+2
-*(-X__fl*x__fl-X__fr*x__fr)*delta+2*t505+2*phi__rl*t375+2*phi__rr*t378+2*X__fl*
-(t511-y__fl)+2*X__fr*(t515-y__fr)+2*t__r*t519-2*t522-2*t524+t311*F__Ax, t531 =
-T__flx*phi__fl, t532 = T__frx*phi__fr, t536 = rr__rl*psi__rl, t537 = psi__rr*
-rr__rr, t538 = t536+t537, t539 = t538*F__Ax, t543 = z__rl^2, t545 = -t331, t550
-= 2*Omega__y*(R__r-h)*Omega__z, t552 = 2*z__rldot, t558 = 2*v__z__rldot*R__r, 
-t561 = z__rr^2, t565 = 2*z__rrdot, t576 = t142*R__r, t590 = omega__fl+omega__fr
-, t593 = i__ry+1/2*i__tg, t595 = (omega__rl+omega__rr)*t593, t605 = N__rl*
-phi__rl*rr__rl, t607 = N__rr*phi__rr*rr__rr, t608 = T__rly*psi__rl, t609 = 
-T__rry*psi__rr, t610 = -t605-t607+t608+t609, t612 = y__fl*X__fl, t613 = y__fr*
-X__fr, t616 = t263-t265, t618 = psi__fl*y__fl, t619 = X__fl*t618, t620 = 
-psi__fr*y__fr, t621 = X__fr*t620, t622 = t63-t64, t624 = psi__rl*t522, t625 = 
-psi__rr*t524, t642 = 2*(Y__fl*x__fl+Y__fr*x__fr)*delta, t643 = -Y__fl+Y__fr, 
-t645 = 2*t__f*t643, t647 = F__Az-2*N__rl, t648 = rr__rl*t647, t650 = F__Az-2*
-N__rr, t651 = rr__rr*t650, t654 = 2*(-Y__rl+Y__rr)*t__r, t655 = Y__fl*y__fl, 
-t656 = 2*t655, t657 = Y__fr*y__fr, t658 = 2*t657, t659 = y__rl*t303, t660 = 
-y__rr*t306, t661 = N__fl*rr__fl, t662 = 2*t661, t663 = rr__fr*N__fr, t664 = 2*
-t663, t665 = 2*t291*t3*t5+t642+t645+t648+t651+t654+t656+t658+t659+t660-t662-
-t664, t667 = F__Ax*h__A, t668 = F__Az*b__A, t669 = h*F__x, t670 = F__x*z, t671
-= b*F__z, t672 = d*F__z, t673 = t667+t668-t669+t670-t671+t672-M__Ay-M__y-T__fly
--T__fry-T__rly-T__rry, t681 = 2*m__fu*t129*g__z, t684 = 2*m__ru*t131*g__z, t686
-= 2*N__fl*z__fl, t688 = 2*N__fr*z__fr, t689 = z__rl*t647, t690 = z__rr*t650, 
-t691 = F__Az-N__fl-N__fr-N__rl-N__rr, t693 = 2*h*t691, t696 = N__fl+N__fr, t698
-= 2*R__f*t696, t701 = 2*(-F__Az+N__rl+N__rr)*R__r, t702 = phi__fl*rr__fl, t704
-= 2*Y__fl*t702, t705 = phi__fr*rr__fr, t707 = 2*Y__fr*t705, t708 = 2*t94*t610*
-t5+t1*t665+2*t3*t673+2*t5*(t605+t607)+t681+t684-t686-t688+t689+t690+t693-
-phi__rl*t304-phi__rr*t307+t698+t701-t704-t707, t712 = (T__fly+T__fry)*delta, 
-t713 = psi__fl*T__fly, t714 = psi__fr*T__fry, t720 = delta*(-t643*t__f-t655-
-t657+t661+t663), t721 = Y__fl*psi__fl, t722 = Y__fr*psi__fr, t724 = t__f*(t721-
-t722), t725 = F__Az*rr__rl, t728 = F__Az*rr__rr, t729 = psi__rr*t728, t732 = 
-t__r*(t90-t91), t733 = psi__fl*rr__fl, t734 = N__fl*t733, t735 = psi__fr*rr__fr
-, t736 = N__fr*t735, t737 = Y__fl*t618, t738 = Y__fr*t620, t739 = y__rl*Y__rl,
-t741 = y__rr*Y__rr, t743 = T__fly*phi__fl, t744 = T__fry*phi__fr, t745 = t720+
-t724-1/2*psi__rl*t725-1/2*t729+t732+t734+t736-t737-t738-psi__rl*t739-psi__rr*
-t741+t743+t744, t748 = t53-t54, t758 = N__fl*t702, t759 = N__fr*t705, t760 = 
-Y__fl*t337, t761 = Y__fr*t339, t766 = rr__fl*X__fl, t767 = X__fr*rr__fr, t776 =
-t17*t19+t100, t777 = v__phi*t776, t779 = omega__ydot*h, t780 = omega__ydot*z, 
-t798 = F__y*b, t799 = F__y*d, t800 = F__Ay*b__A+M__Az+M__z+T__flz+T__frz+T__rlz
-+T__rrz-t798+t799, t805 = 2*m__fu*t129*g__y, t808 = 2*m__ru*t131*g__y, t810 = 2
-*Y__fl*z__fl, t812 = 2*Y__fr*z__fr, t815 = F__Ay+Y__fl+Y__fr+Y__rl+Y__rr, t820
-= -Y__fl-Y__fr, t823 = -F__Ay-Y__rl-Y__rr, t826 = 2*t758, t827 = 2*t759, t828 =
-2*R__f*t820+2*R__r*t823+2*h*t815+phi__rl*t725+phi__rr*t728+2*t3*t800+t303*z__rl
-+t306*z__rr+t805+t808+t810+t812-t826-t827, t831 = m__fu*(t408*t407+z__fl*(t96*
-t411+2*Omega__z*(t413-t414+t415)+t420+Omega__x*(t423*Omega__y+V__z+t421+t425)+
-t428+t257*t429+y__fl*t431+v__z__frdot*t433-delta__ddot*x__fl-t437)+t440*t407+
-z__fr*(t96*t443+2*Omega__z*(t413-t414+t445)+t420+Omega__x*(t450*Omega__y+V__z+
-t421+t452)+t428-t257*t443+y__fr*t431+v__z__frdot*t458-delta__ddot*x__fr-t437)+2
-*h*t463-2*Omega__x*t466+delta*(t469+t470)+(v__Omega__x-v__Omega__z)*t__f+t475+
-t476)+t5*(t479+t480)+1/2*t3*t528+1/2*t51*(2*t5*(t531+t532)+t539)+m__ru*(t543*
-t407+z__rl*(t96*t545+t550+t420+Omega__x*(-x__rl*Omega__y+V__z+t421+t552)+t428+
-t257*t331-v__z__frdot*x__rl-t558)+t561*t407+z__rr*(t96*t334+t550+t420+Omega__x*
-(-x__rr*Omega__y+V__z+t421+t565)+t428-t257*t334-v__z__frdot*x__rr-t558)+2*h*
-t142*Omega__x-2*Omega__x*t576+(-v__Omega__y+v__z__fldot)*t__r+y__rl*v__Omega__y
-+y__rr*v__z__fldot)+Omega__z*(2*delta*Omega__x*i__fy+(-I__yy+I__zz-i__tg)*
-Omega__y+i__fy*t590+t595)+(psi__fl*v__omega__fl+psi__fr*v__omega__fr+t590*
-delta__dot)*i__fy+t94*(t151*t275+t36*t610-t5*(delta*(t505-t612-t613)+t__f*t616+
-t479+t480-t619-t621+t__r*t622-t624-t625))+1/2*t12*t708+t10*(t94*(t712+t713+t714
-)-t1*t3*t745+t51*(t__f*t748+phi__rl*(-1/2*t725+t331*Y__rl)+phi__rr*(-1/2*t728-
-t334*Y__rr)+t758+t759-t760-t761))+delta*(t766+t767-2*(v__z__rrdot-1/2*
-v__omega__fl-1/2*v__omega__fr)*i__fy)-t71*t133*(t172*t777+t12*(t36*(-t154+t19*(
-t156+t121+t779-t780-t119-t122)+t159-t117)+t176+t178+t179+t180)-t1*t25*t187+t151
-*t777+t36*(t163+t164+t166+t168-t169-t167)-t25*t194)+1/2*t36*t828, dynamicRes[13
-] = t405+t831, t832 = t538*t12, t834 = F__Ay*t5-F__Az, t839 = t350*t12, t842 =
--t820, t844 = delta*t842+t721+t722+t90+t91, t853 = R__f*Y__fl, t855 = R__f*
-Y__fr, t864 = 2*F__Ay*b__A*t12, t865 = t364+t263+t265+t63+t64, t868 = -t458, 
-t869 = t868*X__fr, t872 = -t433, t873 = t872*psi__fl, t875 = t868*psi__fr, t877
-= x__rl*X__rl, t878 = psi__rl*t877, t879 = x__rr*X__rr, t880 = psi__rr*t879, 
-t886 = 2*t36*(t667+t668), t888 = F__Ax*(rr__rl+rr__rr), t900 = Y__fl*t433, t914
-= h*t57+b*t844-z__fl*t53-z__fr*t54-Y__rl*t490-z__rr*t56+delta*(-Y__fr*t868+t900
-)+Y__fl*(t511-t873)+Y__fr*(t515-t875)+R__r*(t55+t56)-psi__rl*x__rl*Y__rl-
-psi__rr*x__rr*Y__rr, t919 = t872*phi__fl, t923 = t868*phi__fr, t928 = phi__rl*
-t877, t929 = phi__rr*t879, t930 = h*t865+b*t49+t354+t356+t358+t361-t369+X__fl*(
--R__f*psi__fl-t919)+X__fr*(-R__f*psi__fr-t923)+R__r*(-t63-t64)-t928-t929, t939
-= 2*b*t815, t942 = 2*delta*(-t661-t663+t655+t657), t943 = 2*t900, t945 = 2*
-Y__fr*t458, t948 = -x__rl-x__rr, t949 = F__Ay*t948, t950 = 2*t734, t951 = 2*
-t736, t953 = 2*Y__rl*x__rl, t955 = 2*x__rr*Y__rr, t956 = t939+t942+t943+t945-2*
-t286-2*t288+t949-t950-t951-t953-t955, t961 = t313+t315+t321+t323, t965 = 2*
-rr__fl*t721, t967 = 2*rr__fr*t722, t973 = rr__rr*t91, t975 = -t948, t977 = 2*
-t294, t978 = 2*t295, t980 = 2*N__rl*x__rl, t982 = 2*x__rr*N__rr, t983 = F__Az*
-t975-2*b*t691+2*delta*t961+2*rr__rl*t90-2*t696*w+t965+t967+2*t973-t977-t978-
-t980-t982, t994 = -F__Ax-X__fl-X__fr-X__rl-X__rr, t1003 = -F__Ax-2*X__rl, t1006
-= -F__Ax-2*X__rr, t1009 = R__f*X__fl, t1011 = R__f*X__fr, t1020 = -2*X__fr*
-z__fr+z__rl*t1003+z__rr*t1006+2*t328+2*t1009+2*t1011+2*(F__Ax+X__rl+X__rr)*R__r
--2*t341-2*t342-2*t343-2*t344, t1065 = -2*R__r*t823-2*h*t815-t303*z__rl-t306*
-z__rr+2*t605+2*t607-t805-t808-t810-t812+t826+t827+2*t853+2*t855, t1071 = -2*
-Y__rl*t348-2*Y__rr*t349+t681+t684-t686-t688+t689+t690+t693+t698+t701-t704-t707,
-t1091 = 2*t72*t134+t12*t1065+t36*t1071-2*t28*t84*t133+2*b*t994+2*delta*(-t612-
-t613)+2*X__fl*t872+2*t869+2*t479+2*t480+2*t877+2*t879+2*t531+2*t532+t975*F__Ax,
-t1104 = X__rl*rr__rl, t1105 = X__rr*rr__rr, t1106 = -t766-t767-t1104-t1105, 
-t1111 = -1/2*t94*t1*t834*t832+1/2*t94*(t3*t834*t839+2*t10*(h*t844+z__fl*t88+
-z__fr*t89+psi__rl*z__rl*Y__rl+z__rr*t91-delta*t842*R__f-psi__fl*t853-psi__fr*
-t855-(t90+t91)*R__r)-t864+2*t5*(b*t865+delta*(X__fl*t433-t869)-X__fl*t873-X__fr
-*t875-t878-t880)+t886-t888)+1/2*t1*(-t51*t834*t832+2*t3*(t10*t914-t5*t930)-2*
-t98*t96*t133+t12*t956+t36*t983-2*t100*t133*v__mu-2*m__fu*t129*g__x-2*m__ru*t131
-*g__x+2*h*t994-2*X__fl*z__fl+t1020)+1/2*t51*t3*t834*t839+1/2*t51*(2*t10*(Y__rl*
-phi__rl*x__rl+Y__rr*phi__rr*x__rr+Y__fl*t919+Y__fr*t923+b*t57)-t864+2*t5*(h*t49
-+t486+t488+t491+t494-phi__fl*t1009-phi__fr*t1011-(t47+t48)*R__r)+t886-t888)+1/2
-*t3*t1091-t71*t165*Omega__z*t12*t133-t10*Omega__z*t133*(-t12*t149+t32+t33)+t172
-*t1106+(t798-t799-M__Az-M__z-T__flz-T__frz-T__rlz-T__rrz)*t12+t151*t1106, t1119
-= -t450, t1127 = R__f*Omega__x, t1128 = delta__dot*x__fl, t1132 = delta__dot*
-x__fr, t1160 = 2*v__z__rrdot*R__f, t1185 = t96*(b*t129-t1119*z__fr+t423*z__fl)+
-Omega__z*(2*h*t129*Omega__x+Omega__x*t408+2*z__fl*(-t1127-t1128)-2*(t1132+t1127
--1/2*z__fr*Omega__x)*z__fr)+2*h*(t136*Omega__y+z__fl*v__z__rrdot+z__fr*
-v__z__rrdot)+b*(-t238*z__fl-t238*z__fr+v__Omega__x+v__Omega__z)+v__z__rrdot*
-t408+z__fl*(-t238*t423-Omega__x*t429*Omega__y-v__z__frdot*x__fl*delta+Omega__y*
-(V__z+t425)-t1160+(t__f-y__fl)*v__z__frdot-delta__ddot*y__fl)+v__z__rrdot*t440+
-z__fr*(t238*t1119+Omega__x*t443*Omega__y-v__z__frdot*x__fr*delta+Omega__y*(V__z
-+t452)-t1160+(-t__f-y__fr)*v__z__frdot-delta__ddot*y__fr)+delta*(t476+t475)-2*
-Omega__y*t466-w*t259-t470-t469, t1188 = x__rl*z__rl, t1189 = x__rr*z__rr, t1220
-= 2*v__z__rrdot*R__r, t1237 = t96*(b*t131-t1188-t1189)-2*Omega__z*(-h*t131-1/2*
-t543+R__r*z__rl+z__rr*(R__r-1/2*z__rr))*Omega__x+2*h*(t142*Omega__y+z__rl*
-v__z__rrdot+z__rr*v__z__rrdot)+b*(-t238*z__rl-t238*z__rr+v__Omega__y+
-v__z__fldot)+v__z__rrdot*t543+z__rl*(t238*x__rl-Omega__x*t331*Omega__y+Omega__y
-*(V__z+t552)-t1220+t331*v__z__frdot)+v__z__rrdot*t561+z__rr*(t238*x__rr+
-Omega__x*t334*Omega__y+Omega__y*(V__z+t565)-t1220-t334*v__z__frdot)-2*Omega__y*
-t576-v__Omega__y*x__rl-v__z__fldot*x__rr, t1246 = psi__rl*t394, t1247 = psi__rr
-*t396, t1251 = i__fy*(psi__fl*omega__fl+psi__fr*omega__fr), t1268 = (-t669+t670
--t671+t672-M__Ay-M__y-T__fly-T__fry-T__rly-T__rry)*t36+t28*(t118-t121-t779+t780
-+t119+t122)*t133+m__fu*t1185+m__ru*t1237-t96*I__xz+Omega__z*((I__xx-I__zz)*
-Omega__x+i__fy*(omega__fl+omega__fr-2*Omega__y)*delta+t1246+t1247+t1251)+t238*
-I__xz+Omega__x*(t395+t397+(t398+t399-t400)*i__fy)-2*delta*i__fy*v__z__rldot+(
-I__yy+i__tg)*v__z__rrdot+(-v__omega__fl-v__omega__fr)*i__fy-(v__omega__rl+
-v__omega__rr)*t593, dynamicRes[14] = t1111+t1268, t1281 = -t728-2*t741, t1300 =
-t607-t609, t1326 = 2*t712-2*t__f*t748+2*t__r*(-t55+t56)-phi__rr*t1281+2*t760+2*
-t761+2*t608+rr__rl*t647*phi__rl-t826-t827+2*phi__rl*y__rl*Y__rl+2*t713+2*t714,
-t1329 = -t__f*t504, t1336 = delta*(t1329+t612+t613)-t__f*t616-t__r*t622+t619+
-t621+t624+t625-t531-t532-t479-t480, t1342 = F__x*t15+M__Ay+M__y+T__fly+T__fry+
-T__rly+T__rry-t667-t668+t671-t672, t1375 = t3*(-2*t12*t1300*t5+t10*t1326-2*
-t1300*t36+2*t1336*t5-t539)+2*t12*t1342-2*t36*t800+2*delta*(-w+b)*t363+2*b*(t263
-+t265+t63+t64)+2*t1329-2*t__r*t519-2*t880+2*(-psi__fl*w-psi__fl*x__fl+y__fl)*
-X__fl+2*(-psi__fr*w-psi__fr*x__fr+y__fr)*X__fr-2*t878-y__rl*t1003-t1006*y__rr,
-t1392 = t642+t645+t654+t651+t656+t658+t648-t662-t664+t659+t660, t1394 = t298+
-t301+t310+t307+t314+t316+t322+t324+t304+t312+t318+t320, t1406 = 2*F__y*t15+2*
-X__fl*t919+2*X__fr*t923+2*b*t496+t12*t1392+t1394*t36-t382-t385-t386-t387-t388-
-t389-t390+2*t928+2*t929, t1424 = -F__Ay*psi__rr*rr__rr+F__Az*t948+2*b*t691-2*
-delta*t961-psi__rl*t304-2*t290*t5+2*t696*w-t965-t967+t977+t978+t980+t982, t1431
-= psi__rl*t648-2*t290+t729+t939+t942+t943+t945+t949-t950-t951-t953-t955, t1434
-= y__fl*z__fl, t1435 = y__fr*z__fr, t1437 = Omega__z*(-t1434-t1435), t1439 = 2*
-x__fl*z__fldot, t1441 = 2*x__fr*z__frdot, t1444 = x__fl*z__fl, t1445 = x__fr*
-z__fr, t1446 = -t1444-t1445, t1449 = 2*y__fl*z__fldot, t1451 = 2*y__fr*z__frdot
-, t1477 = t129*w+t1444+t1445, t1481 = z__fl-z__fr, t1505 = 1/2*t94*(2*t12*(t5*(
-t288+t290)-t973)+2*T__rry*t36*phi__rr+t10*(2*t720+2*t724+2*t732+psi__rr*t1281-2
-*t737-2*t738+psi__rl*(-rr__rl*t647-2*t739)+t950+t951)+2*t5*(-delta*t327+t341+
-t342+t343+t344)-t351)+1/2*t1*t1375+t51*(-rr__rr*t12*t91-rr__rr*t36*t287+t10*(-
-t743-t744-t289)+(t330+t__r*(t47-t48)-t338-t340-y__rl*t47-y__rr*t48)*t5)+1/2*t3*
-t1406-t1105*t172*phi__rr+1/2*t12*t1424-t1105*t151*phi__rr+1/2*t36*t1431+delta*(
-m__fu*(Omega__y*(t1437-t1439-t1441)+Omega__x*(t1446*Omega__z+t1449+t1451)+
-v__z__rldot*t1434+v__z__rldot*t1435+t1446*v__z__rrdot)-2*i__fy*(-t257+1/2*
-Omega__y*t590+t238))+m__fu*(b*(-t129*Omega__y*Omega__z+t129*v__z__rldot+2*t463)
+t5, t69 = m*Omega__x, t71 = t10^2, t73 = t71*t25*Omega__z*t69, t75 = g__y*m+
+F__Ay+F__y+Y__fl+Y__fr+Y__rl+Y__rr, t78 = m*g__z, t79 = t78+F__Az+F__z-N__fl-
+N__fr-N__rl-N__rr, t82 = v__mu*V__z, t84 = t19*t82+v__V__z, t88 = Y__fl*t59, 
+t89 = Y__fr*t61, t90 = Y__rl*psi__rl, t91 = Y__rr*psi__rr, t93 = t10*(t88+t89+
+t90+t91), t94 = t3^2, t96 = Omega__z^2, t98 = t71*t25, t100 = t28*V__z, t103 =
+m*g__x, t106 = Omega__z*m, t108 = t25*t12, t109 = t71*t108, t111 = -t17, t117 =
+v__mu*t111, t118 = t19*t117, t119 = v__V__P*t13, t121 = V__P*t31*v__lambda__P,
+t122 = v__z*omega__y, t123 = omega__ydot*t15, t127 = Omega__y*m, t129 = z__fl+
+z__fr, t131 = z__rl+z__rr, t132 = t131*m__ru, t133 = m__fu*t129+t132, t136 = 
+z__fldot+z__frdot, t137 = 2*t136, t142 = z__rldot+z__rrdot, dynamicRes[10] = 
+t51*t50+t1*(t3*(t10*t57-t66)+t73-t5*t75*t36+t36*t79-t84*t28*m)+t94*t93+t3*(-m*
+t100*v__mu-m*t96*t98-F__Ax-F__x-X__fl-X__fr-X__rl-X__rr-t103)-t109*omega__y*
+t106+t10*(t111*t12*t19-t30-t32-t33)*t106+t28*m*(t118+t119-t121+t122-t123)+V__z*
+t127+Omega__z*Omega__x*t133+m__fu*(t129*v__z__rrdot+t137*Omega__y)+m__ru*(t131*
+v__z__rrdot+2*t142*Omega__y), t149 = t111*t19-t100, t150 = v__phi*t149, t151 =
+t36^2, t153 = t19^2, t154 = t153*t117, t156 = V__z*t28*v__mu, t159 = t28*
+v__V__z, t163 = V__P*t13*v__lambda__P, t164 = v__V__P*t31, t165 = t25*omega__y,
+t166 = v__phi*t165, t167 = omega__x*v__z, t168 = omega__xdot*h, t169 = z*
+omega__xdot, t172 = t12^2, t176 = 2*t5*v__phi*t165, t177 = v__phi*t32, t178 = 
+v__phi*t33, t179 = t25*omega__ydot, t186 = -2*t5*v__phi*Omega__z+v__mu*Omega__x
+-v__z__frdot, t193 = (2*t5*v__phi*Omega__x+v__mu*Omega__z+v__z__rldot)*t1, t199
+= -t75, t212 = t28*t111, dynamicRes[11] = -t71*m*(t151*t150+t36*(t12*(t154+t19*
+(t119-t156-t121+t122-t123)-t159+t117)-t163-t164-t166+t167-t168+t169)+t172*t150+
+t12*(-t176-t177-t178-t179)+(t186*t3+t193)*t25)+t36*t199-t12*t79+t3*(-X__fl*t59-
+X__fr*t61-t63-t64)+t1*(-t100*t106+t45+t46+t47+t48)+t212*t106-m*V__z*Omega__x+
+Omega__z*Omega__y*t133+Omega__x*(-m__fu*t137-2*m__ru*t142)-v__z__rldot*t133, 
+t236 = Omega__x^2, t250 = t28*Omega__y, t255 = -m__fu*t129-t132, t257 = 
+Omega__y^2, t259 = v__Omega__x+v__Omega__z, dynamicRes[12] = t94*t66+t3*(t1*(
+t93-t50)+t73-t36*(t199*t5+F__Az+F__z-N__fl-N__fr-N__rl-N__rr+t78))+t51*t10*t57+
+t1*(-m*t236*t98+t100*t127-F__Ax-F__x-X__fl-X__fr-X__rl-X__rr-t103)+t109*
+omega__y*t69-t10*Omega__x*m*(t12*t149-t32-t33)-t250*m*t111+m*v__V__z+t236*t255+
+t257*t255+m__fu*t259+m__ru*(v__Omega__y+v__z__fldot), t263 = X__fl*rr__fl, t264
+= X__fr*rr__fr, t273 = N__rl*phi__rl*rr__rl, t275 = N__rr*phi__rr*rr__rr, t276
+= T__rly*psi__rl, t277 = T__rry*psi__rr, t278 = t273+t275-t276-t277, t283 = 
+N__rl*psi__rl*rr__rl, t285 = N__rr*psi__rr*rr__rr, t286 = T__rly*phi__rl, t287
+= phi__rr*T__rry, t288 = t283+t285+t286+t287, t296 = 2*(Y__fl*x__fl+Y__fr*x__fr
+)*delta, t297 = -Y__fl+Y__fr, t299 = 2*t__f*t297, t301 = F__Az-2*N__rl, t302 =
+rr__rl*t301, t304 = F__Az-2*N__rr, t305 = rr__rr*t304, t308 = 2*(-Y__rl+Y__rr)*
+t__r, t309 = Y__fl*y__fl, t310 = 2*t309, t311 = Y__fr*y__fr, t312 = 2*t311, 
+t314 = F__Ay+2*Y__rl, t315 = y__rl*t314, t317 = F__Ay+2*Y__rr, t318 = y__rr*
+t317, t319 = N__fl*rr__fl, t320 = 2*t319, t321 = N__fr*rr__fr, t322 = 2*t321, 
+t323 = -2*t1*t288*t5+t296+t299+t302+t305+t308+t310+t312+t315+t318-t320-t322, 
+t325 = F__Ax*h__A, t326 = F__Az*b__A, t327 = h*F__x, t328 = F__x*z, t329 = b*
+F__z, t330 = d*F__z, t331 = t325+t326-t327+t328-t329+t330-M__Ay-M__y-T__fly-
+T__fry-T__rly-T__rry, t339 = 2*m__fu*t129*g__z, t342 = 2*m__ru*t131*g__z, t344
+= 2*z__fl*N__fl, t346 = 2*z__fr*N__fr, t347 = z__rl*t301, t348 = z__rr*t304, 
+t349 = F__Az-N__fl-N__fr-N__rl-N__rr, t351 = 2*h*t349, t352 = t314*rr__rl, t354
+= t317*rr__rr, t356 = N__fl+N__fr, t358 = 2*R__f*t356, t361 = 2*(-F__Az+N__rl+
+N__rr)*R__r, t362 = rr__fl*phi__fl, t364 = 2*Y__fl*t362, t365 = rr__fr*phi__fr,
+t367 = 2*Y__fr*t365, t368 = -2*t94*t278*t5+t3*t323+2*t1*t331+2*t5*(t273+t275)+
+t339+t342-t344-t346+t347+t348+t351-phi__rl*t352-phi__rr*t354+t358+t361-t364-
+t367, t372 = t28*t133, t375 = z__fl*t45, t377 = z__fr*t46, t379 = phi__rl*z__rl
+, t380 = X__rl*t379, t382 = phi__rr*z__rr, t383 = X__rr*t382, t385 = -t49, t393
+= X__fl-X__fr, t394 = t__f*t393, t396 = R__r*X__rl, t399 = R__r*X__rr, t402 = 
+R__f*phi__fl, t406 = R__f*phi__fr, t410 = X__rl-X__rr, t413 = y__rl*X__rl, t415
+= y__rr*X__rr, t417 = y__rl+y__rr, t419 = 2*t372*V__z*Omega__z-2*t375-2*t377-2*
+t380-2*t383+2*h*t385+2*(-X__fl*x__fl-X__fr*x__fr)*delta+2*t394+2*phi__rl*t396+2
+*phi__rr*t399+2*X__fl*(t402-y__fl)+2*X__fr*(t406-y__fr)+2*t__r*t410-2*t413-2*
+t415-t417*F__Ax, t422 = T__flx*phi__fl, t423 = T__frx*phi__fr, t429 = psi__rl*
+rr__rl+psi__rr*rr__rr, t430 = t429*F__Ax, t434 = omega__rl*i__ry, t435 = 
+phi__rl*t434, t436 = omega__rr*i__ry, t437 = phi__rr*t436, t438 = phi__fl*
+omega__fl, t439 = phi__fr*omega__fr, t440 = 2*delta__dot, t446 = F__y*b, t447 =
+F__y*d, t448 = F__Ay*b__A+M__Az+M__z+T__flz+T__frz+T__rlz+T__rrz-t446+t447, 
+t453 = 2*m__fu*t129*g__y, t456 = 2*m__ru*t131*g__y, t458 = 2*Y__fl*z__fl, t460
+= 2*Y__fr*z__fr, t463 = F__Ay+Y__fl+Y__fr+Y__rl+Y__rr, t466 = F__Az*rr__rl, 
+t468 = F__Az*rr__rr, t470 = -Y__fl-Y__fr, t473 = -F__Ay-Y__rl-Y__rr, t476 = 
+N__fl*t362, t477 = 2*t476, t478 = N__fr*t365, t479 = 2*t478, t480 = 2*R__f*t470
++2*R__r*t473+2*h*t463+phi__rl*t466+phi__rr*t468+2*t1*t448+t314*z__rl+t317*z__rr
++t453+t456+t458+t460-t477-t479, t488 = x__fl*N__fl, t489 = x__fr*N__fr, t492 =
+2*delta*(t488+t489), t495 = 2*(-N__fl+N__fr)*t__f, t498 = 2*(-N__rl+N__rr)*t__r
+, t500 = -F__Az*t417, t501 = N__fl*y__fl, t502 = 2*t501, t503 = N__fr*y__fr, 
+t504 = 2*t503, t506 = 2*N__rl*y__rl, t508 = 2*N__rr*y__rr, t509 = Y__fl*rr__fl,
+t510 = 2*t509, t511 = Y__fr*rr__fr, t512 = 2*t511, t513 = -2*t1*t288+t352+t354+
+t492+t495+t498+t500+t502+t504+t506+t508+t510+t512, t515 = -T__flx-T__frx, t516
+= delta*t515, t518 = t__f*(t45-t46), t519 = -y__rl+t__r, t522 = y__rr+t__r, 
+t525 = phi__fl*y__fl, t526 = X__fl*t525, t527 = phi__fr*y__fr, t528 = X__fr*
+t527, t529 = psi__fl*T__flx, t530 = psi__fr*T__frx, t531 = T__rlx*psi__rl, t532
+= T__rrx*psi__rr, t536 = rr__rl*phi__rl, t537 = rr__rr*phi__rr, t538 = t536+
+t537, t539 = t538*F__Ax, t542 = z__fl*t60, t544 = z__fr*t62, t546 = psi__rl*
+z__rl, t547 = X__rl*t546, t549 = psi__rr*z__rr, t550 = X__rr*t549, t552 = X__fl
++X__fr, t553 = delta*t552, t554 = X__fl*psi__fl, t555 = X__fr*psi__fr, t560 = 
+delta*t552*R__f, t571 = 2*h__A*F__Ay, t574 = 2*M__x, t575 = 2*M__Ax, t576 = 2*
+T__flx, t577 = 2*T__frx, t578 = 2*T__rlx, t579 = 2*T__rrx, t580 = t36*t513+t1*(
+2*t5*(X__rl*phi__rl*t519-X__rr*phi__rr*t522+t516+t518-t526-t528-t529-t530-t531-
+t532)+t539)+2*t542+2*t544+2*t547+2*t550+2*h*(t553+t554+t555+t63+t64+F__y)-2*
+t560-2*R__f*t554-2*R__f*t555-2*psi__rl*t396-2*psi__rr*t399-t571-2*z*F__y-t574-
+t575-t576-t577-t578-t579, t585 = rr__rl*t63+rr__rr*t64, t589 = y__fl*X__fl, 
+t590 = y__fr*X__fr, t593 = t554-t555, t595 = T__rlx*phi__rl, t596 = T__rrx*
+phi__rr, t597 = psi__fl*y__fl, t598 = X__fl*t597, t599 = psi__fr*y__fr, t600 =
+X__fr*t599, t601 = t63-t64, t603 = psi__rl*t413, t604 = psi__rr*t415, t611 = 
+omega__fl+omega__fr, t616 = -Omega__y*Omega__z+v__z__rldot, t617 = z__fl^2, 
+t620 = 2*h*t616, t622 = delta*x__fl-t__f+y__fl, t624 = R__f*Omega__y, t625 = 
+delta__dot*y__fl, t629 = b*Omega__y, t630 = delta*y__fl, t631 = t630-w-x__fl, 
+t633 = 2*z__fldot, t636 = b*v__z__frdot, t637 = -t622, t639 = delta*v__z__frdot
+, t641 = -w-x__fl, t645 = 2*v__z__rldot*R__f, t648 = z__fr^2, t651 = delta*
+x__fr+t__f+y__fr, t653 = delta__dot*y__fr, t657 = delta*y__fr, t658 = t657-w-
+x__fr, t660 = 2*z__frdot, t666 = -w-x__fr, t671 = t136*Omega__x, t674 = t136*
+R__f, t677 = x__fl*v__Omega__z, t678 = x__fr*v__Omega__x, t683 = v__Omega__x*
+y__fr, t684 = v__Omega__z*y__fl, t687 = delta*(t263+t264-2*(v__z__rrdot-1/2*
+v__omega__fl-1/2*v__omega__fr)*i__fy)+1/2*t12*t368+1/2*t1*t419+1/2*t51*(2*t5*(
+t422+t423)+t430)+Omega__y*(-t435-t437-(t438+t439+t440)*i__fy)+1/2*t36*t480-
+I__xz*v__z__frdot+I__xx*v__z__rldot+1/2*t3*t580+t94*(t151*t585-t36*t278-(delta*
+(t394-t589-t590)+t__f*t593+t595+t596-t598-t600+t__r*t601-t603-t604)*t5)+(
+psi__fl*v__omega__fl+psi__fr*v__omega__fr+t611*delta__dot)*i__fy+m__fu*(t617*
+t616+z__fl*(t620+t96*t622+2*Omega__z*(t624+t625)+Omega__x*(t631*Omega__y+V__z+
+t629+t633)+t636+t257*t637+y__fl*t639+v__z__frdot*t641-delta__ddot*x__fl-t645)+
+t648*t616+z__fr*(t620+t96*t651+2*Omega__z*(t624+t653)+Omega__x*(t658*Omega__y+
+V__z+t629+t660)+t636-t257*t651+y__fr*t639+v__z__frdot*t666-delta__ddot*x__fr-
+t645)+2*h*t671-2*Omega__x*t674+delta*(t677+t678)+(v__Omega__x-v__Omega__z)*t__f
++t683+t684), t688 = t133*Omega__z, t699 = t17*t19+t100, t700 = v__phi*t699, 
+t702 = omega__ydot*h, t703 = omega__ydot*z, t721 = (T__fly+T__fry)*delta, t722
+= psi__fl*T__fly, t723 = psi__fr*T__fry, t729 = delta*(-t297*t__f-t309-t311+
+t319+t321), t730 = Y__fl*psi__fl, t731 = Y__fr*psi__fr, t733 = t__f*(t730-t731)
+, t736 = psi__rr*t468, t739 = t__r*(t90-t91), t741 = rr__fl*psi__fl*N__fl, t743
+= rr__fr*psi__fr*N__fr, t744 = Y__fl*t597, t745 = Y__fr*t599, t746 = y__rl*
+Y__rl, t748 = y__rr*Y__rr, t750 = T__fly*phi__fl, t751 = T__fry*phi__fr, t752 =
+t729+t733-1/2*psi__rl*t466-1/2*t736+t739+t741+t743-t744-t745-psi__rl*t746-
+psi__rr*t748+t750+t751, t755 = t53-t54, t765 = Y__fl*t525, t766 = Y__fr*t527, 
+t779 = i__ry+1/2*i__tg, t780 = t779*(omega__rl+omega__rr), t790 = z__rl^2, t792
+= -t519, t796 = 2*R__r*Omega__y*Omega__z, t798 = 2*z__rldot, t804 = 2*
+v__z__rldot*R__r, t807 = z__rr^2, t811 = 2*z__rrdot, t822 = t142*R__r, t831 = -
+t212*t688+psi__rl*v__omega__rl*i__ry+rr__fr*t555+rr__fl*t554-I__xz*Omega__x*
+Omega__y+psi__rr*v__omega__rr*i__ry-t71*(t172*t700+t12*(t36*(-t154+t19*(t156+
+t121+t702-t703-t119-t122)+t159-t117)+t176+t177+t178+t179)-t3*t25*t186+t151*t700
++t36*(t163+t164+t166+t168-t169-t167)-t25*t193)*t133+t10*(t94*(t721+t722+t723)-
+t3*t1*t752+t51*(t__f*t755+phi__rl*(-1/2*t466+t519*Y__rl)+phi__rr*(-1/2*t468-
+t522*Y__rr)+t476+t478-t765-t766))+Omega__z*(2*delta*Omega__x*i__fy+(-I__yy+
+I__zz)*Omega__y+i__fy*t611+t780)+t5*(t595+t596)+t151*t585*t51+t172*t585*(t94+
+t51)+m__ru*(t790*t616+z__rl*(t620+t96*t792+t796+Omega__x*(-x__rl*Omega__y+V__z+
+t629+t798)+t636+t257*t519-v__z__frdot*x__rl-t804)+t807*t616+z__rr*(t620+t96*
+t522+t796+Omega__x*(-x__rr*Omega__y+V__z+t629+t811)+t636-t257*t522-v__z__frdot*
+x__rr-t804)+2*h*t142*Omega__x-2*Omega__x*t822+(-v__Omega__y+v__z__fldot)*t__r+
+y__rl*v__Omega__y+y__rr*v__z__fldot), dynamicRes[13] = t687+t831, t832 = t429*
+t12, t834 = F__Ay*t5-F__Az, t839 = t538*t12, t842 = -t470, t844 = delta*t842+
+t730+t731+t90+t91, t852 = R__f*Y__fl, t854 = R__f*Y__fr, t863 = 2*F__Ay*t12*
+b__A, t864 = t553+t554+t555+t63+t64, t867 = -t666, t868 = t867*X__fr, t871 = -
+t641, t872 = t871*psi__fl, t874 = t867*psi__fr, t876 = x__rl*X__rl, t877 = 
+psi__rl*t876, t878 = x__rr*X__rr, t879 = psi__rr*t878, t885 = 2*t36*(t325+t326)
+, t887 = F__Ax*(rr__rl+rr__rr), t899 = Y__fl*t641, t913 = h*t57+b*t844-z__fl*
+t53-z__fr*t54-Y__rl*t379-Y__rr*t382+delta*(-Y__fr*t867+t899)+Y__fl*(t402-t872)+
+Y__fr*(t406-t874)+R__r*(t55+t56)-psi__rl*x__rl*Y__rl-psi__rr*x__rr*Y__rr, t918
+= t871*phi__fl, t922 = t867*phi__fr, t927 = phi__rl*t876, t928 = phi__rr*t878,
+t929 = h*t864+b*t49+t542+t544+t547+t550-t560+X__fl*(-R__f*psi__fl-t918)+X__fr*(
+-R__f*psi__fr-t922)+R__r*(-t63-t64)-t927-t928, t939 = 2*b*t463, t942 = 2*delta*
+(-t319-t321+t309+t311), t943 = 2*t899, t945 = 2*Y__fr*t666, t948 = -x__rl-x__rr
+, t949 = F__Ay*t948, t950 = 2*t741, t951 = 2*t743, t953 = 2*x__rl*Y__rl, t955 =
+2*x__rr*Y__rr, t956 = t939+t942+t943+t945-2*t283-2*t285+t949-t950-t951-t953-
+t955, t961 = t501+t503+t509+t511, t965 = 2*rr__fl*t730, t967 = 2*rr__fr*t731, 
+t973 = rr__rr*t91, t975 = -t948, t977 = 2*t488, t978 = 2*t489, t980 = 2*N__rl*
+x__rl, t982 = 2*x__rr*N__rr, t983 = F__Az*t975-2*b*t349+2*delta*t961+2*rr__rl*
+t90-2*t356*w+t965+t967+2*t973-t977-t978-t980-t982, t993 = -F__Ax-X__fl-X__fr-
+X__rl-X__rr, t1002 = -F__Ax-2*X__rl, t1005 = -F__Ax-2*X__rr, t1008 = R__f*X__fl
+, t1010 = R__f*X__fr, t1019 = -2*z__fr*X__fr+z__rl*t1002+z__rr*t1005+2*t516+2*
+t1008+2*t1010+2*(F__Ax+X__rl+X__rr)*R__r-2*t529-2*t530-2*t531-2*t532, t1049 = 
+t71*t688, t1066 = -2*R__r*t473-2*h*t463-t314*z__rl-t317*z__rr+2*t273+2*t275-
+t453-t456-t458-t460+t477+t479+2*t852+2*t854, t1072 = -2*Y__rl*t536-2*Y__rr*t537
++t339+t342-t344-t346+t347+t348+t351+t358+t361-t364-t367, t1092 = 2*t1049*
+Omega__x*t25+t12*t1066+t36*t1072-2*t28*t84*t133+2*b*t993+2*delta*(-t589-t590)+2
+*X__fl*t871+2*t868+2*t595+2*t596+2*t876+2*t878+2*t422+2*t423+t975*F__Ax, t1103
+= X__rl*rr__rl, t1104 = X__rr*rr__rr, t1105 = -t263-t264-t1103-t1104, t1110 = -\
+1/2*t94*t3*t834*t832+1/2*t94*(t1*t834*t839+2*t10*(h*t844+z__fl*t88+z__fr*t89+
+Y__rl*t546+Y__rr*t549-delta*t842*R__f-psi__fl*t852-psi__fr*t854-(t90+t91)*R__r)
+-t863+2*t5*(b*t864+delta*(X__fl*t641-t868)-X__fl*t872-X__fr*t874-t877-t879)+
+t885-t887)+1/2*t3*(-t51*t834*t832+2*t1*(t10*t913-t5*t929)-2*t71*t96*t133*t25+
+t12*t956+t36*t983-2*t372*t82-2*m__fu*t129*g__x-2*m__ru*t131*g__x+2*h*t993-2*
+z__fl*X__fl+t1019)+1/2*t51*t1*t834*t839+1/2*t51*(2*t10*(Y__rl*phi__rl*x__rl+
+Y__rr*phi__rr*x__rr+Y__fl*t918+Y__fr*t922+b*t57)-t863+2*t5*(h*t49+t375+t377+
+t380+t383-phi__fl*t1008-phi__fr*t1010-(t47+t48)*R__r)+t885-t887)+1/2*t1*t1092-
+t1049*omega__y*t108-t10*Omega__z*t133*(-t12*t149+t32+t33)+t172*t1105+(t446-t447
+-M__Az-M__z-T__flz-T__frz-T__rlz-T__rrz)*t12+t151*t1105, t1118 = -t658, t1126 =
+R__f*Omega__x, t1127 = delta__dot*x__fl, t1131 = delta__dot*x__fr, t1159 = 2*
+v__z__rrdot*R__f, t1184 = t96*(b*t129-t1118*z__fr+t631*z__fl)+Omega__z*(2*h*
+t129*Omega__x+Omega__x*t617+2*z__fl*(-t1126-t1127)-2*(t1131+t1126-1/2*z__fr*
+Omega__x)*z__fr)+2*h*(t136*Omega__y+z__fl*v__z__rrdot+z__fr*v__z__rrdot)+b*(-
+t236*z__fl-t236*z__fr+v__Omega__x+v__Omega__z)+v__z__rrdot*t617+z__fl*(-t236*
+t631-Omega__x*t637*Omega__y-v__z__frdot*x__fl*delta+Omega__y*(V__z+t633)-t1159+
+(t__f-y__fl)*v__z__frdot-delta__ddot*y__fl)+v__z__rrdot*t648+z__fr*(t236*t1118+
+Omega__x*t651*Omega__y-v__z__frdot*x__fr*delta+Omega__y*(V__z+t660)-t1159+(-
+t__f-y__fr)*v__z__frdot-delta__ddot*y__fr)+delta*(t684+t683)-2*Omega__y*t674-w*
+t259-t678-t677, t1187 = x__rl*z__rl, t1188 = x__rr*z__rr, t1219 = 2*v__z__rrdot
+*R__r, t1236 = t96*(b*t131-t1187-t1188)-2*Omega__z*(-h*t131-1/2*t790+R__r*z__rl
++z__rr*(R__r-1/2*z__rr))*Omega__x+2*h*(t142*Omega__y+z__rl*v__z__rrdot+z__rr*
+v__z__rrdot)+b*(-t236*z__rl-t236*z__rr+v__Omega__y+v__z__fldot)+v__z__rrdot*
+t790+z__rl*(t236*x__rl-Omega__x*t519*Omega__y+Omega__y*(V__z+t798)-t1219+t519*
+v__z__frdot)+v__z__rrdot*t807+z__rr*(t236*x__rr+Omega__x*t522*Omega__y+Omega__y
+*(V__z+t811)-t1219-t522*v__z__frdot)-2*Omega__y*t822-v__Omega__y*x__rl-
+v__z__fldot*x__rr, t1245 = psi__rl*t434, t1246 = psi__rr*t436, t1250 = i__fy*(
+psi__fl*omega__fl+psi__fr*omega__fr), t1266 = (-t327+t328-t329+t330-M__Ay-M__y-
+T__fly-T__fry-T__rly-T__rry)*t36+t28*(t118-t121-t702+t703+t119+t122)*t133+m__fu
+*t1184+m__ru*t1236-t96*I__xz+Omega__z*((I__xx-I__zz)*Omega__x+i__fy*(omega__fl+
+omega__fr-2*Omega__y)*delta+t1245+t1246+t1250)+t236*I__xz+Omega__x*(t435+t437+(
+t438+t439-t440)*i__fy)-2*delta*i__fy*v__z__rldot+I__yy*v__z__rrdot+(-
+v__omega__fl-v__omega__fr)*i__fy-(v__omega__rl+v__omega__rr)*t779, dynamicRes[
+14] = t1110+t1266, t1279 = -t468-2*t748, t1298 = t275-t277, t1324 = 2*t721-2*
+t__f*t755+2*t__r*(-t55+t56)-phi__rr*t1279+2*t765+2*t766+2*t276+rr__rl*t301*
+phi__rl-t477-t479+2*phi__rl*y__rl*Y__rl+2*t722+2*t723, t1327 = -t__f*t393, 
+t1334 = delta*(t1327+t589+t590)-t__f*t593-t__r*t601+t598+t600+t603+t604-t422-
+t423-t595-t596, t1340 = F__x*t15+M__Ay+M__y+T__fly+T__fry+T__rly+T__rry-t325-
+t326+t329-t330, t1373 = t1*(-2*t12*t1298*t5+t10*t1324-2*t1298*t36+2*t1334*t5-
+t430)+2*t12*t1340-2*t36*t448+2*delta*(-w+b)*t552+2*b*(t554+t555+t63+t64)+2*
+t1327-2*t__r*t410-2*t879+2*(-psi__fl*w-psi__fl*x__fl+y__fl)*X__fl+2*(-psi__fr*w
+-psi__fr*x__fr+y__fr)*X__fr-2*t877-y__rl*t1002-t1005*y__rr, t1392 = t296+t299+
+t308+t305+t310+t312+t302-t320-t322+t315+t318, t1394 = t492+t495+t498+t354+t502+
+t504+t510+t512+t352+t500+t506+t508, t1406 = 2*F__y*t15+2*X__fl*t918+2*X__fr*
+t922+2*b*t385+t12*t1392+t1394*t36-t571-t574-t575-t576-t577-t578-t579+2*t927+2*
+t928, t1424 = -F__Ay*psi__rr*rr__rr+F__Az*t948+2*b*t349-2*delta*t961-psi__rl*
+t352-2*t287*t5+2*t356*w-t965-t967+t977+t978+t980+t982, t1431 = psi__rl*t302-2*
+t287+t736+t939+t942+t943+t945+t949-t950-t951-t953-t955, t1434 = y__fl*z__fl, 
+t1435 = y__fr*z__fr, t1437 = Omega__z*(-t1434-t1435), t1439 = 2*x__fl*z__fldot,
+t1441 = 2*x__fr*z__frdot, t1444 = x__fl*z__fl, t1445 = x__fr*z__fr, t1446 = -
+t1444-t1445, t1449 = 2*y__fl*z__fldot, t1451 = 2*y__fr*z__frdot, t1477 = t129*w
++t1444+t1445, t1481 = z__fl-z__fr, t1505 = 1/2*t94*(2*t12*(t5*(t285+t287)-t973)
++2*T__rry*t36*phi__rr+t10*(2*t729+2*t733+2*t739+psi__rr*t1279-2*t744-2*t745+
+psi__rl*(-rr__rl*t301-2*t746)+t950+t951)+2*t5*(-delta*t515+t529+t530+t531+t532)
+-t539)+1/2*t3*t1373+t51*(-Y__rr*rr__rr*t12*psi__rr-N__rr*rr__rr*t36*psi__rr+t10
+*(-t750-t751-t286)+(t518+t__r*(t47-t48)-t526-t528-y__rl*t47-y__rr*t48)*t5)+1/2*
+t1*t1406-t1104*t172*phi__rr+1/2*t12*t1424-t1104*t151*phi__rr+1/2*t36*t1431+
+delta*(m__fu*(Omega__y*(t1437-t1439-t1441)+Omega__x*(t1446*Omega__z+t1449+t1451
+)+v__z__rldot*t1434+v__z__rldot*t1435+t1446*v__z__rrdot)-2*i__fy*(-t257+1/2*
+Omega__y*t611+t236))+m__fu*(b*(-t129*Omega__y*Omega__z+t129*v__z__rldot+2*t671)
 +Omega__y*(2*(z__fldot-z__frdot)*t__f+Omega__z*t1477-t1449-t1451)+Omega__x*(
 t1481*t__f*Omega__z-2*t136*w+t1437-t1439-t1441)+t__f*t1481*v__z__rrdot-
-v__z__rrdot*t1434-v__z__rrdot*t1435-t1477*v__z__rldot)-b*m__ru*(t131*Omega__y*
-Omega__z-t131*v__z__rldot-2*t142*Omega__x), t1508 = t1188+t1189, t1522 = z__rl-
+v__z__rrdot*t1434-v__z__rrdot*t1435-v__z__rldot*t1477)-b*m__ru*(t131*Omega__y*
+Omega__z-t131*v__z__rldot-2*t142*Omega__x), t1508 = t1187+t1188, t1522 = z__rl-
 z__rr, t1524 = y__rl*z__rl, t1525 = y__rr*z__rr, t1559 = Omega__y*((-I__xx+
-I__yy+i__tg)*Omega__x+m__ru*(Omega__z*t1508+2*(z__rldot-z__rrdot)*t__r-2*y__rl*
-z__rldot-2*y__rr*z__rrdot)+I__xz*Omega__z-t1247-t1246-t1251)+Omega__x*(m__ru*(
-Omega__z*(t1522*t__r-t1524-t1525)-2*x__rl*z__rldot-2*x__rr*z__rrdot)-i__fy*t590
--t595)+m__ru*(t__r*t1522*v__z__rrdot-v__z__rldot*t1508-(t1524+t1525)*
+I__yy)*Omega__x+m__ru*(Omega__z*t1508+2*(z__rldot-z__rrdot)*t__r-2*y__rl*
+z__rldot-2*y__rr*z__rrdot)+I__xz*Omega__z-t1246-t1245-t1250)+Omega__x*(m__ru*(
+Omega__z*(t1522*t__r-t1524-t1525)-2*x__rl*z__rldot-2*x__rr*z__rrdot)-i__fy*t611
+-t780)+m__ru*(t__r*t1522*v__z__rrdot-v__z__rldot*t1508-(t1524+t1525)*
 v__z__rrdot)-i__fy*phi__fl*v__omega__fl-i__fy*phi__fr*v__omega__fr-phi__rl*
-i__ry*v__omega__rl-phi__rr*i__ry*v__omega__rr-rr__fl*t45-rr__fr*t46-rr__rl*t47-
+v__omega__rl*i__ry-phi__rr*v__omega__rr*i__ry-rr__fl*t45-rr__fr*t46-rr__rl*t47-
 I__xz*v__z__rldot+v__z__frdot*I__zz, dynamicRes[15] = t1505+t1559, t1561 = t71*
-t26, t1562 = t1561*m__fu*Omega__x, t1567 = t12*t776, t1570 = Omega__x*(t1567+
-t32+t33)*m__fu, t1577 = g__y*m__fu, t1580 = g__z*m__fu, t1586 = m__fu*Omega__y*
-t100, t1587 = m__fu*g__x, t1591 = t28*Omega__y, t1592 = t1591*t17*m__fu, t1593
-= R__f-z__fl-h, t1609 = v__z__rrdot*b, t1610 = t__f*v__z__rldot, t1613 = 
-v__z__rrdot*w, t1614 = t238*t1593+Omega__x*(Omega__z*(-t422-b+w+x__fl)+2*t1128)
-+t257*t1593+Omega__y*(t411*Omega__z+2*t415)+(x__fl*v__z__rldot+y__fl*
-v__z__rrdot)*delta+t1609-t1610-v__z__rrdot*x__fl+y__fl*v__z__rldot-t1613+
-v__V__z+v__Omega__z, dynamicRes[16] = -t1562+t10*(Y__fl*t1*t3*t59-t51*t53+t1570
-)+t94*t59*t5*X__fl+t1*(-t45*t6+t12*(t1577+Y__fl)-(t1580-N__fl)*t36)+t3*(t1586-
-t1587-X__fl)+t1592+m__fu*t1614+X__fl*(-D__phi__fl*t733+(-phi__fl*D__psi__fl-
-D__mu__fl)*rr__fl-D__x__fl)+Y__fl*(-D__mu__fl*t733+(-mu__fl*D__psi__fl+
-D__phi__fl)*rr__fl-D__y__fl)+(T__flx*D__mu__fl-T__fly*D__phi__fl)*psi__fl+(-
-T__flz*phi__fl-T__fly)*D__mu__fl-T__flx*D__phi__fl-T__flz*D__psi__fl-F__fl, 
-t1655 = R__f-z__fr-h, t1673 = t238*t1655+Omega__x*(Omega__z*(-t449-b+w+x__fr)+2
-*t1132)+t257*t1655+Omega__y*(t443*Omega__z+2*t445)+(x__fr*v__z__rldot+y__fr*
-v__z__rrdot)*delta+t1609+t1610-v__z__rrdot*x__fr+y__fr*v__z__rldot-t1613+
+t26, t1562 = t1561*m__fu*Omega__x, t1570 = Omega__x*m__fu*(t12*t699+t32+t33), 
+t1577 = g__y*m__fu, t1580 = g__z*m__fu, t1585 = m__fu*Omega__y, t1586 = t1585*
+t100, t1587 = m__fu*g__x, t1591 = t28*t17*t1585, t1592 = -z__fl-h+R__f, t1608 =
+b*v__z__rrdot, t1609 = t__f*v__z__rldot, t1612 = v__z__rrdot*w, t1613 = t236*
+t1592+Omega__x*(Omega__z*(-t630-b+w+x__fl)+2*t1127)+t257*t1592+Omega__y*(t622*
+Omega__z+2*t625)+(x__fl*v__z__rldot+y__fl*v__z__rrdot)*delta+t1608-t1609-x__fl*
+v__z__rrdot+y__fl*v__z__rldot-t1612+v__V__z+v__Omega__z, dynamicRes[16] = -
+t1562+t10*(Y__fl*t1*t3*t59-t51*t53+t1570)+t94*t59*t5*X__fl+t3*(-t45*t8+t12*(
+t1577+Y__fl)-(t1580-N__fl)*t36)+t1*(t1586-t1587-X__fl)+t1591+m__fu*t1613-F__fl-
+S__fl, t1633 = -z__fr-h+R__f, t1651 = t236*t1633+Omega__x*(Omega__z*(-t657-b+w+
+x__fr)+2*t1131)+t257*t1633+Omega__y*(t651*Omega__z+2*t653)+(x__fr*v__z__rldot+
+y__fr*v__z__rrdot)*delta+t1608+t1609-x__fr*v__z__rrdot+y__fr*v__z__rldot-t1612+
 v__V__z+v__Omega__x, dynamicRes[17] = -t1562+t10*(Y__fr*t1*t3*t61-t51*t54+t1570
-)+t94*t61*t5*X__fr+t1*(-t46*t6+t12*(t1577+Y__fr)-(t1580-N__fr)*t36)+t3*(t1586-
-t1587-X__fr)+t1592+m__fu*t1673+X__fr*(-D__phi__fr*t735+(-phi__fr*D__psi__fr-
-D__mu__fr)*rr__fr-D__x__fr)+Y__fr*(-D__mu__fr*t735+(-mu__fr*D__psi__fr+
-D__phi__fr)*rr__fr-D__y__fr)+(T__frx*D__mu__fr-T__fry*D__phi__fr)*psi__fr+(-
-T__frz*phi__fr-T__fry)*D__mu__fr-T__frx*D__phi__fr-T__frz*D__psi__fr-F__fr, 
-t1696 = m__ru*Omega__x, t1697 = t1561*t1696, t1698 = t1*t3, t1700 = t1567*t1696
-, t1703 = (t32+t33)*t1696, t1706 = t94*t5, t1708 = g__y*m__ru, t1712 = g__z*
-m__ru, t1718 = m__ru*Omega__y*t100, t1719 = m__ru*g__x, t1723 = t1591*t17*m__ru
-, t1724 = -z__rl-h+R__r, dynamicRes[18] = -t1697+t10*(t1698*t90-t51*t55+t1700+
-t1703)+t63*t1706+t1*(t12*(t1708+Y__rl)-t47*t6-(t1712-N__rl)*t36)+t3*(t1718-
-t1719-X__rl)+t1723+m__ru*(t238*t1724-Omega__z*(-x__rl+b)*Omega__x+t257*t1724-
-Omega__y*t331*Omega__z+t1609+v__z__rldot*t545-x__rl*v__z__rrdot+v__V__z+
-v__Omega__y)+X__rl*(-D__phi__rl*t536+(-phi__rl*D__psi__rl-D__mu__rl)*rr__rl-
-D__x__rl)+Y__rl*(-D__mu__rl*t536+(-mu__rl*D__psi__rl+D__phi__rl)*rr__rl-
-D__y__rl)+(T__rlx*D__mu__rl-T__rly*D__phi__rl)*psi__rl+(-T__rlz*phi__rl-T__rly)
-*D__mu__rl-T__rlx*D__phi__rl-T__rlz*D__psi__rl-F__rl, t1771 = -z__rr-h+R__r, 
-dynamicRes[19] = -t1697+t10*(t1698*t91-t51*t56+t1700+t1703)+t64*t1706+t1*(t12*(
-t1708+Y__rr)-t48*t6-(t1712-N__rr)*t36)+t3*(t1718-t1719-X__rr)+t1723+m__ru*(t238
-*t1771-Omega__z*(-x__rr+b)*Omega__x+t257*t1771+Omega__y*t334*Omega__z+t1609+
-v__z__rldot*t334-x__rr*v__z__rrdot+v__V__z+v__z__fldot)+X__rr*(-D__phi__rr*t537
-+(-phi__rr*D__psi__rr-D__mu__rr)*rr__rr-D__x__rr)+Y__rr*(-D__mu__rr*t537+(-
-mu__rr*D__psi__rr+D__phi__rr)*rr__rr-D__y__rr)+(T__rrx*D__mu__rr-T__rry*
-D__phi__rr)*psi__rr+(-T__rrz*phi__rr-T__rry)*D__mu__rr-T__rrx*D__phi__rr-T__rrz
-*D__psi__rr-F__rr, t1806 = t1*phi__fl, t1815 = delta*v__z__rldot, t1818 = 
-Omega__x*delta__dot, dynamicRes[20] = t36*(-T__flz*t3*t59-T__flz*t1806-T__fly)+
-t12*(T__fly*t3*t59+T__fly*t1806-T__flz)+i__fy*(phi__fl*v__z__frdot-psi__fl*
-v__z__rldot-t1815-t1818-v__omega__fl+v__z__rrdot)-t766+Tau__fl, t1823 = t1*
-phi__fr, dynamicRes[21] = t36*(-T__frz*t3*t61-T__frz*t1823-T__fry)+t12*(T__fry*
-t3*t61+T__fry*t1823-T__frz)+i__fy*(phi__fr*v__z__frdot-psi__fr*v__z__rldot-
-t1815-t1818-v__omega__fr+v__z__rrdot)-t767+Tau__fr, t1836 = t1*phi__rl, t1838 =
-t3*psi__rl, dynamicRes[22] = t36*(-T__rlz*t1836-T__rlz*t1838-T__rly)+t12*(
-T__rly*t1836+T__rly*t1838-T__rlz)+(phi__rl*v__z__frdot-psi__rl*v__z__rldot-
-v__omega__rl+v__z__rrdot)*i__ry-i__ta*v__omega__rl-t1104+Tau__rl, t1851 = t1*
-phi__rr, t1853 = t3*psi__rr, dynamicRes[23] = t36*(-T__rrz*t1851-T__rrz*t1853-
-T__rry)+t12*(T__rry*t1851+T__rry*t1853-T__rrz)+(phi__rr*v__z__frdot-psi__rr*
-v__z__rldot-v__omega__rr+v__z__rrdot)*i__ry-i__ta*v__omega__rr-t1105+Tau__rr;
-ref_point_kin0 := t1 = sec(phi), t2 = sin(phi), t4 = sin(mu), t6 = cos(mu), 
-yaw__rate = (t2*omega__y-t4*Omega__x+t6*Omega__z)*t1, t9 = cos(lambda__P), 
+)+t94*t61*t5*X__fr+t3*(-t46*t8+t12*(t1577+Y__fr)-(t1580-N__fr)*t36)+t1*(t1586-
+t1587-X__fr)+t1591+m__fu*t1651-F__fr-S__fr, t1654 = t1561*Omega__x*m__ru, t1655
+= t1*t3, t1659 = t12*Omega__x*t699*m__ru, t1663 = Omega__x*(t32+t33)*m__ru, 
+t1666 = t5*t94, t1668 = g__y*m__ru, t1672 = g__z*m__ru, t1678 = t100*m__ru*
+Omega__y, t1679 = m__ru*g__x, t1683 = t250*m__ru*t17, t1684 = -z__rl-h+R__r, 
+dynamicRes[18] = -t1654+t10*(t1655*t90-t51*t55+t1659+t1663)+t63*t1666+t3*(t12*(
+t1668+Y__rl)-t47*t8-(t1672-N__rl)*t36)+t1*(t1678-t1679-X__rl)+t1683+m__ru*(t236
+*t1684-Omega__z*(-x__rl+b)*Omega__x+t257*t1684-Omega__y*t519*Omega__z+t1608+
+v__z__rldot*t792-x__rl*v__z__rrdot+v__V__z+v__Omega__y)-F__rl-S__rl, t1710 = -
+z__rr-h+R__r, dynamicRes[19] = -t1654+t10*(t1655*t91-t51*t56+t1659+t1663)+t64*
+t1666+t3*(t12*(t1668+Y__rr)-t48*t8-(t1672-N__rr)*t36)+t1*(t1678-t1679-X__rr)+
+t1683+m__ru*(t236*t1710-Omega__z*(-x__rr+b)*Omega__x+t257*t1710+Omega__y*t522*
+Omega__z+t1608+v__z__rldot*t522-x__rr*v__z__rrdot+v__V__z+v__z__fldot)-F__rr-
+S__rr, t1724 = t3*phi__fl, t1733 = delta*v__z__rldot, t1736 = Omega__x*
+delta__dot, dynamicRes[20] = t36*(-T__flz*t1*t59-T__flz*t1724-T__fly)+t12*(
+T__fly*t1*t59+T__fly*t1724-T__flz)+i__fy*(phi__fl*v__z__frdot-psi__fl*
+v__z__rldot-t1733-t1736-v__omega__fl+v__z__rrdot)-t263+Tau__fl, t1741 = t3*
+phi__fr, dynamicRes[21] = t36*(-T__frz*t1*t61-T__frz*t1741-T__fry)+t12*(T__fry*
+t1*t61+T__fry*t1741-T__frz)+i__fy*(phi__fr*v__z__frdot-psi__fr*v__z__rldot-
+t1733-t1736-v__omega__fr+v__z__rrdot)-t264+Tau__fr, t1754 = t3*phi__rl, t1756 =
+t1*psi__rl, dynamicRes[22] = t36*(-T__rlz*t1754-T__rlz*t1756-T__rly)+t12*(
+T__rly*t1754+T__rly*t1756-T__rlz)+(phi__rl*v__z__frdot-psi__rl*v__z__rldot-
+v__omega__rl+v__z__rrdot)*i__ry-i__ta*v__omega__rl-t1103+Tau__rl, t1769 = t3*
+phi__rr, t1771 = t1*psi__rr, dynamicRes[23] = t36*(-T__rrz*t1769-T__rrz*t1771-
+T__rry)+t12*(T__rry*t1769+T__rry*t1771-T__rrz)+(phi__rr*v__z__frdot-psi__rr*
+v__z__rldot-v__omega__rr+v__z__rrdot)*i__ry-i__ta*v__omega__rr-t1104+Tau__rr;
+ref_point_kin0 := t1 = sec(phi), t2 = cos(mu), t4 = sin(mu), t6 = sin(phi), 
+yaw__rate = (t2*Omega__z-t4*Omega__x+t6*omega__y)*t1, t9 = cos(lambda__P), 
 V__xP = V__P*t9, t10 = sin(lambda__P), V__yP = V__P*t10, t12 = V__P*(yaw__rate+
-v__lambda__P), a__xP = -t10*t12+t9*v__V__P+v__w*omega__y, a__yP = t10*v__V__P+
-t12*t9-v__w*omega__x, a__tP = -t10*v__w*omega__x+t9*v__w*omega__y+v__V__P, 
-a__nP = -t10*v__w*omega__y-t9*v__w*omega__x+t12;
+v__lambda__P), a__xP = -t10*t12+t9*v__V__P+v__w*omega__y, t18 = omega__x*v__w,
+a__yP = t10*v__V__P+t12*t9-t18, a__tP = t9*v__w*omega__y-t10*t18+v__V__P, a__nP
+= -t10*v__w*omega__y-t9*v__w*omega__x+t12;
 front_tyre_kinematics := t2 = delta*y__fl+b-w-x__fl, t3 = sin(mu), t5 = cos(mu)
 , t6 = -R__f+z__fl+h, t8 = t2*t3+t5*t6, t9 = cos(phi), t12 = delta*x__fl-t__f+
-y__fl, t13 = sin(phi), t15 = t12*t13+t8*t9-h+z, t16 = delta+psi__fl, t17 = t3*
-t16, t18 = phi__fl*t5, t19 = t17+t18, rr__fl = 1/(t13*t19-t9)*t15, t23 = 
+y__fl, t13 = sin(phi), t15 = t12*t13+t8*t9-h+z-z__rfl, t16 = delta+psi__fl, t17
+= t16*t3, t18 = phi__fl*t5, t19 = t17+t18, rr__fl = 1/(t13*t19-t9)*t15, t23 = 
 delta__dot*y__fl, t25 = tan(phi), t30 = sec(phi), t31 = omega__y*t30, t32 = t25
 *t3*Omega__x-t25*t5*Omega__z-t31+Omega__y, t35 = t3*t32, t42 = t3*Omega__z+t5*
-Omega__x-omega__x, t45 = delta__dot*x__fl, t49 = cos(lambda__P), t50 = V__P*t49
-, t52 = -z+h, t53 = omega__y*t52, t55 = tan(mu), t59 = (t55*(V__z*t3-t50+t53)+
-V__z*t5)*t9, t60 = -t50+t53, t62 = sec(mu), t63 = t62*V__z, t66 = sin(lambda__P
-), t67 = V__P*t66, t68 = t52*omega__x, t70 = t25*(t13*(t55*t60+t63)+t67+t68), 
-t73 = omega__y*t13, t75 = b-d, t78 = t30*t25*t75*(t3*Omega__x-t5*Omega__z-t73),
-t79 = omega__y*t75, t82 = t13*t3*delta, t83 = t13*t3, t85 = t5*t13, t87 = 
-phi__fl*t85+psi__fl*t83+t82-t9, t90 = t87^2, t93 = t13*t42, t94 = t3*delta__dot
-, rr__fldot = 1/t87*(t9*(t2*t32*t5+t23*t3-t35*t6+t5*z__fldot)-t13*t42*t8+t13*
-t45+t9*t42*t12+t59+t70-t78+t79-v__w)-(t93+t13*(t16*t32*t5-phi__fl*t35+t94)+t9*
-t42*t19)/t90*t15, xi__fl = R__f-rr__fl, xi__fldot = -rr__fldot, ca__fl = t17+
-t18+phi, t104 = rr__fl*Omega__z, t105 = t25^2, t108 = -t__f+y__fl, t109 = t108*
-Omega__x, t110 = b-w-x__fl, t111 = t110*Omega__y, t112 = t109+t111+V__z+
-z__fldot, t115 = t30^2, t116 = rr__fl*Omega__x, t117 = Omega__z*t75, t118 = 
-t116+t117, t122 = t5^2, t124 = delta*Omega__z, t134 = Omega__y*t6, t135 = -t108
-, t136 = t135*Omega__z, t137 = t134+t136, t143 = -t75, t144 = Omega__x*t143, 
-t149 = Omega__x*t75, t150 = t149-t104, t156 = delta*t75, t157 = phi__fl*rr__fl,
-t174 = V__z*t13*t62+t13*t55*t60+t67+t68, t178 = -t62*t60, t179 = -t6, t180 = 
-t179*Omega__x, t182 = Omega__z*(-w+b), t185 = t110*Omega__z, t192 = t62*t60, 
-t193 = t55*V__z, t201 = t3^2, t203 = rr__fl*delta, t204 = psi__fl*rr__fl, t209
-= delta*Omega__y, t215 = t115*omega__x, t219 = Omega__x*x__fl, t223 = Omega__x*
-t6, t228 = Omega__x*delta, VSfl0 = t122*(phi__fl*t104*t105-t112*t16*t25+t115*
-t118*t16)+t5*(t3*(t105*(-phi__fl*Omega__x+psi__fl*Omega__z+t124)*rr__fl+t25*(-
-V__z*t16*t55-t16*t60*t62+delta*t137+phi__fl*t112+psi__fl*t137)+t115*(delta*(
-t144+t104)-phi__fl*t118-t150*psi__fl)-t63)+t25*(t30*(psi__fl*t75+t156+t157)*
-omega__y-rr__fl*(phi__fl*Omega__y-Omega__z-delta__dot))-t115*t16*omega__x*
-rr__fl+t30*t16*t174+t178+delta*(t180-t182)+psi__fl*(t180-t185)+t136+t134-t23)+
-t201*(-t105*t16*t116+t25*(t108*Omega__z-t134+t192+t193)*phi__fl+t150*phi__fl*
-t115)+t3*(t25*(-t30*(phi__fl*t75-t203-t204)*omega__y-(psi__fl*Omega__y+t209+
-Omega__x)*rr__fl)+t215*t157-t30*t174*phi__fl+delta*(y__fl*Omega__y+t219)+
-phi__fl*(t223+t185)+t109+t111+V__z+z__fldot)-(-phi__fl*Omega__z+psi__fl*
-Omega__x+t228-t31)*rr__fl, t252 = t9^2, t261 = delta*t53, t262 = Omega__z*t143,
-t297 = t75*t73, VNfl0 = -t30*(t122*t16*t137+t5*(t3*(Omega__y*(delta*t110+
-phi__fl*t179+psi__fl*t110)+delta*(t109+z__fldot)-phi__fl*t136-psi__fl*(t135*
-Omega__x-z__fldot))+t252*(rr__fl*t16*Omega__y+phi__fl*rr__fldot+t116)+t9*t13*(
-delta*t219+t2*Omega__y+t109+z__fldot)+t49*t16*V__P-t261+t262-t52*omega__y*
-psi__fl)-t201*(t111+t109+z__fldot)*phi__fl+t3*(t252*(delta*rr__fldot+psi__fl*
-rr__fldot+rr__fl*delta__dot-t157*Omega__y+t104)-t9*t13*(-delta*x__fl*Omega__z+
-t134+t136-t23)-t49*V__P*phi__fl+phi__fl*t53+t149)+t252*(delta*y__fl*Omega__z+
-t185+t223-t45)+t9*(t13*(-t157*Omega__x-t203*Omega__z-t204*Omega__z+rr__fldot)-
-t67-t68)-t297), t310 = delta__dot*t25*t5, VRfl0 = ((t19*t25+1)*t32+t115*(
-phi__fl*t3-t16*t5)*t42-t310-omega__fl)*rr__fl, t313 = 1/VSfl0, kappa__fl = t313
-*(-VSfl0-VRfl0), t315 = arctan(t313*VNfl0), alpha__fl = -t315, t317 = delta*
-y__fr+b-w-x__fr, t319 = -R__f+z__fr+h, t321 = t3*t317+t319*t5, t324 = delta*
-x__fr+t__f+y__fr, t326 = t13*t324+t321*t9-h+z, t327 = delta+psi__fr, t328 = t3*
-t327, t329 = phi__fr*t5, t330 = t328+t329, rr__fr = 1/(t13*t330-t9)*t326, t334
-= delta__dot*y__fr, t344 = delta__dot*x__fr, t351 = phi__fr*t85+psi__fr*t83+t82
--t9, t354 = t351^2, rr__frdot = 1/t351*(t9*(t317*t32*t5+t3*t334-t319*t35+t5*
-z__frdot)-t13*t42*t321+t13*t344+t9*t42*t324+t59+t70-t78+t79-v__w)-(t93+t13*(t32
-*t327*t5-phi__fr*t35+t94)+t9*t42*t330)/t354*t326, xi__fr = R__f-rr__fr, 
-xi__frdot = -rr__frdot, ca__fr = t328+t329+phi, t366 = rr__fr*Omega__z, t369 =
-t__f+y__fr, t370 = t369*Omega__x, t371 = b-w-x__fr, t372 = t371*Omega__y, t373
-= t370+t372+V__z+z__frdot, t376 = rr__fr*Omega__x, t377 = t376+t117, t392 = -
-t369*Omega__z, t393 = Omega__y*t319, t397 = t369*Omega__z, t406 = t149-t366, 
-t412 = phi__fr*rr__fr, t427 = -t319, t428 = t427*Omega__x, t431 = t371*Omega__z
-, t459 = x__fr*Omega__x, t463 = Omega__x*t319, VSfr0 = t122*(phi__fr*t105*t366+
-t115*t327*t377-t25*t327*t373)+t5*(t3*(t105*(-phi__fr*Omega__x+psi__fr*Omega__z+
-t124)*rr__fr+t25*(-t62*t327*t60-t55*t327*V__z+delta*(t392+t393)+phi__fr*t373-
-psi__fr*(-t393+t397))+t115*(delta*(t144+t366)-phi__fr*t377-t406*psi__fr)-t63)+
-t25*(t30*(psi__fr*t75+t156+t412)*omega__y-rr__fr*(phi__fr*Omega__y-Omega__z-
-delta__dot))-t115*t327*omega__x*rr__fr+t30*t327*t174+t178+delta*(t428-t182)+
-psi__fr*(t428-t431)+t392+t393-t334)+t201*(-t105*t327*t376+t25*(t192+t193+t397-
-t393)*phi__fr+t406*phi__fr*t115)+t3*(t25*(-t30*(-delta*rr__fr+phi__fr*t75-
-psi__fr*rr__fr)*omega__y-(psi__fr*Omega__y+t209+Omega__x)*rr__fr)+t215*t412-t30
-*t174*phi__fr+delta*(y__fr*Omega__y+t459)+phi__fr*(t463+t431)+t370+t372+V__z+
-z__frdot)-(-phi__fr*Omega__z+psi__fr*Omega__x+t228-t31)*rr__fr, t472 = Omega__y
-*t427, t481 = t370+z__frdot, VNfr0 = -t30*(-t122*t327*(t472+t397)+t5*(t3*(
-Omega__y*(delta*t371+phi__fr*t427+psi__fr*t371)+delta*t481+phi__fr*t397+psi__fr
-*t481)+t252*(rr__fr*t327*Omega__y+phi__fr*rr__frdot+t376)+t9*t13*(delta*t459+
-t317*Omega__y+t370+z__frdot)+t49*t327*V__P-t261+t262-t52*omega__y*psi__fr)-t201
-*(t372+t370+z__frdot)*phi__fr+t3*(t252*(-phi__fr*rr__fr*Omega__y+delta*
-rr__frdot+psi__fr*rr__frdot+rr__fr*delta__dot+t366)+t9*(delta*x__fr*Omega__z+
-t334+t397+t472)*t13-phi__fr*t50+phi__fr*t53+t149)+t252*(delta*y__fr*Omega__z-
-t344+t431+t463)+t9*(t13*(-delta*t366-phi__fr*t376-psi__fr*t366+rr__frdot)-t67-
-t68)-t297), VRfr0 = ((t25*t330+1)*t32+(phi__fr*t3-t327*t5)*t115*t42-t310-
-omega__fr)*rr__fr, t546 = 1/VSfr0, kappa__fr = t546*(-VSfr0-VRfr0), t548 = 
-arctan(t546*VNfr0), alpha__fr = -t548;
+Omega__x-omega__x, t45 = delta__dot*x__fl, t50 = cos(lambda__P), t51 = V__P*t50
+, t53 = -z+h, t54 = omega__y*t53, t56 = tan(mu), t59 = (V__z*t5+t56*(V__z*t3-
+t51+t54))*t9, t60 = -t51+t54, t62 = sec(mu), t63 = t62*V__z, t66 = sin(
+lambda__P), t67 = V__P*t66, t68 = t53*omega__x, t70 = t25*(t13*(t56*t60+t63)+
+t67+t68), t73 = omega__y*t13, t75 = b-d, t78 = t30*t25*t75*(t3*Omega__x-t5*
+Omega__z-t73), t79 = omega__y*t75, t81 = t13*t3, t82 = delta*t81, t84 = t5*t13,
+t86 = phi__fl*t84+psi__fl*t81+t82-t9, t89 = t86^2, t92 = t13*t42, t95 = 
+delta__dot*t3, rr__fldot = 1/t86*(t9*(t2*t32*t5+t23*t3-t35*t6+t5*z__fldot)-t13*
+t42*t8+t13*t45+t9*t42*t12+t59+t70-t78+t79-v__w-z__rfldot)-(t92+t13*(t16*t32*t5-
+phi__fl*t35+t95)+t9*t42*t19)/t89*t15, xi__fl = R__f-rr__fl, xi__fldot = -
+rr__fldot, ca__fl = t17+t18+phi, t103 = rr__fl*Omega__z, t104 = t25^2, t107 = -
+t__f+y__fl, t108 = t107*Omega__x, t109 = b-w-x__fl, t110 = t109*Omega__y, t111
+= t108+t110+V__z+z__fldot, t114 = t30^2, t115 = rr__fl*Omega__x, t116 = 
+Omega__z*t75, t117 = t115+t116, t121 = t5^2, t123 = delta*Omega__z, t133 = 
+Omega__y*t6, t134 = -t107, t135 = t134*Omega__z, t136 = t133+t135, t142 = -t75,
+t143 = Omega__x*t142, t148 = Omega__x*t75, t149 = t148-t103, t155 = delta*t75,
+t156 = rr__fl*phi__fl, t173 = V__z*t13*t62+t13*t56*t60+t67+t68, t177 = -t62*t60
+, t178 = -t6, t179 = t178*Omega__x, t181 = Omega__z*(-w+b), t184 = Omega__z*
+t109, t191 = t62*t60, t192 = V__z*t56, t200 = t3^2, t202 = delta*rr__fl, t203 =
+psi__fl*rr__fl, t208 = delta*Omega__y, t214 = t114*omega__x, t218 = x__fl*
+Omega__x, t222 = Omega__x*t6, t227 = Omega__x*delta, VSfl0 = t121*(phi__fl*t103
+*t104-t111*t16*t25+t114*t117*t16)+t5*(t3*(t104*(-phi__fl*Omega__x+psi__fl*
+Omega__z+t123)*rr__fl+t25*(-V__z*t16*t56-t16*t60*t62+delta*t136+phi__fl*t111+
+psi__fl*t136)+t114*(delta*(t143+t103)-phi__fl*t117-psi__fl*t149)-t63)+t25*(t30*
+omega__y*(psi__fl*t75+t155+t156)-rr__fl*(phi__fl*Omega__y-Omega__z-delta__dot))
+-t114*t16*rr__fl*omega__x+t30*t173*t16+t177+delta*(t179-t181)+psi__fl*(t179-
+t184)+t135+t133-t23)+t200*(-t104*t16*t115+t25*(t107*Omega__z-t133+t191+t192)*
+phi__fl+phi__fl*t149*t114)+t3*(t25*(-t30*omega__y*(phi__fl*t75-t202-t203)-(
+psi__fl*Omega__y+t208+Omega__x)*rr__fl)+t214*t156-t30*t173*phi__fl+delta*(y__fl
+*Omega__y+t218)+phi__fl*(t222+t184)+t108+t110+V__z+z__fldot)-(-phi__fl*Omega__z
++psi__fl*Omega__x+t227-t31)*rr__fl, t238 = t9^2, t260 = delta*t54, t261 = 
+Omega__z*t142, t296 = t75*t73, VNfl0 = -t30*(t121*t136*t16+t5*(t238*(rr__fl*t16
+*Omega__y+phi__fl*rr__fldot+t115)+t9*(delta*t218+t2*Omega__y+t108+z__fldot)*t13
++t3*(Omega__y*(delta*t109+phi__fl*t178+psi__fl*t109)+delta*(t108+z__fldot)-
+phi__fl*t135-psi__fl*(t134*Omega__x-z__fldot))+t50*t16*V__P-t260+t261-t53*
+omega__y*psi__fl)-t200*(t110+t108+z__fldot)*phi__fl+t3*(t238*(delta*rr__fldot+
+psi__fl*rr__fldot+rr__fl*delta__dot-t156*Omega__y+t103)-t9*t13*(-delta*x__fl*
+Omega__z+t133+t135-t23)-t50*V__P*phi__fl+phi__fl*t54+t148)+t238*(delta*y__fl*
+Omega__z+t184+t222-t45)+t9*(t13*(-t156*Omega__x-t202*Omega__z-t203*Omega__z+
+rr__fldot)-t67-t68)-t296), t309 = delta__dot*t25*t5, VRfl0 = rr__fl*((t19*t25+1
+)*t32+(phi__fl*t3-t16*t5)*t114*t42-t309-omega__fl), t312 = 1/VSfl0, kappa__fl =
+t312*(-VSfl0-VRfl0), t314 = arctan(t312*VNfl0), alpha__fl = -t314, t316 = delta
+*y__fr+b-w-x__fr, t318 = -R__f+z__fr+h, t320 = t3*t316+t318*t5, t323 = delta*
+x__fr+t__f+y__fr, t325 = t13*t323+t320*t9-h+z-z__rfr, t326 = delta+psi__fr, 
+t327 = t3*t326, t328 = phi__fr*t5, t329 = t327+t328, rr__fr = 1/(t13*t329-t9)*
+t325, t333 = delta__dot*y__fr, t343 = delta__dot*x__fr, t350 = phi__fr*t84+
+psi__fr*t81+t82-t9, t353 = t350^2, rr__frdot = 1/t350*(t9*(t316*t32*t5+t3*t333-
+t318*t35+t5*z__frdot)-t13*t42*t320+t13*t343+t9*t42*t323+t59+t70-t78+t79-v__w-
+z__rfrdot)-(t92+t13*(t32*t326*t5-phi__fr*t35+t95)+t9*t42*t329)/t353*t325, 
+xi__fr = R__f-rr__fr, xi__frdot = -rr__frdot, ca__fr = t327+t328+phi, t365 = 
+rr__fr*Omega__z, t368 = t__f+y__fr, t369 = t368*Omega__x, t370 = b-w-x__fr, 
+t371 = t370*Omega__y, t372 = t369+t371+V__z+z__frdot, t375 = rr__fr*Omega__x, 
+t376 = t375+t116, t391 = -t368*Omega__z, t392 = Omega__y*t318, t396 = t368*
+Omega__z, t405 = t148-t365, t411 = rr__fr*phi__fr, t426 = -t318, t427 = t426*
+Omega__x, t430 = Omega__z*t370, t444 = rr__fr*delta, t445 = psi__fr*rr__fr, 
+t458 = x__fr*Omega__x, t462 = Omega__x*t318, VSfr0 = t121*(phi__fr*t104*t365+
+t114*t326*t376-t25*t326*t372)+t5*(t3*(t104*(-phi__fr*Omega__x+psi__fr*Omega__z+
+t123)*rr__fr+t25*(-t62*t60*t326-t56*t326*V__z+delta*(t391+t392)+phi__fr*t372-
+psi__fr*(t396-t392))+t114*(delta*(t143+t365)-phi__fr*t376-psi__fr*t405)-t63)+
+t25*(t30*omega__y*(psi__fr*t75+t155+t411)-rr__fr*(phi__fr*Omega__y-Omega__z-
+delta__dot))-t114*t326*rr__fr*omega__x+t30*t173*t326+t177+delta*(t427-t181)+
+psi__fr*(t427-t430)+t391+t392-t333)+t200*(-t104*t326*t375+t25*(t191+t192+t396-
+t392)*phi__fr+phi__fr*t405*t114)+t3*(t25*(-t30*omega__y*(phi__fr*t75-t444-t445)
+-(psi__fr*Omega__y+t208+Omega__x)*rr__fr)+t214*t411-t30*t173*phi__fr+delta*(
+y__fr*Omega__y+t458)+phi__fr*(t462+t430)+t369+t371+V__z+z__frdot)-(-phi__fr*
+Omega__z+psi__fr*Omega__x+t227-t31)*rr__fr, t471 = Omega__y*t426, t490 = t369+
+z__frdot, VNfr0 = -(-t121*t326*(t471+t396)+t5*(t238*(rr__fr*t326*Omega__y+
+phi__fr*rr__frdot+t375)+t9*t13*(delta*t458+t316*Omega__y+t369+z__frdot)+t3*(
+Omega__y*(delta*t370+phi__fr*t426+psi__fr*t370)+delta*t490+phi__fr*t396+t490*
+psi__fr)+t50*t326*V__P-t260+t261-t53*omega__y*psi__fr)-t200*phi__fr*(t371+t369+
+z__frdot)+t3*(t238*(delta*rr__frdot+psi__fr*rr__frdot+rr__fr*delta__dot-t411*
+Omega__y+t365)+t9*(delta*x__fr*Omega__z+t333+t396+t471)*t13-phi__fr*t51+phi__fr
+*t54+t148)+t238*(delta*y__fr*Omega__z-t343+t430+t462)+t9*(t13*(-t411*Omega__x-
+t444*Omega__z-t445*Omega__z+rr__frdot)-t67-t68)-t296)*t30, VRfr0 = rr__fr*((t25
+*t329+1)*t32+t114*(phi__fr*t3-t326*t5)*t42-t309-omega__fr), t544 = 1/VSfr0, 
+kappa__fr = t544*(-VSfr0-VRfr0), t546 = arctan(t544*VNfr0), alpha__fr = -t546;
 rear_tyre_kinematics := t1 = -R__r+z__rl+h, t2 = cos(mu), t4 = sin(mu), t5 = -
 x__rl+b, t7 = t1*t2+t4*t5, t8 = cos(phi), t10 = y__rl-t__r, t11 = sin(phi), t13
-= t10*t11+t7*t8-h+z, t14 = t2*phi__rl, t15 = t4*psi__rl, t16 = t14+t15, rr__rl
-= 1/(t11*t16-t8)*t13, t21 = tan(phi), t26 = sec(phi), t27 = omega__y*t26, t28 =
--t2*t21*Omega__z+t21*t4*Omega__x-t27+Omega__y, t31 = t2*t28, t37 = t2*Omega__x+
-t4*Omega__z-omega__x, t42 = cos(lambda__P), t43 = V__P*t42, t45 = -z+h, t46 = 
-omega__y*t45, t48 = tan(mu), t52 = (t48*(V__z*t4-t43+t46)+V__z*t2)*t8, t53 = -
-t43+t46, t55 = sec(mu), t59 = sin(lambda__P), t60 = V__P*t59, t61 = t45*
-omega__x, t63 = t21*(t11*(V__z*t55+t48*t53)+t60+t61), t66 = omega__y*t11, t68 =
+= t10*t11+t7*t8-h+z-z__rrl, t14 = t2*phi__rl, t15 = t4*psi__rl, t16 = t14+t15,
+rr__rl = 1/(t11*t16-t8)*t13, t21 = tan(phi), t26 = sec(phi), t27 = omega__y*t26
+, t28 = -t2*t21*Omega__z+t21*t4*Omega__x-t27+Omega__y, t31 = t2*t28, t37 = t2*
+Omega__x+t4*Omega__z-omega__x, t43 = cos(lambda__P), t44 = V__P*t43, t46 = -z+h
+, t47 = omega__y*t46, t49 = tan(mu), t52 = (V__z*t2+t49*(V__z*t4-t44+t47))*t8,
+t53 = -t44+t47, t55 = sec(mu), t59 = sin(lambda__P), t60 = V__P*t59, t61 = t46*
+omega__x, t63 = t21*(t11*(V__z*t55+t49*t53)+t60+t61), t66 = omega__y*t11, t68 =
 b-d, t71 = t26*t21*t68*(-t2*Omega__z+t4*Omega__x-t66), t72 = omega__y*t68, t74
-= t11*t4, t76 = t2*t11, t78 = phi__rl*t76+psi__rl*t74-t8, t81 = t78^2, t84 = 
-t11*t37, t87 = -phi__rl*t4+psi__rl*t2, rr__rldot = 1/t78*(t8*(-t1*t28*t4+t2*
-z__rldot+t31*t5)-t11*t37*t7+t8*t37*t10+t52+t63-t71+t72-v__w)-(t11*t28*t87+t16*
-t37*t8+t84)/t81*t13, xi__rl = R__r-rr__rl, xi__rldot = -rr__rldot, ca__rl = phi
-+t14+t15, t94 = rr__rl*Omega__x, t95 = t21^2, t100 = t48*V__z, t102 = t10*
-Omega__z, t103 = Omega__y*t1, t109 = t26^2, t110 = t109*phi__rl, t111 = 
-Omega__x*t68, t112 = rr__rl*Omega__z, t113 = t111-t112, t116 = t4^2, t125 = t10
-*Omega__x, t126 = t5*Omega__y, t127 = t125+t126+V__z+z__rldot, t130 = -t10*
-Omega__z, t135 = Omega__z*t68, t136 = t94+t135, t143 = rr__rl*psi__rl, t159 = 
-V__z*t11*t55+t11*t48*t53+t60+t61, t163 = Omega__z*t5, t175 = t2^2, t177 = 
-rr__rl*phi__rl, t187 = t109*omega__x, t192 = -t55*t53, t193 = -t1, t195 = t193*
-Omega__x-t163, VSrl0 = t116*(-t95*psi__rl*t94+t21*(t55*phi__rl*t53+phi__rl*t100
-+phi__rl*(t102-t103)-psi__rl*V__z)+t113*t110)+t4*(t2*(-t95*(phi__rl*Omega__x-
-psi__rl*Omega__z)*rr__rl+t21*(-t55*psi__rl*t53+phi__rl*t127+(t103+t130)*psi__rl
-)-t109*(phi__rl*t136+psi__rl*t113))+t21*(-t26*(phi__rl*t68-t143)*omega__y-
-rr__rl*(psi__rl*Omega__y+Omega__x))+t110*rr__rl*omega__x-t26*phi__rl*t159+
-phi__rl*(t1*Omega__x+t163)+t125+t126+z__rldot)+t175*(phi__rl*t112*t95+psi__rl*
-t109*t136-psi__rl*t127*t21)+t2*(t21*(t26*(psi__rl*t68+t177)*omega__y-rr__rl*(
-phi__rl*Omega__y-Omega__z))-t187*t143+t26*psi__rl*t159+t192+psi__rl*t195+t130+
-t103)+(phi__rl*Omega__z-psi__rl*Omega__x+t27)*rr__rl, t204 = t193*Omega__y+t102
-, t219 = t8^2, t221 = t126+t125+z__rldot, t248 = t68*t66, VNrl0 = (t175*psi__rl
-*t204+t2*(t4*(Omega__y*(phi__rl*t1-psi__rl*t5)-phi__rl*t102-psi__rl*(t125+
-z__rldot))+t219*(-phi__rl*rr__rldot-t143*Omega__y-t94)-t8*t11*t221-t42*psi__rl*
-V__P+psi__rl*t46+t135)+t116*t221*phi__rl+t4*(t219*(-psi__rl*rr__rldot+t177*
-Omega__y-t112)-t8*t11*t204+phi__rl*t43-phi__rl*t46-t111)+t219*t195+t8*(t11*(
-t143*Omega__z+t177*Omega__x+xi__rldot)+t60+t61)+t248)*t26, VRrl0 = rr__rl*((t16
-*t21+1)*t28-t109*t87*t37-omega__rl), t258 = 1/VSrl0, kappa__rl = t258*(-VSrl0-
-VRrl0), t260 = arctan(t258*VNrl0), alpha__rl = -t260, t261 = -R__r+z__rr+h, 
-t263 = -x__rr+b, t265 = t2*t261+t263*t4, t267 = y__rr+t__r, t269 = t11*t267+
-t265*t8-h+z, t270 = phi__rr*t2, t271 = psi__rr*t4, t272 = t270+t271, rr__rr = 1
-/(t11*t272-t8)*t269, t289 = phi__rr*t76+psi__rr*t74-t8, t292 = t289^2, t297 = -
-phi__rr*t4+psi__rr*t2, rr__rrdot = 1/t289*(t8*(-t261*t28*t4+t2*z__rrdot+t263*
-t31)-t11*t37*t265+t8*t37*t267+t52+t63-t71+t72-v__w)-(t11*t28*t297+t272*t37*t8+
-t84)/t292*t269, xi__rr = R__r-rr__rr, xi__rrdot = -rr__rrdot, ca__rr = phi+t270
-+t271, t304 = rr__rr*Omega__x, t310 = Omega__y*t261, t311 = t267*Omega__z, t312
-= -t310+t311, t317 = t109*phi__rr, t318 = rr__rr*Omega__z, t319 = t111-t318, 
-t330 = t267*Omega__x, t331 = t263*Omega__y, t332 = t330+t331+V__z+z__rrdot, 
-t337 = t304+t135, t344 = psi__rr*rr__rr, t359 = Omega__z*t263, t372 = rr__rr*
-phi__rr, t385 = -t261, t387 = t385*Omega__x-t359, VSrr0 = t116*(-t95*psi__rr*
-t304+t21*(phi__rr*t53*t55-V__z*psi__rr+phi__rr*t100+phi__rr*t312)+t319*t317)+t4
-*(t2*(-t95*(phi__rr*Omega__x-psi__rr*Omega__z)*rr__rr+t21*(-psi__rr*t53*t55+
-phi__rr*t332-psi__rr*t312)-t109*(phi__rr*t337+psi__rr*t319))+t21*(-t26*(phi__rr
-*t68-t344)*omega__y-rr__rr*(psi__rr*Omega__y+Omega__x))+t317*rr__rr*omega__x-
-t26*phi__rr*t159+phi__rr*(t261*Omega__x+t359)+t330+t331+z__rrdot)+t175*(phi__rr
-*t318*t95+psi__rr*t109*t337-psi__rr*t21*t332)+t2*(t21*(t26*(psi__rr*t68+t372)*
-omega__y-rr__rr*(phi__rr*Omega__y-Omega__z))-t187*t344+t26*psi__rr*t159+t192+
-psi__rr*t387-t267*Omega__z+t310)+(phi__rr*Omega__z-psi__rr*Omega__x+t27)*rr__rr
-, t398 = t385*Omega__y+t311, t415 = t331+t330+z__rrdot, VNrr0 = (t175*psi__rr*
-t398+t2*(t4*(Omega__y*(phi__rr*t261-psi__rr*t263)-Omega__z*t267*phi__rr-(t330+
-z__rrdot)*psi__rr)+t219*(-phi__rr*rr__rrdot-t344*Omega__y-t304)-t8*t11*t415-t42
-*psi__rr*V__P+psi__rr*t46+t135)+t116*t415*phi__rr+t4*(t219*(-psi__rr*rr__rrdot+
-t372*Omega__y-t318)-t8*t11*t398+phi__rr*t43-phi__rr*t46-t111)+t219*t387+t8*(t11
-*(t344*Omega__z+t372*Omega__x+xi__rrdot)+t60+t61)+t248)*t26, VRrr0 = ((t21*t272
-+1)*t28-t109*t297*t37-omega__rr)*rr__rr, t451 = 1/VSrr0, kappa__rr = t451*(-
-VSrr0-VRrr0), t453 = arctan(t451*VNrr0), alpha__rr = -t453;
+= t11*t4, t76 = t2*t11, t78 = phi__rl*t76+psi__rl*t74-t8, t81 = t78^2, t86 = -
+phi__rl*t4+psi__rl*t2, t91 = t11*t37, rr__rldot = 1/t78*(t8*(-t1*t28*t4+t2*
+z__rldot+t31*t5)-t11*t37*t7+t8*t37*t10+t52+t63-t71+t72-v__w-z__rrldot)-(t11*t28
+*t86+t16*t37*t8+t91)/t81*t13, xi__rl = R__r-rr__rl, xi__rldot = -rr__rldot, 
+ca__rl = phi+t14+t15, t94 = rr__rl*Omega__x, t95 = t21^2, t100 = t49*V__z, t102
+= t10*Omega__z, t103 = Omega__y*t1, t109 = Omega__x*t68, t110 = rr__rl*Omega__z
+, t111 = t109-t110, t113 = t26^2, t116 = t4^2, t125 = t10*Omega__x, t126 = t5*
+Omega__y, t127 = t125+t126+V__z+z__rldot, t130 = -t10*Omega__z, t135 = Omega__z
+*t68, t136 = t94+t135, t143 = psi__rl*rr__rl, t160 = V__z*t11*t55+t11*t49*t53+
+t60+t61, t164 = Omega__z*t5, t176 = t2^2, t178 = rr__rl*phi__rl, t188 = t113*
+omega__x, t193 = -t55*t53, t194 = -t1, t196 = t194*Omega__x-t164, VSrl0 = t116*
+(-t95*psi__rl*t94+t21*(t55*phi__rl*t53+phi__rl*t100+phi__rl*(t102-t103)-psi__rl
+*V__z)+t113*phi__rl*t111)+t4*(t2*(-t95*(phi__rl*Omega__x-psi__rl*Omega__z)*
+rr__rl+t21*(-t55*psi__rl*t53+phi__rl*t127+(t103+t130)*psi__rl)-(phi__rl*t136+
+psi__rl*t111)*t113)+t21*(-t26*(phi__rl*t68-t143)*omega__y-rr__rl*(psi__rl*
+Omega__y+Omega__x))+phi__rl*t113*rr__rl*omega__x-t26*phi__rl*t160+phi__rl*(t1*
+Omega__x+t164)+t125+t126+z__rldot)+t176*(phi__rl*t110*t95+psi__rl*t113*t136-
+psi__rl*t127*t21)+t2*(t21*(t26*omega__y*(psi__rl*t68+t178)-rr__rl*(phi__rl*
+Omega__y-Omega__z))-t188*t143+t26*t160*psi__rl+t193+psi__rl*t196+t130+t103)+(
+phi__rl*Omega__z-psi__rl*Omega__x+t27)*rr__rl, t205 = t194*Omega__y+t102, t220
+= t8^2, t222 = t126+t125+z__rldot, t249 = t68*t66, VNrl0 = (t176*psi__rl*t205+
+t2*(t4*(Omega__y*(phi__rl*t1-psi__rl*t5)-phi__rl*t102-psi__rl*(t125+z__rldot))+
+t220*(-phi__rl*rr__rldot-t143*Omega__y-t94)-t8*t11*t222-t43*psi__rl*V__P+
+psi__rl*t47+t135)+t116*t222*phi__rl+t4*(t220*(-psi__rl*rr__rldot+t178*Omega__y-
+t110)-t8*t11*t205+phi__rl*t44-phi__rl*t47-t109)+t220*t196+t8*(t11*(t143*
+Omega__z+t178*Omega__x+xi__rldot)+t60+t61)+t249)*t26, VRrl0 = rr__rl*((t16*t21+
+1)*t28-t113*t86*t37-omega__rl), t259 = 1/VSrl0, kappa__rl = t259*(-VSrl0-VRrl0)
+, t261 = arctan(t259*VNrl0), alpha__rl = -t261, t262 = -R__r+z__rr+h, t264 = -
+x__rr+b, t266 = t2*t262+t264*t4, t268 = y__rr+t__r, t270 = t11*t268+t266*t8-h+z
+-z__rrr, t271 = phi__rr*t2, t272 = psi__rr*t4, t273 = t271+t272, rr__rr = 1/(
+t11*t273-t8)*t270, t290 = phi__rr*t76+psi__rr*t74-t8, t293 = t290^2, t298 = -
+phi__rr*t4+psi__rr*t2, rr__rrdot = 1/t290*(t8*(-t262*t28*t4+t2*z__rrdot+t264*
+t31)-t11*t37*t266+t8*t37*t268+t52+t63-t71+t72-v__w-z__rrrdot)-(t11*t28*t298+
+t273*t37*t8+t91)/t293*t270, xi__rr = R__r-rr__rr, xi__rrdot = -rr__rrdot, 
+ca__rr = phi+t271+t272, t305 = rr__rr*Omega__x, t311 = t268*Omega__z, t312 = 
+Omega__y*t262, t313 = t311-t312, t318 = rr__rr*Omega__z, t319 = t109-t318, t331
+= t268*Omega__x, t332 = t264*Omega__y, t333 = t331+t332+V__z+z__rrdot, t338 = 
+t305+t135, t345 = psi__rr*rr__rr, t361 = Omega__z*t264, t374 = rr__rr*phi__rr,
+t387 = -t262, t389 = t387*Omega__x-t361, VSrr0 = t116*(-t95*psi__rr*t305+t21*(
+phi__rr*t53*t55-V__z*psi__rr+phi__rr*t100+phi__rr*t313)+t113*phi__rr*t319)+t4*(
+t2*(-t95*(phi__rr*Omega__x-psi__rr*Omega__z)*rr__rr+t21*(-psi__rr*t53*t55+
+phi__rr*t333-psi__rr*t313)-(phi__rr*t338+psi__rr*t319)*t113)+t21*(-t26*(phi__rr
+*t68-t345)*omega__y-rr__rr*(psi__rr*Omega__y+Omega__x))+phi__rr*t113*rr__rr*
+omega__x-t26*phi__rr*t160+phi__rr*(t262*Omega__x+t361)+t331+t332+z__rrdot)+t176
+*(phi__rr*t318*t95+psi__rr*t113*t338-psi__rr*t21*t333)+t2*(t21*(t26*omega__y*(
+psi__rr*t68+t374)-rr__rr*(phi__rr*Omega__y-Omega__z))-t188*t345+t26*t160*
+psi__rr+t193+psi__rr*t389-t268*Omega__z+t312)+(phi__rr*Omega__z-psi__rr*
+Omega__x+t27)*rr__rr, t400 = t387*Omega__y+t311, t417 = t332+t331+z__rrdot, 
+VNrr0 = t26*(t176*psi__rr*t400+t2*(t4*(Omega__y*(phi__rr*t262-psi__rr*t264)-
+Omega__z*t268*phi__rr-psi__rr*(t331+z__rrdot))+t220*(-phi__rr*rr__rrdot-t345*
+Omega__y-t305)-t8*t11*t417-t43*psi__rr*V__P+psi__rr*t47+t135)+t116*t417*phi__rr
++t4*(t220*(-psi__rr*rr__rrdot+t374*Omega__y-t318)-t8*t11*t400+phi__rr*t44-
+phi__rr*t47-t109)+t220*t389+t8*(t11*(t345*Omega__z+t374*Omega__x+xi__rrdot)+t60
++t61)+t249), VRrr0 = ((t21*t273+1)*t28-t113*t298*t37-omega__rr)*rr__rr, t453 =
+1/VSrr0, kappa__rr = t453*(-VSrr0-VRrr0), t455 = arctan(t453*VNrr0), alpha__rr
+= -t455;
 postproc_eqns := t2 = (delta+psi__fl)*rr__fl, t3 = tan(phi), t5 = delta*y__fl,
-t7 = cos(mu), t9 = phi__fl*rr__fl, t12 = sin(mu), CPfl[1] = t7*(t2*t3-b-t5+w+
+t7 = cos(mu), t9 = rr__fl*phi__fl, t12 = sin(mu), CPfl[1] = t7*(t2*t3-b-t5+w+
 x__fl)+t12*(-t3*t9-R__f+h+z__fl)+b-d, t14 = -t5-b+w+x__fl, t15 = t12*t14, t16 =
-R__f-z__fl-h, t19 = sin(phi), t21 = cos(phi), t24 = delta*x__fl, t25 = -t12*t2-
-t7*t9+t24-t__f+y__fl, CPfl[2] = t19*(t16*t7-rr__fl+t15)+t25*t21, t27 = -t14, 
-t28 = t12*t27, t29 = -t16, t30 = t29*t7, CPfl[3] = t21*(t28+t30+rr__fl)+t19*t25
--h+z, t35 = (delta+psi__fr)*rr__fr, t37 = delta*y__fr, t40 = phi__fr*rr__fr, 
-CPfr[1] = t7*(t3*t35-b-t37+w+x__fr)+t12*(-t3*t40-R__f+h+z__fr)+b-d, t44 = -t37-
-b+w+x__fr, t45 = t12*t44, t46 = R__f-z__fr-h, t52 = delta*x__fr, t53 = -t12*t35
--t40*t7+t52+t__f+y__fr, CPfr[2] = t19*(t46*t7-rr__fr+t45)+t53*t21, t55 = -t44,
-t56 = t12*t55, t57 = -t46, t58 = t57*t7, CPfr[3] = t21*(t56+t58+rr__fr)+t19*t53
--h+z, CPrl[1] = t12*(-phi__rl*rr__rl*t3-R__r+h+z__rl)+t7*(psi__rl*rr__rl*t3-b+
-x__rl)+b-d, t70 = -z__rl-h+R__r, t71 = t7*t70, t72 = x__rl-b, t76 = rr__rl*
-phi__rl, t78 = rr__rl*psi__rl, t80 = t12*t78+t7*t76+t__r-y__rl, CPrl[2] = t19*(
-t12*t72-rr__rl+t71)-t80*t21, t82 = -t70, t83 = t7*t82, t84 = -t72, t85 = t84*
-t12, CPrl[3] = t21*(t83+t85+rr__rl)-t19*t80-h+z, CPrr[1] = t12*(-phi__rr*rr__rr
-*t3-R__r+h+z__rr)+t7*(psi__rr*rr__rr*t3-b+x__rr)+b-d, t98 = -z__rr-h+R__r, t99
-= t7*t98, t100 = x__rr-b, t104 = rr__rr*phi__rr, t106 = psi__rr*rr__rr, t108 =
-t104*t7+t106*t12-t__r-y__rr, CPrr[2] = t19*(t100*t12-rr__rr+t99)-t108*t21, t110
-= -t98, t111 = t7*t110, t112 = -t100, t113 = t112*t12, CPrr[3] = t21*(t111+t113
-+rr__rr)-t19*t108-h+z, Wfl[1] = t12*t29+t14*t7+b-d, t122 = t24-t__f+y__fl, Wfl[
-2] = t19*(t15-t30)+t122*t21, Wfl[3] = t21*(t28+t30)+t19*t122+z-h, Wfr[1] = t12*
-t57+t44*t7+b-d, t131 = t52+t__f+y__fr, Wfr[2] = t19*(t45-t58)+t131*t21, Wfr[3]
-= t21*(t56+t58)+t19*t131+z-h, Wrl[1] = t12*t82+t7*t72+b-d, t140 = -y__rl+t__r,
-Wrl[2] = t19*(t71-t85)-t140*t21, Wrl[3] = t21*(t83+t85)-t19*t140+z-h, Wrr[1] =
-t100*t7+t110*t12+b-d, t150 = y__rr+t__r, Wrr[2] = t19*(t99-t113)+t150*t21, Wrr[
-3] = t21*(t111+t113)+t19*t150+z-h, t155 = -t76-t104, t157 = 2*h, t158 = 2*R__r,
-t162 = t78+t106, t164 = 2*b, CA[1] = 1/2*t12*(t155*t3+t157-t158+z__rl+z__rr)+1/
-2*t7*(t162*t3-t164+x__rl+x__rr)+b-d+b__A, t168 = -z__rl-z__rr-t157+t158, t170 =
--t164+x__rl+x__rr, CA[2] = 1/2*t19*(t12*t170+t168*t7-rr__rl-rr__rr)-1/2*(t12*
-t162-t155*t7-y__rl-y__rr)*t21, CA[3] = 1/2*t21*(-t12*t170-t168*t7+rr__rl+rr__rr
-)+1/2*t19*(-t12*t162+t155*t7+y__rl+y__rr)-h+z-h__A, t197 = (z__fl+z__fr)*m__fu+
-m__ru*(z__rl+z__rr), t199 = 1/m, G[1] = t12*t197*t199+b-d, t201 = t197*t7, G[2]
-= -t199*t19*t201, t205 = -z+h, G[3] = t199*(-m*t205+t201*t21), t208 = z__fl^2,
-t209 = -R__f+h, t210 = 2*t209, t214 = (h+1/2*z__fr-R__f)*z__fr, t215 = 2*t214,
-t217 = m__fu*(t210*z__fl+t208+t215), t218 = z__rl^2, t220 = -R__r+h, t224 = 
-z__rr*(h+1/2*z__rr-R__r), t226 = m__ru*(1/2*t218+z__rl*t220+t224), t227 = 2*
-t226, t230 = t197^2, t231 = m*(t217+t227)-t230, t232 = t7^2, t242 = m__fu*(t27*
-z__fl+t55*z__fr)+(t112*z__rr+t84*z__rl)*m__ru, t243 = m*t242, II[1] = t199*(
-t232*t231+2*t7*t12*t243+2*m*(delta*(psi__fl+psi__fr)*i__fy+1/2*I__xx)), t261 =
-m*(m__fu*(-t210*z__fl-t208-t215)-t227)+t230, t262 = t21^2, t276 = m__fu*(-t122*
-z__fl-t131*z__fr)+m__ru*(t140*z__rl-t150*z__rr), t277 = t21*t276, t283 = t12^2,
-II[2] = t199*(-t232*t262*t261-2*t7*t19*m*(t12*t19*t242+t277)+t283*t231+m*I__yy)
-, t298 = t7*(m*(m__fu*(1/2*t208+z__fl*t209+t214)+t226)-1/2*t230)+t242*t12*m, II
-[3] = t199*(-2*t262*t7*t298+2*t21*t19*m*t276*t7+m*(t217+m__ru*(2*t220*z__rl+
-t218+2*t224)+I__zz)-t230), t319 = t12*t261*t7+2*t232*t243-t243, II[4] = t199*(
-t21*t319+m*(t12*t19*t276-delta*(phi__fl+phi__fr)*i__fy-I__xz)), t329 = 2*phi, 
-t330 = sin(t329), t333 = cos(t329), II[5] = t199*t7*(m*t276*t333+t298*t330), II
-[6] = t199*(-t19*t319+m*(-2*delta*i__fy+t12*t277)), t345 = sec(mu), t346 = cos(
-lambda__P), t347 = V__P*t346, t349 = omega__y*t205, V__x = -(V__z*t12-t347+t349
-)*t345, t352 = sec(phi), t354 = Omega__x*t12, t355 = t7*Omega__z, t357 = b-d, 
-t360 = -t347+t349, t361 = tan(mu), t364 = V__z*t345+t360*t361, t366 = sin(
-lambda__P), t368 = t205*omega__x, V__y = (t352*t357*(t19*omega__y-t354+t355)+
-t19*t364+V__P*t366+t368)*t352, t375 = v__V__P*t346, t377 = V__P*t366*
-v__lambda__P, t378 = v__z*omega__y, t379 = omega__ydot*t205, V__xdot = -t345*(
-t345*(t12*t360+V__z)*v__mu+v__V__z*t12-t375+t377-t378+t379), t394 = t352^2, 
-t396 = t357*omega__y, t397 = t3^2, t408 = t361^2, t430 = 2*t397*v__phi*t396+t3*
-(V__P*t366*v__phi+t357*omega__ydot+t368*v__phi)+t408*t19*v__mu*t360+t361*t19*(
-V__z*t345*v__mu-t375+t377-t378+t379)+t19*(-V__P*t346*v__mu+t205*v__mu*omega__y+
-t345*v__V__z)+V__P*t346*v__lambda__P+v__V__P*t366+v__phi*t396-omega__x*v__z+
-omega__xdot*h-z*omega__xdot, V__ydot = -t394*t357*(2*t3*(t354-t355)*v__phi+t7*(
-v__mu*Omega__x-v__z__frdot)+(v__mu*Omega__z+v__z__rldot)*t12)+t352*t430+v__phi*
-t364*(t397+1), V__zdot = v__V__z;
+-z__fl-h+R__f, t19 = sin(phi), t21 = cos(phi), t24 = delta*x__fl, t25 = -t12*t2
+-t7*t9+t24-t__f+y__fl, CPfl[2] = t19*(t16*t7-rr__fl+t15)+t25*t21, t28 = -t12*
+t14, t29 = -t16, t30 = t29*t7, CPfl[3] = t21*(t28+t30+rr__fl)+t19*t25-h+z, t35
+= (delta+psi__fr)*rr__fr, t37 = delta*y__fr, t40 = rr__fr*phi__fr, CPfr[1] = t7
+*(t3*t35-b-t37+w+x__fr)+t12*(-t3*t40-R__f+h+z__fr)+b-d, t44 = -t37-b+w+x__fr, 
+t45 = t12*t44, t46 = -z__fr-h+R__f, t52 = delta*x__fr, t53 = -t12*t35-t40*t7+
+t52+t__f+y__fr, CPfr[2] = t19*(t46*t7-rr__fr+t45)+t53*t21, t56 = -t12*t44, t57
+= -t46, t58 = t57*t7, CPfr[3] = t21*(t56+t58+rr__fr)+t19*t53-h+z, CPrl[1] = t12
+*(-phi__rl*rr__rl*t3-R__r+h+z__rl)+t7*(psi__rl*rr__rl*t3-b+x__rl)+b-d, t70 = -
+z__rl-h+R__r, t71 = t7*t70, t72 = x__rl-b, t76 = rr__rl*phi__rl, t78 = psi__rl*
+rr__rl, t80 = t12*t78+t7*t76+t__r-y__rl, CPrl[2] = t19*(t12*t72-rr__rl+t71)-t80
+*t21, t82 = -t70, t83 = t7*t82, t85 = -t12*t72, CPrl[3] = t21*(t83+t85+rr__rl)-
+t19*t80-h+z, CPrr[1] = t12*(-phi__rr*rr__rr*t3-R__r+h+z__rr)+t7*(psi__rr*rr__rr
+*t3-b+x__rr)+b-d, t98 = -z__rr-h+R__r, t99 = t7*t98, t100 = x__rr-b, t104 = 
+rr__rr*phi__rr, t106 = psi__rr*rr__rr, t108 = t104*t7+t106*t12-t__r-y__rr, CPrr
+[2] = t19*(t100*t12-rr__rr+t99)-t108*t21, t110 = -t98, t111 = t7*t110, t113 = -
+t12*t100, CPrr[3] = t21*(t111+t113+rr__rr)-t19*t108-h+z, Wfl[1] = t12*t29+t14*
+t7+b-d, t122 = t24-t__f+y__fl, Wfl[2] = t19*(t15-t30)+t122*t21, Wfl[3] = t21*(
+t28+t30)+t19*t122-h+z, Wfr[1] = t12*t57+t44*t7+b-d, t131 = t52+t__f+y__fr, Wfr[
+2] = t19*(t45-t58)+t131*t21, Wfr[3] = t21*(t56+t58)+t19*t131-h+z, Wrl[1] = t12*
+t82+t7*t72+b-d, t140 = -y__rl+t__r, Wrl[2] = t19*(t71-t85)-t140*t21, t144 = -
+t140, Wrl[3] = t21*(t83+t85)+t19*t144-h+z, Wrr[1] = t100*t7+t110*t12+b-d, t150
+= y__rr+t__r, Wrr[2] = t19*(t99-t113)+t150*t21, Wrr[3] = t21*(t111+t113)+t19*
+t150-h+z, t155 = -t76-t104, t157 = 2*h, t158 = 2*R__r, t162 = t78+t106, t164 =
+2*b, CA[1] = 1/2*t12*(t155*t3+t157-t158+z__rl+z__rr)+1/2*t7*(t162*t3-t164+x__rl
++x__rr)+b-d+b__A, t168 = -z__rl-z__rr-t157+t158, t170 = -t164+x__rl+x__rr, CA[2
+] = 1/2*t19*(t12*t170+t168*t7-rr__rl-rr__rr)-1/2*t21*(t12*t162-t155*t7-y__rl-
+y__rr), CA[3] = 1/2*t21*(-t12*t170-t168*t7+rr__rl+rr__rr)+1/2*t19*(-t12*t162+
+t155*t7+y__rl+y__rr)-h+z-h__A, G[1] = b-d, G[2] = 0, G[3] = z-h, t195 = z__rl+
+z__rr, t197 = (z__fl+z__fr)*m__fu+t195*m__ru, t199 = 1/m, G1[1] = t12*t197*t199
++b-d, G1[2] = -t199*t7*t19*t197, t206 = -G[3], G1[3] = t199*(t197*t21*t7-m*t206
+), t209 = z__fl^2, t218 = m__fu*(t209+(2*h-2*R__f)*z__fl+2*(h+1/2*z__fr-R__f)*
+z__fr), t219 = z__rl^2, t228 = m__ru*(t219+(2*h-2*R__r)*z__rl+2*(h+1/2*z__rr-
+R__r)*z__rr), t235 = t197^2, I1[1] = t199*(m*(t218+t228+2*delta*(psi__fl+
+psi__fr)*i__fy+I__xx)-t235), I1[2] = t199*(m*(t218+t228+I__yy)-t235), I1[3] = 
+I__zz, I1[4] = ((y__fl*z__fl+y__fr*z__fr)*delta+(b-w-x__fl)*z__fl+z__fr*(b-w-
+x__fr))*m__fu-(phi__fl+phi__fr)*i__fy*delta+m__ru*(b*t195-x__rl*z__rl-x__rr*
+z__rr)-I__xz, I1[5] = m__fu*(-t122*z__fl-t131*z__fr)-(t144*z__rl+t150*z__rr)*
+m__ru, I1[6] = -2*delta*i__fy, t269 = sec(mu), t270 = cos(lambda__P), t271 = 
+V__P*t270, t273 = omega__y*t206, V__x = -(V__z*t12-t271+t273)*t269, t276 = t7*
+Omega__z, t277 = Omega__x*t12, t281 = sec(phi), t283 = -t271+t273, t284 = tan(
+mu), t287 = V__z*t269+t283*t284, t289 = sin(lambda__P), t290 = V__P*t289, t291
+= t206*omega__x, V__y = t281*(t281*G[1]*(t19*omega__y+t276-t277)+t19*t287+t290+
+t291), t298 = v__V__P*t270, t300 = V__P*t289*v__lambda__P, t301 = v__z*omega__y
+, t302 = omega__ydot*t206, V__xdot = -(t269*v__mu*(t12*t283+V__z)+v__V__z*t12-
+t298+t300-t301+t302)*t269, t305 = t277-t276, t306 = t305*v__phi, t309 = v__mu*
+Omega__x, t310 = t309-v__z__frdot, t312 = v__mu*Omega__z, t313 = t312+
+v__z__rldot, t317 = t281^2, t319 = omega__y*G[1], t320 = t3^2, t329 = t283*
+v__mu, t330 = t284^2, t335 = V__z*t269*v__mu-t298+t300-t301+t302, t340 = t269*
+v__V__z, t346 = V__P*t270*v__lambda__P, t347 = v__V__P*t289, t349 = omega__x*
+v__z, t350 = omega__xdot*h, t351 = z*omega__xdot, t352 = 2*t320*v__phi*t319+t3*
+(t290*v__phi+t291*v__phi+omega__ydot*G[1])+t330*t19*t329+t284*t335*t19+t19*(-
+V__P*t270*v__mu+t206*v__mu*omega__y+t340)+t346+t347+v__phi*t319-t349+t350-t351,
+V__ydot = -t317*(t12*t313+2*t3*t306+t310*t7)*G[1]+t281*t352+t287*(t320+1)*
+v__phi, V__zdot = v__V__z, t357 = V__y*Omega__z, t358 = Omega__y*V__z, t359 = -
+t357+t358+V__xdot, t361 = Omega__y*V__x, t362 = V__y*Omega__x, t363 = t361-t362
+-v__V__z, a__xG = -t12*t363+t359*t7, t366 = t12*t359, t369 = V__x*Omega__z, 
+t370 = V__z*Omega__x, t371 = t369-t370+V__ydot, a__yG = t19*(t363*t7+t366)+t371
+*t21, t373 = -t363, t377 = t19*t371, a__zG = t21*(t373*t7-t366)+t377, AG[1] = -
+g__y*t12*t19+g__z*t12*t21-g__x*t7+V__xdot-t357+t358, AG[2] = -g__y*t21-g__z*t19
++V__ydot+t369-t370, AG[3] = g__y*t19*t7-g__z*t21*t7-g__x*t12-t361+t362+v__V__z,
+t392 = t206*Omega__x, t399 = t7^2, t401 = Omega__x*Omega__z, t402 = G[1]*t12, 
+t406 = Omega__x^2, t407 = Omega__z^2, t411 = 2*omega__x, t412 = v__phi+t411, 
+t417 = Omega__x-Omega__z, t418 = t417*t12, t419 = Omega__x+Omega__z, t423 = 
+v__mu-Omega__y, t424 = t19*t423, t426 = Omega__x*omega__y, t427 = t3*t206, t451
+= Omega__z*omega__y, AP[1] = t399*Omega__z*(t317*Omega__z*G[1]+2*t21*t392-4*
+t281*t392)+t7*(-2*t317*t402*t401+t281*t206*(t12*(2*t406-2*t407)+t412*Omega__z)-
+t21*t206*t419*t418-t424*t392-2*t427*t426-t357+t358+V__xdot)+t317*G[1]*(t277+
+omega__y)*(t277-omega__y)+t281*(-2*V__z*t269*omega__y-t12*t392*t412-2*t283*t284
+*omega__y+2*t206*t401)+t12*(-t206*t424*Omega__z-2*t427*t451-t361+t362+v__V__z)-
+t21*t206*t401+t3*omega__y*(t206*v__phi-2*t290)+2*v__w*omega__y+omega__ydot*h-
+omega__ydot*z-g__x, t470 = t12*t3, t472 = omega__y*t281, t474 = (-t3*t7*
+Omega__z+t470*Omega__x-t472+Omega__y)^2, t483 = t12^2, t485 = Omega__x*Omega__y
+, t494 = Omega__z*G[1], t496 = t399*Omega__x*t494, t500 = v__phi*Omega__z, t501
+= t320*G[1], t508 = v__phi*Omega__x, t517 = t281*G[1], t531 = t21^2, t535 = G[1
+]*t3, t540 = G[1]*t419, t541 = t12*t540, t547 = omega__x*V__z, t549 = G[1]*
+v__z__frdot, t559 = Omega__y*Omega__z, t573 = t535*t281*omega__x+1/2*t423*t206,
+AP[2] = t474*t206*t19*t21+t19*(-t21*(t399*t407-2*t7*(t3*Omega__y+t277)*Omega__z
++t483*t406+2*t470*t485+(-2*t472+Omega__y)*Omega__y)*t206+2*t496+t7*(t3*t310*G[1
+]-t402*t417*t419-t500*t501-t500*G[1]+t361-t362-v__V__z)+t12*(t3*t313*G[1]+t501*
+t508+t508*G[1]+V__xdot-t357+t358)+t3*(-t517*(v__phi-t411)*omega__y+2*omega__x*
+t287)-G[1]*(t281*omega__ydot+t401))+2*t531*t206*(t3*t305-t472)*t305+t21*(-2*
+t399*t535*t401+t7*(2*t3*t417*t541-2*t426*t517+t485*G[1]+2*t547-t549)+2*t483*
+t535*t401+t12*(-2*t517*t451+2*t284*t547+G[1]*(t559+v__z__rldot))+2*t284*t283*
+omega__x+t369-t370+V__ydot)+2*t7*t573*Omega__z-2*t12*t573*Omega__x+2*t3*
+omega__x*(t290+t291)+2*omega__x*(t319-v__w)-t350+t351-g__y, t608 = t269^2, t632
+= Omega__x*t21, t639 = G[1]*t19, t649 = omega__y^2, t651 = omega__x^2, AP[3] =
+-2*t317*(omega__y*t535+1/2*t290+1/2*t291)*v__phi+t281*(2*t501*t306+t3*(t12*
+v__z__rldot*G[1]-t287*v__phi-t549*t7)-4*t496+2*t7*t540*t418-t284*t335-t608*t329
+-t340+2*Omega__x*t494)+t320*G[1]*(t12*t19*t312+t19*t309*t7-omega__ydot)+t3*(b*
+v__phi*omega__y-d*v__phi*omega__y-2*t426*t7*G[1]-2*t402*t451-t346-t347+t349-
+t350+t351)+2*t399*t494*t632+t7*(-t21*t417*t541+t21*t373+t485*t639)+t12*(-t21*
+t359+t559*t639)-t494*t632+t377+t649*G[3]-h*t651+z*t651-g__z+v__wdot;

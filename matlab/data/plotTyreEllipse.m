@@ -19,11 +19,10 @@ FY = 0*A;
 % Calc
 for ik = 1 : numel(kappa)
     for ia = 1 : numel(alpha)
-        Omega = 0; % not used
-        phit = 0; % not used
         Vn = Vs*tan(alpha(ia));
         Vr = Vs*(1+kappa(ik));
-        [FX(ik,ia),FY(ik,ia)] = tyre.Forces(tyre, N, Vs, Vn, Vr, Omega, ca, phit);
+        Omega = Vr/tyre.UNLOADED_RADIUS;
+        [FX(ik,ia),FY(ik,ia)] = tyre.Forces(tyre, N, Vs, Vn, Vr, Omega, ca);
     end
 end
 % envelope
@@ -39,3 +38,4 @@ plot(FY'/N,FX'/N,'b-');
 plot(FY0/N,FX0/N,'k-','LineWidth',2);
 xlabel('Fy/N'), ylabel('Fx/N')
 box on
+axis equal

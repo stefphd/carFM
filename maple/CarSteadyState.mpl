@@ -7,8 +7,12 @@ restart:
 with(MBSymba_r6):
 with(codegen,cost,optimize):
 read( "CarModel.mla"):
-interface(rtablesize=30)
-;
+interface(rtablesize=30):
+status := GetLicenseStatus():
+printf("Status: %s\n", status[Message]),
+if not status[StatusCode]=0 then
+   error("Invalid license"):
+end if:
 # Convert dynamic equations into steady state
 S0 := [   # main variables
 phi(t)=phi0,mu(t)=mu0,z(t)=z0,
@@ -22,13 +26,23 @@ omega__fl(t)=omega__fl0+omega__dotfl0*t,
 omega__fr(t)=omega__fr0+omega__dotfr0*t,
 omega__rl(t)=omega__rl0+omega__dotrl0*t,
 omega__rr(t)=omega__rr0+omega__dotrr0*t,
-Omega__x(t) = Omega__x0, Omega__y(t) = Omega__y0, Omega__z(t) = Omega__z0,
-V__x(t) = V__x0, V__y(t) = V__y0, V__z(t) = V__z0,
+Omega__x(t) = Omega__x0 + Omega__dotx0 * t, # includes time derivative
+
+Omega__y(t) = Omega__y0 + Omega__doty0 * t, # includes time derivative
+
+Omega__z(t) = Omega__z0 + Omega__dotz0 * t, # includes time derivative
+
+V__x(t) = V__x0 + V__dotx0 * t, # includes time derivative
+
+V__y(t) = V__y0 + V__doty0 * t, # includes time derivative
+
+V__z(t) = V__z0 + V__dotz0 * t, # includes time derivative
+
 # forces & torques
-X__fl(t)=X__fl0,Y__fl(t)=Y__fl0,N__fl(t)=N__fl0,F__fl(t)=F__fl0,
-X__fr(t)=X__fr0,Y__fr(t)=Y__fr0,N__fr(t)=N__fr0,F__fr(t)=F__fr0,
-X__rl(t)=X__rl0,Y__rl(t)=Y__rl0,N__rl(t)=N__rl0,F__rl(t)=F__rl0,
-X__rr(t)=X__rr0,Y__rr(t)=Y__rr0,N__rr(t)=N__rr0,F__rr(t)=F__rr0,
+X__fl(t)=X__fl0,Y__fl(t)=Y__fl0,N__fl(t)=N__fl0,F__fl(t)=F__fl0,S__fl(t)=S__fl0,
+X__fr(t)=X__fr0,Y__fr(t)=Y__fr0,N__fr(t)=N__fr0,F__fr(t)=F__fr0,S__fr(t)=S__fr0,
+X__rl(t)=X__rl0,Y__rl(t)=Y__rl0,N__rl(t)=N__rl0,F__rl(t)=F__rl0,S__rl(t)=S__rl0,
+X__rr(t)=X__rr0,Y__rr(t)=Y__rr0,N__rr(t)=N__rr0,F__rr(t)=F__rr0,S__rr(t)=S__rr0,
 # tyre deflections
 xi__fl(t)=xi__fl0,xi__fr(t)=xi__fr0,xi__rl(t)=xi__rl0,xi__rr(t)=xi__rr0,
 # tyre radii
@@ -36,38 +50,52 @@ rr__fl(t)=r0__fl,rr__fr(t)=r0__fr,rr__rl(t)=r0__rl,rr__rr(t)=r0__rr,
 # tyre slip
 kappa__fl(t)=kappa__fl0,kappa__fr(t)=kappa__fr0,kappa__rl(t)=kappa__rl0,kappa__rr(t)=kappa__rr0,
 # wheel torques
-Tau__fl(t)=Tau__fl0,Tau__fr(t)=Tau__fr0,Tau__rl(t)=Tau__rl0,Tau__rr(t)=Tau__rr0
+Tau__fl(t)=Tau__fl0,Tau__fr(t)=Tau__fr0,Tau__rl(t)=Tau__rl0,Tau__rr(t)=Tau__rr0,
+# road roughness
+z__rfl(t)=0,z__rfr(t)=0,z__rrl(t)=0,z__rrr(t)=0
 ]:<%>;
 # Kinematics
 pos; vel; #<velocity_eqns>;
 
 # angular velocities
 ang_vel := op(simplify(solve(velocity_eqns[3..5], vel[5..7]))): #<ang_vel>; # full expressions
-ang_vel0 := subs(diff(psi(t),t)=yaw__rate0, S0, ang_vel): <ang_vel0>;
-# CoG velocity
-show(project(VG,T__R)); # full expression
 # steady state
-[comp_X(VP, T__P)=V__P(t)*cos(lambda__P(t)), comp_Y(VP, T__P)=V__P(t)*sin(lambda__P(t)), comp_Z(VP, T__P)=0]:
+subs(S0, ang_vel):
+ang_vel0 := subs(t=0,%): <%>;
+# angular velocity derivatives
+diff(ang_vel,t):    # full expressions
+
+# steady state
+ang_veldot0 := eval(subs(
+  diff(Omega__x(t),t)=Omega__dotx0,
+  diff(Omega__y(t),t)=Omega__doty0,
+  diff(Omega__z(t),t)=Omega__dotz0, 
+S0,%)): <%>;  # angular accelerations are 0 in SS!
+# CoG velocity and derivative
+show(VG); # full expression
+[comp('X', VP, T__P)=V__P(t)*cos(lambda__P(t)), comp('Y', VP, T__P)=V__P(t)*sin(lambda__P(t)), comp('Z', VP, T__P)=0]:
 op(solve(%, [V__x(t),V__y(t),V__z(t)])):
-G_vel := simplify(%):
-G_vel0 := simplify(expand(subs(S0,ang_vel0,%))): <%>;
-G_veldot0 := simplify(expand(subs(V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)=V__z0+V__dotz0*t,S0,ang_vel0,diff(G_vel,t)))):<%>;
+G_vel := simplify(%): <%>:
+G_veldot := simplify(diff(G_vel,t)): <%>:
+# steady state
+G_vel0 := simplify(subs(t=0,simplify(expand(subs(S0,ang_vel0,G_vel))))): <%>;
+G_veldot0 := simplify(expand(subs(S0,ang_vel0,ang_veldot0, G_veldot))): <%>;
 # Check: G_veldot0 gives z__ddot = 0
 velocity_eqns[6]; # z__ddot
 
-simplify(expand(subs(diff(z(t),t,t)=z__ddot,V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)=V__z0+V__dotz0*t, G_veldot0, S0, diff(%,t)))); #  = 0 OK
+simplify(expand(subs(diff(z(t),t,t)=z__ddot, S0, ang_veldot0, G_veldot0, S0, diff(%,t)))); #  = 0 OK
 ;
 # Check: G_veldot0 gives lambda__Pdot = 0
-[comp_X(VP, T__P)=V__P(t)*cos(lambda__P(t)), comp_Y(VP, T__P)=V__P(t)*sin(lambda__P(t))]: # V__P,lambda__P
+[comp('X', VP, T__P)=V__P(t)*cos(lambda__P(t)), comp('Y', VP, T__P)=V__P(t)*sin(lambda__P(t))]: # V__P,lambda__P
 simplify(expand(op(solve(diff(%,t), [diff(V__P(t),t),diff(lambda__P(t),t)])))): # sV__Pdot,lambda__Pdot
 
-simplify(expand(subs(V__x(t)=V__x0+V__dotx0*t, V__y(t)=V__y0+V__doty0*t, V__z(t)=V__z0+V__dotz0*t, G_veldot0, S0, %, lambda__Pdot=diff(lambda__P(t),t)))); #  = 0 OK
+simplify(expand(subs(S0, ang_veldot0, G_veldot0, S0, %, lambda__Pdot=diff(lambda__P(t),t)))); #  = 0 OK
 ;
 # Solve radii
 xx_eqns[-4..-1]: <%>:
 S0rr := simplify(subs(S0, op(solve(%, [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)])))):<%>;
 # all togheter
-S0plus := ang_vel0 union G_vel0: <%>;
+S0plus := ang_vel0 union G_vel0 union ang_veldot0 union G_veldot0: <%>;
 # steady state equations
 simplify(subs(S0,S0plus,xx_eqns[1..-5])):   # exclude radii eqns
 
@@ -104,21 +132,36 @@ subs(t=0,simplify(eval(subs(S0,S0plus, [VSrr0 = VSrr, VNrr0 = VNrr, VRrr0 = VRrr
 rear_right_kin0 := %:
 <rear_right_kin0>;
 # wheel points
-CPfl_coords:=subs(S0,[comp_XYZ(CPfl, T__P)]): <%>:# 
-CPfr_coords:=subs(S0,[comp_XYZ(CPfr, T__P)]): <%>:
-CPrl_coords:=subs(S0,[comp_XYZ(CPrl, T__P)]): <%>:# 
-CPrr_coords:=subs(S0,[comp_XYZ(CPrr, T__P)]): <%>:
-Wfl_coords:=subs(S0,[comp_XYZ(W__fl, T__P)]): <%>:
-Wfr_coords:=subs(S0,[comp_XYZ(W__fr, T__P)]): <%>:
-Wrl_coords:=subs(S0,[comp_XYZ(W__rl, T__P)]): <%>:
-Wrr_coords:=subs(S0,[comp_XYZ(W__rr, T__P)]): <%>:
+CPfl_coords:=subs(S0,[comp('XYZ', CPfl, T__P)]): <%>:# 
+CPfr_coords:=subs(S0,[comp('XYZ', CPfr, T__P)]): <%>:
+CPrl_coords:=subs(S0,[comp('XYZ', CPrl, T__P)]): <%>:# 
+CPrr_coords:=subs(S0,[comp('XYZ', CPrr, T__P)]): <%>:
+Wfl_coords:=subs(S0,[comp('XYZ', W__fl, T__P)]): <%>:
+Wfr_coords:=subs(S0,[comp('XYZ', W__fr, T__P)]): <%>:
+Wrl_coords:=subs(S0,[comp('XYZ', W__rl, T__P)]): <%>:
+Wrr_coords:=subs(S0,[comp('XYZ', W__rr, T__P)]): <%>:
+# full-ext centre of mass
+G_coords:=subs(S0,[comp('XYZ', G, T__P)]):<%>;NULL;
 # ovarall cog
-Gall_coords:=subs(S0,[comp_XYZ(G__all, T__P)]): <%>;
+G1_coords:=subs(S0,[comp('XYZ', G1, T__P)]): <%>;
 # ovarall inertia
-Iall_comps:=simplify(subs(S0,[I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]])):
+I1_comps:=simplify(subs(S0,[I1[1][1], I1[2][2], I1[3][3], I1[3][1], I1[3][2], I1[1][2]])):
 # reference point
-AP_xycomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__xP=comp_X(AP, T__P), a__yP=comp_Y(AP, T__P)])))),{mu0,phi0}):<%>;
-AP_tncomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__tP=comp_X(AP, T__P*rotate('Z',lambda__P(t))), a__nP=comp_Y(AP, T__P*rotate('Z',lambda__P(t)))])))),{mu0,phi0}):<%>;
+AP_xycomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__xP=comp('X', AP, T__P), a__yP=comp('Y', AP, T__P)])))),{mu0,phi0}):<%>;
+AP_tncomps:=linearize(subs(t=0, simplify(expand(subs(S0, S0plus, [a__tP=comp('X', AP, T__P*Rotate('Z',lambda__P(t))), a__nP=comp('Y', AP, T__P*Rotate('Z',lambda__P(t)))])))),{mu0,phi0}):<%>;
+# G acceleration projected in T__P (x,y components)
+[comp('XYZ', AG,T__P)]:
+[a__xG = %[1], a__yG = %[2], a__zG = %[3]]:
+simplify(subs(S0, S0plus, %)): 
+AG_comps := simplify(subs(t=0,%)): <%>;
+# G total acceleration in body-fixed frame, including gravity
+[comp('XYZ', AG_tot, T__V)];
+AG_tot_comps := simplify(subs(t=0,eval(subs(S0, S0plus,G_veldot0, %)))): <%>:
+simplify(subs(mu0=0,lambda__P0=0,z0=0,g__x=0,g__y=0,h=0,d=b,g__z=g,%)): <%>;  # check OK
+# P total acceleration in road-fixed frame, including gravity
+[comp('XYZ', AP_tot, T__P)]:
+AP_tot_comps := simplify(subs(t=0,eval(subs(S0, S0plus,G_veldot0, %)))): <%>:
+simplify(subs(mu0=0,lambda__P0=0,z0=0,g__x=0,g__y=0,h=0,d=b,g__z=g,%)): <%>;  # check OK
 # Find omegaidot from kappaidot=0 and omega as a function of kappa
 # Note that this is only an internal definition of kappa, which is not seen by the end user
 eqkappa: <%>; # definition of kappa
@@ -146,7 +189,9 @@ rear_right_kin0 := subs(S0,
     [eqomega0[4],eqomegadot0[4]] union
     rear_right_kin0 union [alpha__rr0=-arctan(VNrr0/VSrr0)]:<%>;
 # aerodynamic center
-CA_coords:=linearize(subs(S0,[comp_XYZ(CA, T__P)]),{mu0,phi0}): Vector(%);
+CA_coords:=linearize(subs(S0,[comp('XYZ', CA, T__P)]),{mu0,phi0}): Vector(%);
+# Suspension anti force
+anti_force0 := subs(S0, S0plus, anti_force): <%>;
 # Optimize to reduce cpu cost
 optimizeProc := proc(expr) local c1, c2, dc, expropt; c1 := cost(expr); print("Original cost", c1); expropt := simplify(expr, trig); expropt := optimize(expropt); c2 := cost(expropt); print("Optimized cost ", c2); dc := c1 - c2; print("Difference cost", dc); return expropt; end proc;
 for k from 1 to nops(ss_eqns) do 
@@ -155,6 +200,7 @@ end:
 ss_eqns:=optimizeProc(ss_eqns):
 front_tyre_kinematics := optimizeProc(front_left_kin0 union front_right_kin0):
 rear_tyre_kinematics := optimizeProc(rear_left_kin0 union rear_right_kin0):
+suspension_anti_force := optimizeProc(anti_force0):
 for k from 1 to nops(CPfl_coords) do 
    CPfl_coords[k] := CPfl[k] = CPfl_coords[k]:
    CPfr_coords[k] := CPfr[k] = CPfr_coords[k]:
@@ -164,17 +210,24 @@ for k from 1 to nops(CPfl_coords) do
    Wfr_coords[k] := Wfr[k] = Wfr_coords[k]:
    Wrl_coords[k] := Wrl[k] = Wrl_coords[k]:
    Wrr_coords[k] := Wrr[k] = Wrr_coords[k]:
-   Gall_coords[k] := G[k] = Gall_coords[k]:
-   CA_coords[k] := CA[k] = CA_coords[k]
+   G_coords[k] := G[k] = G_coords[k]:
+   G1_coords[k] := G1[k] = G1_coords[k]:
+   CA_coords[k] := CA[k] = CA_coords[k]:
+   AG_tot_comps[k] := AG[k] = AG_tot_comps[k]:
+   AP_tot_comps[k] := AP[k] = AP_tot_comps[k]:
 end:
-for k from 1 to nops(Iall_comps) do 
-    Iall_comps[k] := II[k] = Iall_comps[k]:
+unassign('I1');
+for k from 1 to nops(I1_comps) do 
+    I1_comps[k] := I1[k] = I1_comps[k]:
 end:
-postproc_eqns := optimizeProc(subs(t=0,[op(G_vel0), op(ang_vel0), op(G_veldot0), op(AP_xycomps), op(AP_tncomps), 
+postproc_eqns := optimizeProc(subs(t=0,[
+op(G_vel0), op(ang_vel0), op(G_veldot0), op(ang_veldot0),
+op(AP_xycomps), op(AP_tncomps), op(AG_comps),
+op(AG_tot_comps), op(AP_tot_comps),
 op(CPfl_coords), op(CPfr_coords),op(CPrl_coords), op(CPrr_coords),
 op(Wfl_coords), op(Wfr_coords),op(Wrl_coords), op(Wrr_coords),
 op(CA_coords), 
-op(Gall_coords), op(Iall_comps)])):
+op(G_coords), op(G1_coords), op(I1_comps)])):
 # Create +maple folder
 dirname:="+maple/";
 with(FileTools): 
@@ -197,8 +250,6 @@ ffclose(fd);
 fd := ffopen(cat(dirname,"frontTyreKinematics.m"), WRITE):
 fprintf(fd,"%% Front tyre kinematics  *** DO NOT EDIT ***\n"):
 fprintf(fd,"%s",CodeGeneration[Matlab]([front_tyre_kinematics], output=string)):
-fprintf(fd,"phit__fl = 0; %% Turn slip TODO calc from MAPLE\n"):
-fprintf(fd,"phit__fr = 0; %% Turn slip TODO calc from MAPLE\n"):
 fprintf(fd,"\n"):
 ffclose(fd);
 # Rear tyre kinematics
@@ -206,8 +257,13 @@ ffclose(fd);
 fd := ffopen(cat(dirname,"rearTyreKinematics.m"), WRITE):
 fprintf(fd,"%% Rear tyre kinematics  *** DO NOT EDIT ***\n"):
 fprintf(fd,"%s",CodeGeneration[Matlab]([rear_tyre_kinematics], output=string)):
-fprintf(fd,"phit__rl = 0; %% Turn slip TODO calc from MAPLE\n"):
-fprintf(fd,"phit__rr = 0; %% Turn slip TODO calc from MAPLE\n"):
+fprintf(fd,"\n"):
+ffclose(fd);
+# Suspension anti force
+#print2screen := true:
+fd := ffopen(cat(dirname,"suspAntiForce.m"), WRITE):
+fprintf(fd,"%% Suspension anti forces  *** DO NOT EDIT ***\n"):
+fprintf(fd,"%s",CodeGeneration[Matlab]([suspension_anti_force], output=string)):
 fprintf(fd,"\n"):
 ffclose(fd);
 # Post-processing
@@ -220,4 +276,4 @@ ffclose(fd);
 # Save output equations
 save(ss_eqns, front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarSteadyState.mla");
-
+NULL;

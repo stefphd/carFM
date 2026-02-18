@@ -14,6 +14,11 @@ v = abs(v);
 iH = v >= (th*rms(v));
 iHi = find(diff(iH)==1);
 iHf = find(diff(iH)==-1);
+if isempty(iHi) || isempty(iHf) % no sectors found
+    % fallback to equally-spaced
+    tmesh = linspace(t(1),t(end),N);
+    return
+end
 if iHi(1)>iHf(1) % starts with v>th: add index 1 to iHi
     iHi = [1; iHi];
 end
@@ -56,6 +61,7 @@ if (t(end)-tH(end,2))<(tl+ms)
 end
 iH = any((t >= tH(:,1)') & (t <= tH(:,2)'), 2);
 if all(iH) || all(~iH)
+    % fallback to equally-spaced
     tmesh = linspace(t(1),t(end),N);
     return
 end

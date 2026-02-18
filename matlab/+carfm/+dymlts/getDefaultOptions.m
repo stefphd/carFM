@@ -25,9 +25,10 @@ function opts = getDefaultOptions(opts)
     default_opts.tyreDeformationRigid = [0 0 0 0]; % fl, fr, rl, rr vertical deformation for rigid tyres
     default_opts.gearSharpness = 5; % sharpness factor for gear shift
     default_opts.Taueps = 10; % torque epsilon for regularization (Nm)
-    default_opts.Neps = 0.02; % zero vertical load (in units of m*g)
+    default_opts.Neps = eps; % zero vertical load (in units of m*g)
     default_opts.extForce  = [0 0 0]; % x,y,z external force applied to the car in ref. point P (N)
     default_opts.extTorque = [0 0 0]; % x,y,z external torque applied to the car
+    default_opts.sensitivityPar = {}; % parameters for sensitivities
     % Scaling factors
     default_opts.sscale = 1e1; % s scale
     default_opts.xscale = [ 1 1 1 1 ... % phi, mu, z, delta, 
@@ -39,7 +40,7 @@ function opts = getDefaultOptions(opts)
                             ... % 1 1 1 1 ... % alpha__fl, alpha__fr, alpha__rl, alpha__rr
                             5 1 ... % n, chi
                             ]; % x vector scale 
-    default_opts.uscale = [1 1e3... % delta__ddot, Tau__t = Tau__fl+Tau__fr+Tau__rl+Tau__rr
+    default_opts.uscale = [1 1e3... % delta__ddot, Tau__t
                             ]; % u vector scale
     default_opts.upscale = [1 1e3 ... % delta__ddot', Tau__t'
                             ]; % u'=du/ds vector scale
@@ -53,24 +54,24 @@ function opts = getDefaultOptions(opts)
                            1e1, 1e1, ... % n', chi'
                            1e1, 1e1 ... % control integration chains
                            ]; % f scale
-    default_opts.cscale = [ 1 1 ... % road 
+    default_opts.cscale = [ 1e1 1e1 ... % road 
                             1e1 1e1 1e1 1e1 ... % positive normal loads
                             1e3 % engine
                             ]; % c scale
     default_opts.lscale = 1; % l scale
     % Penalty weights
+    default_opts.wdeltaddot = 1e-3; % delta__ddot weight
+    default_opts.wOmegaxdot = 5e-4; % Omegax__dot weight
+    default_opts.wOmegaydot = 5e-4; % Omegay__dot weight
+    default_opts.wOmegazdot = 1e-3; % Omegaz__dot weight
     default_opts.wuDelta = 1e-3; % delta-control weight
-    default_opts.wuTaut = 1e-5; % Tau__t-control weight
-    default_opts.wdeltadot = 5e-2; % delta__dot weight
-    default_opts.wdeltaddot = 5e-2; % delta__ddot weight
-    default_opts.wlambda = 5e-2; % lambda weight
-    default_opts.wlambdadot = 1e-1; % lambda__dot weight
-    default_opts.wkappa = 1e-2; % kappa__rl,kappa__rr weight
+    default_opts.wuTaut = 1e-4; % Tau__t-control weight
     % Solving options
     default_opts.problemName = 'dymlts'; % Name of the problem
     default_opts.sRange = [-inf, inf]; % Initial and final travelled distance
+    default_opts.speedGuess = 60; % speed for default guess (m/s)
+    default_opts.minDecLen = 0; % Minimum decimation length for track/trajectory data (0 = no downsampling)
     default_opts.bcsFunc = @(xi, ui, xf, uf) [xf-xi; uf-ui]; % function handle to define the boundary conditions
-    % default_opts.bcsRelax = false; % relax the boundary conditions
     default_opts.numMeshPts = 3000; % number of mesh points
     default_opts.meshStrategy = 'adaptive'; % mesh strategy: 'equally-spaced', 'adaptive', 'manual'
     default_opts.meshRatio = 3; % max/min mesh size for adaptive mesh strategy
@@ -100,14 +101,6 @@ function opts = getDefaultOptions(opts)
     default_opts.optTolAccept = 1e-3; % NLP optimality tol for acceptable (acceptable_dual_inf_tol=1e10 default in IPOPT)
     default_opts.complTolAccept = 1e-4; % NLP complementarity tol for acceptable (acceptable_compl_inf_tol=1e-2 default in IPOPT)
     default_opts.objChangeAccept = 5e-6; % NLP objective change for acceptable (acceptable_obj_change_tol=1e20 default in IPOPT)
-    % Undocumented options: these options are for internal use and are hidden to the user
-    % defualt_opts.bcsRelax = false; % Relax the boundary conditions (add them to penalty)
-    % default_opts.refineSol = false; % refine the solution using WORHP SQP (requires WORHP installed) - used only for mex=true
-    % default_opts.gravityFactors = [0 0 1]; % Ratio X,Y,Z gravity / total gravity
-    % default_opts.angVelocities = [0 0]; % X,Y angular velocities induced by the road (rad/s)
-    % default_opts.angAccelerations = [0 0]; % X,Y angular accelerations induced by the road (rad/s2)
-    % default_opts.zVelocity = 0; % Z velocity induced by the road (m/s)
-    % default_opts.zVelocityRate = 0; % Z velocity rate induced by the road (m/s2)
     % [...]
     % override default options
     opts_fields = fieldnames(opts);

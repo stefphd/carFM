@@ -45,6 +45,15 @@ else
     mu = 0*t;
     phi = 0*t;
 end
+% This is to convert CasADi DM vars to standard double when input args are
+% numeric (i.e. numeric eval of this function)
+rwr = full(rwr);
+rwl = full(rwl);
+mu = full(mu);
+phi = full(phi);
+Omegax = full(Omegax);
+Omegay = full(Omegay);
+Omegaz = full(Omegaz);
 
 %% Others
 wt = opts.wt;
@@ -85,17 +94,18 @@ alpha = atan2(ateq-at0*g,aneq);
 rhomax2 = aux.rho{1}{1}([alpha(:)';V(:)';geq(:)'/g]).^2;
 rho2 = ((ateq-at0*g).^2+aneq.^2) / g^2;
 % create c
-c = [n./rwr
-     n./rwl
+c = [n-rwr                 % n-rwr < 0
+     n+rwl                 % n+rwl > 0
      (rho2+1)./(rhomax2+1) % +1 is to avoid division by 0 if rhomax2=0 (note that rhomax2>=0)
      geq/g % constraint geq within gg map range
      ] ./ opts.cscale(:);
 
 %% Lagrange cost
-pnlt = wt*jt.^2+wn*jn.^2; % control penalty
+pnlt = [wt*jt.^2
+        wn*jn.^2]; % control penalty
 tp = 1 ./ sdot; % dt/ds
 l = [tp
-     pnlt] * opts.sscale / opts.lscale;
+     sum(pnlt)] * opts.sscale / opts.lscale;
 
 %% Post-processing
 if nargout > 3
@@ -121,35 +131,13 @@ if nargout > 3
     xc = full(aux.track.x(s));
     yc = full(aux.track.y(s));
     zc = 0*t;
-    % xl = full(aux.track.xl(s));
-    % yl = full(aux.track.yl(s));
-    % zl = 0*t;
-    % xr = full(aux.track.xr(s));
-    % yr = full(aux.track.yr(s));
-    % zr = 0*t;
-    % rw = full(aux.track.rw(s));
     theta = full(aux.track.theta(s));
-    mu = 0*t;
-    phi = 0*t;
-    Omegax = 0*t;
-    Omegay = 0*t;
-    Omegaz = full(aux.track.Omegaz(s));
     if aux.track.isTrack3D
         zc = full(aux.track.z(s));
-        % zl = full(aux.track.zl(s));
-        % zr = full(aux.track.zr(s));
-        mu = full(aux.track.mu(s));
-        phi = full(aux.track.phi(s));
-        Omegax = full(aux.track.Omegax(s));
-        Omegay = full(aux.track.Omegay(s));
     end
-    % if isnumeric(zetap)
     data.zeta = cumtrapz(data.s, full(zetap));
-    % end
-    [data.x, data.y, data.z] = carfm.common.getVehCoords(xc, yc, zc, theta, mu, phi, ...
-                                                   data.n);
-    [data.psi, data.sigma, data.beta] = carfm.common.getVehAngles(theta, mu, phi, ...
-                                                            data.chi);
+    [data.x, data.y, data.z] = carfm.common.getVehCoords(xc, yc, zc, theta, mu, phi, data.n);
+    [data.psi, data.sigma, data.beta] = carfm.common.getVehAngles(theta, mu, phi, data.chi);
     [data.vx, data.vy, data.vz] = carfm.common.getVehVels(data.psi, data.sigma, data.V);
     data.omegax = full(omegax);
     data.omegay = full(omegay);
@@ -157,12 +145,8 @@ if nargout > 3
 	data.Gammax = data.omegax./data.V;
 	data.Gammay = data.omegay./data.V;
 	data.Gammaz = data.omegaz./data.V;
-    % if isnumeric(tp)
     data.t = cumtrapz(data.s, full(tp));
-    % end
-    % data.tp = full(tp);
-    % data.zetap = full(zetap);
-    data.pnlt = pnlt;
+    data.pnlt = sum(pnlt);
     
 end
 

@@ -63,7 +63,7 @@ function opts = getDefaultOptions(opts)
     default_opts.tyreDeformationRigid = [0 0 0 0]; % fl, fr, rl, rr vertical deformation for rigid tyres
     default_opts.gearSharpness = 5; % sharpness factor for gear shift
     default_opts.Taueps = 10; % torque epsilon for regularization (Nm)
-    default_opts.Neps = 0.02; % zero vertical load (in units of m*g)
+    default_opts.Neps = eps; % zero vertical load (in units of m*g)
     default_opts.extForce  = [0 0 0]; % x,y,z external force applied to the car in ref. point P (N)
     default_opts.extTorque = [0 0 0]; % x,y,z external torque applied to the car
     % SSA options
@@ -76,14 +76,20 @@ function opts = getDefaultOptions(opts)
     % GG options
     default_opts.ggMexName = 'ggSolver'; % mex filename for gg solver
     default_opts.fillFailed = true; % fill failed GG points with spline interp
-    default_opts.kappaLim = 0.3; % maximum long slip (/)
+    default_opts.maxLongSlip = [0.3, 0.3]; % front tyre (first entry) and rear tyre (second entry) maximum longitudinal slip (/)
+    default_opts.minLongSlip = [-0.3, -0.3]; % front tyre (first entry) and rear tyre (second entry) minimum longitudinal slip (/)
+    default_opts.maxSideSlip = [0.3, 0.3]; % front tyre (first entry) and rear tyre (second entry) maximum longitudinal slip (/)
     default_opts.wdelta = 25; % steer weighting factor (/)
     default_opts.wlambda = 25; % drift weighting factor (/)
     default_opts.wkappa = 25; % long slip weighting factor (/)
     default_opts.numGGpts = 181; % number of gg points from alpha=-pi/2 to alpha=+pi/2
     default_opts.isSymGG = true; % assume symmetric GG, i.e. avoid computation of left-side
+    default_opts.GGAngleRange = [-pi/2 +pi/2]; % range of the GG angle
+    default_opts.useGGSeqGuess = true; % use sequential guess to compute the next point of the GG when guess are provided
     default_opts.GGshift = @(V) 0; % function handle (function of V) for the GG vertical shift (expressed in g)
     default_opts.algorithmGGopt = 'interior-point'; % algorithm employed for GG optimization ('interior-point' or 'sqp')
+    default_opts.sensitivityPar = {}; % parameters for GG radius sensitivities
+    default_opts.useExactSensitivity = true; % use the exact sensitivity analysis
     % GGMLTS2SS options
     default_opts.GGRadiusTol = 0.95; % tolerance for GG radius on GG boundary
     default_opts.refineMLTS = false; % refine to solve exactly SSA

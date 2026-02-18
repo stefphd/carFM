@@ -50,11 +50,13 @@ velocity_eqns := [
 xi_eqns := xifl_eqn union xifr_eqn union xirl_eqn union xirr_eqn;
 xidot_eqns := subs(velocity_eqns, diff(xi_eqns,t));
 # Solz of velocity VX,VY of G as function of VP,lambdaP
-op(simplify(solve(subs(velocity_eqns, [comp_X(VP) = V__P(t)*cos(lambda__P(t)), comp_Y(VP) = V__P(t)*sin(lambda__P(t))]), [V__x(t), V__y(t)]))): # a
+op(simplify(solve(subs(velocity_eqns, [comp('X', VP) = V__P(t)*cos(lambda__P(t)), comp('Y', VP) = V__P(t)*sin(lambda__P(t))]), [V__x(t), V__y(t)]))): 
 G_vel := % :<%>;
 # Solz tyre radii
 rr_solz := op(simplify(solve(subs(xi_eqns,xx_eqns[-4..-1]), [rr__fl(t),rr__fr(t),rr__rl(t),rr__rr(t)]))):<%>;
-rrdot_solz:=simplify(subs(velocity_eqns, G_vel, diff(rr_solz,t))):<%>;
+simplify(subs(velocity_eqns, G_vel, diff(rr_solz,t))):
+subs(diff(z__rfl(t),t)=z__rfldot(t), diff(z__rfr(t),t)=z__rfrdot(t),diff(z__rrl(t),t)=z__rrldot(t), diff(z__rrr(t),t)=z__rrrdot(t),%):   # \dot z__rij = z__rijdot
+rrdot_solz:= %: <%>;
 # Use VP,lambdaP instead of VX,VY
 velocity_eqns := simplify(subs(G_vel, velocity_eqns)):
 VSfl := simplify(subs(G_vel,VSfl)):
@@ -119,35 +121,52 @@ VNrr0=VNrr,
 VRrr0=VRrr,
 eqkappa[4], eqalpha[4]])): <%>:
 # Wheel points
-CPfl_coords:=[comp_XYZ(CPfl, T__P)]:<%>:# 
-CPfr_coords:=[comp_XYZ(CPfr, T__P)]:<%>:
-CPrl_coords:=[comp_XYZ(CPrl, T__P)]:<%>:# 
-CPrr_coords:=[comp_XYZ(CPrr, T__P)]:<%>:
-Wfl_coords:=[comp_XYZ(W__fl, T__P)]:<%>:
-Wfr_coords:=[comp_XYZ(W__fr, T__P)]:<%>:
-Wrl_coords:=[comp_XYZ(W__rl, T__P)]:<%>:
-Wrr_coords:=[comp_XYZ(W__rr, T__P)]:<%>:
+CPfl_coords:=[comp('XYZ', CPfl, T__P)]:<%>:# 
+CPfr_coords:=[comp('XYZ', CPfr, T__P)]:<%>:
+CPrl_coords:=[comp('XYZ', CPrl, T__P)]:<%>:# 
+CPrr_coords:=[comp('XYZ', CPrr, T__P)]:<%>:
+Wfl_coords:=[comp('XYZ', W__fl, T__P)]:<%>:
+Wfr_coords:=[comp('XYZ', W__fr, T__P)]:<%>:
+Wrl_coords:=[comp('XYZ', W__rl, T__P)]:<%>:
+Wrr_coords:=[comp('XYZ', W__rr, T__P)]:<%>:
 # Rate of G vel
 G_veldot :=simplify(subs(xdot2v,diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t),diff(omega__x(t),t)=omega__xdot(t), diff(omega__y(t),t)=omega__ydot(t), (diff(G_vel,t)) union [V__zdot(t)=diff(V__z(t),t)])):
 <%>;
+# full-ext centre of mass
+G_coords:=[comp('XYZ', G, T__P)]:<%>;
 # ovarall cog
-Gall_coords:=[comp_XYZ(G__all, T__P)]:<%>:
+G1_coords:=[comp('XYZ', G1, T__P)]:<%>:
 # ovarall inertia
-Iall_comps:=simplify([I__all[1][1], I__all[2][2], I__all[3][3], I__all[3][1], I__all[3][2], I__all[1][2]]):<%>:
+I1_comps:=simplify([I1[1][1], I1[2][2], I1[3][3], I1[3][1], I1[3][2], I1[1][2]]):<%>:
 # aerodynamic center
-CA_coords:=[comp_XYZ(CA, T__P)]:<%>:
-# ref point kinematics
+CA_coords:=[comp('XYZ', CA, T__P)]:<%>:
+# reference point kinematics
 yawrate := subs(omega__z(t)=yaw__rate(t), velocity_eqns[3]);
-VP_xycomps:=[ 'V__xP'=simplify(subs(G_vel,velocity_eqns, comp_X(VP, T__P))),
-              'V__yP'=simplify(subs(G_vel,velocity_eqns, comp_Y(VP, T__P)))]:
-simplify(expand(subs(velocity_eqns, G_vel,[a__xP = comp_X(AP, T__R), a__yP = comp_Y(AP, T__R)]))):
+VP_xycomps:=[ 'V__xP'=simplify(subs(G_vel,velocity_eqns, comp('X', VP, T__P))),
+              'V__yP'=simplify(subs(G_vel,velocity_eqns, comp('Y', VP, T__P)))]:
+simplify(expand(subs(velocity_eqns, G_vel,[a__xP = comp('X', AP, T__R), a__yP = comp('Y', AP, T__R)]))):
 simplify(subs(velocity_eqns, %)): 
 AP_xycomps := simplify(subs(Omega__z(t) = solve(yawrate, Omega__z(t)), xdot2v, %)):<%>;
-T__R1 := T__R * rotate('Z',lambda__P(t)):
-simplify(expand(subs(velocity_eqns, G_vel,[a__tP = comp_X(AP, T__R1), a__nP = comp_Y(AP, T__R1)]))): 
+T__R1 := T__R * Rotate('Z',lambda__P(t)):
+simplify(expand(subs(velocity_eqns, G_vel,[a__tP = comp('X', AP, T__R1), a__nP = comp('Y', AP, T__R1)]))): 
 simplify(subs(velocity_eqns, %)): 
 AP_tncomps := simplify(subs(Omega__z(t) = solve(yawrate, Omega__z(t)), xdot2v, %)):
 ref_point_kin := [yawrate, op(VP_xycomps), op(AP_xycomps), op(AP_tncomps)]: <%>;
+# G acceleration porjected in T__P (x,y components)
+[comp('XYZ', AG,T__P)]:
+[a__xG(t) = %[1], a__yG(t) = %[2], a__zG(t) = %[3]]:
+simplify(subs(velocity_eqns,xdot2v,%)):
+AG_comps := subs(diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t), diff(V__z(t),t)=V__zdot(t),%): <%>;
+# G total acceleration in body-fixed frame, including gravity
+[comp('XYZ', AG_tot, T__V)]:
+# AG_tot_comps := simplify(subs(velocity_eqns,xdot2v,eval(subs(G_vel,%)))): <%>;  # replace all expressions
+AG_tot_comps := subs(diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t), diff(V__z(t),t)=V__zdot(t),%): <%>; # use original expression
+# P total acceleration in body-fixed frame, including gravity
+[comp('XYZ', AP_tot, T__R)]:
+simplify(%): subs(velocity_eqns, %):
+AP_tot_comps := simplify(subs(xdot2v, 
+diff(omega__x(t),t)=omega__xdot(t), diff(omega__y(t),t)=omega__ydot(t), diff(v__w(t),t)=v__wdot,
+diff(V__x(t),t)=V__xdot(t), diff(V__y(t),t)=V__ydot(t), diff(V__z(t),t)=V__zdot(t), %)): <%>;
 # get vehice rates: V__z,Omega__i,ft__dot,... as a function of v__z, v__phi, ...
 velocity_eqns[3..6]: # velocity equations omega__z, phi dot, mu dot ...
 subs(xdot2v, 
@@ -196,13 +215,16 @@ for k from 1 to nops(Wfl_coords0) do
    Wrl_coords0[k] := Wrl[k] = Wrl_coords0[k]:
    Wrr_coords0[k] := Wrr[k] = Wrr_coords0[k]:
 end:
-Gall_coords0:=remove_t(Gall_coords):
-for k from 1 to nops(Gall_coords0) do 
-   Gall_coords0[k] := G[k] = Gall_coords0[k]:
+G_coords0:=remove_t(G_coords):
+G1_coords0:=remove_t(G1_coords):
+for k from 1 to nops(G1_coords0) do 
+   G_coords0[k] := G[k] = G_coords0[k]:
+   G1_coords0[k] := G1[k] = G1_coords0[k]:
 end:
-Iall_comps0:=remove_t(Iall_comps):
-for k from 1 to nops(Iall_comps0) do 
-   Iall_comps0[k] := II[k] = Iall_comps0[k]:
+unassign('I1');
+I1_comps0:=remove_t(I1_comps):
+for k from 1 to nops(I1_comps0) do 
+   I1_comps0[k] := I1[k] = I1_comps0[k]:
 end:
 G_vel0:=remove_t(G_vel):
 G_veldot0:=remove_t(G_veldot):
@@ -210,22 +232,35 @@ CA_coords0:=remove_t(CA_coords):
 for k from 1 to nops(CA_coords) do 
    CA_coords0[k] := CA[k] = CA_coords0[k]:
 end:NULL;
+AG_tot_comps0:=remove_t(AG_tot_comps):
+for k from 1 to nops(AG_tot_comps) do
+    AG_tot_comps0[k] := AG[k] = AG_tot_comps0[k]:
+end:
+AP_tot_comps0:=remove_t(AP_tot_comps):
+for k from 1 to nops(AP_tot_comps) do
+    AP_tot_comps0[k] := AP[k] = AP_tot_comps0[k]:
+end:
+AG_comps0:=remove_t(AG_comps):
 rr_solz0:=remove_t(rr_solz):
 xi_eqns0:=remove_t(xi_eqns):
 xidot_eqns0:=remove_t(xidot_eqns):
 ref_point_kin0:=remove_t(ref_point_kin):
 rates_eqns0:=remove_t(rates_eqns):
+anti_force0:=remove_t(anti_force):
 # Optimize to reduce cpu cost
 optimizeProc := proc(expr) local c1, c2, dc, expropt; c1 := cost(expr); print("Original cost", c1); expropt := simplify(expr, trig); expropt := optimize(expropt); c2 := cost(expropt); print("Optimized cost ", c2); dc := c1 - c2; print("Difference cost", dc); return expropt; end proc;
 dyna_eqns0:=optimizeProc(dyna_eqns0):
 ref_point_kin0:=optimizeProc(ref_point_kin0):
 front_tyre_kinematics := optimizeProc(front_left_kin0 union front_right_kin0):
 rear_tyre_kinematics := optimizeProc(rear_left_kin0 union rear_right_kin0):
+suspension_anti_force := optimizeProc(anti_force0):
 postproc_eqns := optimizeProc([
 op(CPfl_coords0), op(CPfr_coords0),op(CPrl_coords0), op(CPrr_coords0),
 op(Wfl_coords0), op(Wfr_coords0),op(Wrl_coords0), op(Wrr_coords0),
-op(CA_coords0), op(Gall_coords0), 
-op(Iall_comps0), op(G_vel0), op(G_veldot0)]):
+op(CA_coords0),
+op(G_coords0), op(G1_coords0), op(I1_comps0),
+op(G_vel0), op(G_veldot0),
+op(AG_comps0), op(AG_tot_comps0), op(AP_tot_comps0)]):
 rates_eqns0 := optimizeProc(rates_eqns0):
 # Matlab code
 # Create +maple folder
@@ -256,16 +291,19 @@ ffclose(fd);
 fd := ffopen(cat(dirname,"frontTyreKinematics.m"), WRITE):
 fprintf(fd,"%% Front Tyre Kinematics  *** DO NOT EDIT ***\n"):
 fprintf(fd,"%s",CodeGeneration[Matlab]([front_tyre_kinematics], output=string)):
-fprintf(fd,"phit__fl = 0; %% Turn slip TODO calc from MAPLE\n"):
-fprintf(fd,"phit__fr = 0; %% Turn slip TODO calc from MAPLE\n"):#  
 ffclose(fd);
 # Rear tyre kinematics
 #print2screen := true:
 fd := ffopen(cat(dirname,"rearTyreKinematics.m"), WRITE):
 fprintf(fd,"%% Rear Tyre Kinematics  *** DO NOT EDIT ***\n"):
 fprintf(fd,"%s",CodeGeneration[Matlab]([rear_tyre_kinematics], output=string)):
-fprintf(fd,"phit__rl = 0; %% Turn slip TODO calc from MAPLE\n"):
-fprintf(fd,"phit__rr = 0; %% Turn slip TODO calc from MAPLE\n"):#  
+ffclose(fd);
+# Suspension anti force
+#print2screen := true:
+fd := ffopen(cat(dirname,"suspAntiForce.m"), WRITE):
+fprintf(fd,"%% Suspension anti forces  *** DO NOT EDIT ***\n"):
+fprintf(fd,"%s",CodeGeneration[Matlab]([suspension_anti_force], output=string)):
+fprintf(fd,"\n"):
 ffclose(fd);
 # Post-processing
 #print2screen := true:
@@ -283,5 +321,4 @@ ffclose(fd);
 save(dyna_eqns0, ref_point_kin0, 
 front_tyre_kinematics, rear_tyre_kinematics, postproc_eqns,
 "CarDynamics.mla");
-NULL;
 NULL;

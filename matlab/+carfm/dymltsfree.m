@@ -26,9 +26,29 @@ carfm.common.setMaxNumDir(8); % 8 to speed up cc time
 % Default options and override with user-defined options
 opts = carfm.dymlts.getDefaultOptions(opts);
 
+% Get undocumented options and override with user-defined options
+opts = carfm.dymlts.getUndocOptions(opts);
+
+% Check if sensitivity parameters exist in car struct
+[flag, errid, errmsg] = carfm.common.checkSensitivityPar(opts.sensitivityPar, car);
+if flag
+    % Reset and exit
+    clearvars -except filepath errmsg errid
+    carfm.common.setEnvironment(filepath, false);
+    % Give error if sth went wrong
+    error(errid, '%s', errmsg);
+end
+
+% Extract sensitivity parameters
+opts.sensitivityPar = carfm.common.expandSensitivityPar(opts.sensitivityPar, car);
+np = numel(opts.sensitivityPar); % num of sensitivies
+
 % Create aux
 aux.car = carfm.common.matlab2casadiInterpolant(car);
-aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod);
+aux.track = carfm.common.interpTrack(track, 'casadi', opts.trackinterpMethod, opts.minDecLen);
+
+% Check interpolant types
+carfm.dymlts.checkInterpolantType(car, {'spline','bspline'}); % suggest to use spline/bspline
 
 % Find si and sf
 if opts.sRange(1) <= track.s(1)
@@ -47,7 +67,7 @@ ti = si / opts.sscale;
 tf = sf / opts.sscale;
 
 % Create vars
-nx = 23+2+2; nu = 2;
+nx = 23+2+2; nu = 2+np; % include sensitivities in control u
 x = casadi.MX.sym('x', nx); % state
 xp = casadi.MX.sym('xp', nx); % state derivative
 u = casadi.MX.sym('u', nu); % control
@@ -57,11 +77,15 @@ u0 = casadi.MX.sym('u0', nu); % initial control
 xn = casadi.MX.sym('xn', nx); % final state
 un = casadi.MX.sym('un', nu); % final control
 
+% Parameters
+p = u(3:end); % 0x1 if no sensitivities
+[aux.car, p0] = carfm.common.replaceField(aux.car, opts.sensitivityPar, p);
+
 % Model equations
 % r: system dynamics
 % c: path constraint
 % l: Lagrange term
-[r, c, l] = carfm.dymlts.ocpEquations(t,x,xp,u,aux,opts);
+[r, c, l] = carfm.dymlts.ocpEquations(t,x,xp,u(1:end-np),aux,opts);
 nc = numel(c);
 % bcs
 try
@@ -75,14 +99,10 @@ catch err
     carfm.common.setEnvironment(filepath, false);
     error('carfm:unableEval', 'Unable to ealuate "bcsFunc" function handle: %s', err.message);
 end
-% Undocumented feature: relax boundary conditions 'opts.bcsRelax'
-% This feature removes the boundary conditions and adds them into the OCP
-% cost as a Mayer term. This may be usefull when starting from unfeasible
-% BCs, but has not been extensively tested yet, and thus remains undoc.
-% Default is opts.bcsRelax = false, i.e. standard BCs used.
-if ~isfield(opts, 'bcsRelax')
-    opts.bcsRelax = false;
-end
+% Undocumented feature: relax boundary conditions using undocumented 
+% option 'opts.bcsRelax' (default false): BCs are removed and added into 
+% the OCP cost as a Mayer term. This may be usefull when starting from 
+% unfeasible BCs, but has not been extensively tested yet.
 if ~opts.bcsRelax % Default
     m = 0; % no mayer
 else 
@@ -170,6 +190,7 @@ if contains(opts.scheme, 'lgr')
 else % euler,trapz,midpint
     d = 1; % w=x, z=u
     tau_root = [0 1];
+    W = [1 0]'; % unitary weight
     xp12 = (x2-x1)/h; % finite derivative
     switch opts.scheme
         case 'euler' % Euler integration
@@ -207,14 +228,15 @@ z0 = vertcat(z0{:});
 zn = vertcat(zn{:});
 
 % Create OCP functions
-p = casadi.MX.sym('p',0);
-ocp_runcost = casadi.Function('ocp_runcost', {t, w1, z1, w2, z2, p, h}, {sum(dl)});
-ocp_runcost2 = casadi.Function('ocp_runcost2', {t, w1, z1, w2, z2, p, h}, {dl}); % separates laptime and penalty
-ocp_bcscost = casadi.Function('ocp_bcscost', {w0, z0, wn, zn, p}, {m});
-ocp_dyn = casadi.Function('ocp_dyn', {t, w1, z1, w2, z2, p, h}, {dw});
-ocp_path = casadi.Function('ocp_path', {t, w1, z1, p, h}, {c});
-ocp_bcs = casadi.Function('ocp_bcs', {w0, z0, wn, zn, p}, {b});
-ocp_int = casadi.Function('ocp_int', {t, w1, z1, w2, z2, p, h}, {[]});
+null = casadi.MX.sym('p',0);
+ocp_runcost = casadi.Function('run_cost', {t, w1, z1, w2, z2, null, h}, {sum(dl)});
+ocp_runcost2 = casadi.Function('run_cost2', {t, w1, z1, w2, z2, null, h}, {dl}); % separates laptime and penalty
+ocp_bcscost = casadi.Function('bcs_cost', {w0, z0, wn, zn, null}, {m});
+ocp_dyn = casadi.Function('dyn_constr', {t, w1, z1, w2, z2, null, h}, {dw});
+ocp_path = casadi.Function('path_constr', {t, w1, z1, null, h}, {c});
+ocp_bcs = casadi.Function('bcs_constr', {w0, z0, wn, zn, null}, {b});
+ocp_int = casadi.Function('int_constr', {t, w1, z1, w2, z2, null, h}, {[]});
+
 % Bounds
 % x = [ phi, mu, z, delta,
 %       z__fl, z__fr, z__rl, z__rr, 
@@ -226,17 +248,17 @@ ocp_int = casadi.Function('ocp_int', {t, w1, z1, w2, z2, p, h}, {[]});
 %       delta__ddot, Tau__t]
 lbx = [[-15/180*pi; -15/180*pi; -0.25; -30/180*pi;
         -0.5; -0.5; -0.5; -0.5;
-        5; -30/180*pi; -5;
+        5; -0.2; -5;
         -0.5; -0.5; -0.5; -0.5; -0.5;
         -5; -0.1; -0.1;
-        20; 20; 20; 20;
+        15; 15; 15; 15;
         -10; -0.5
        ] ./ opts.xscale(:);
        [-1; -10e3] ./ opts.uscale(:)
     ];
 ubx = [[15/180*pi; 15/180*pi; 0.25; 30/180*pi;
         0.5; 0.5; 0.5; 0.5;
-       110; 30/180*pi; 5;
+       110; 0.2; 5;
        0.5; 0.5; 0.5; 0.5; 0.5;
        5; 0.1; 0.1; 
        350; 350; 350; 350;
@@ -244,12 +266,18 @@ ubx = [[15/180*pi; 15/180*pi; 0.25; 30/180*pi;
        ] ./ opts.xscale(:);
        [+1; +10e3] ./ opts.uscale(:)
     ];
+% Undocumented feature: constraint the raceline on the track centerline
+if opts.constrainRaceline % default false
+    % x(24) = n
+    lbx(24) = 0;
+    ubx(24) = 0;
+end
 % u = [delta__ddot', Tau__t']
-lbu = [-1; -5e2] ./ opts.upscale(:);
-ubu = [+1; +5e2] ./ opts.upscale(:);
-% c = [n/rwr, n/rwl, z__f, z__r, Taue-TaueMax, Tau__f*Tau__r]
-lbc = [-2; -1; opts.Neps; opts.Neps; opts.Neps; opts.Neps; -1]./opts.cscale(:);
-ubc = [+1; +2; +3;        +3;        +3;        +3;        +1]./opts.cscale(:);
+lbu = [[-1; -1e2] ./ opts.upscale(:); p0(:)];
+ubu = [[+1; +1e2] ./ opts.upscale(:); p0(:)];
+% c = [n/rwr, n/rwl, N__fl/mg, N__fr/mg, N__rl/mg, N__rr/mg, Tau__e-Tau__emax]
+lbc = [-1e2; 0; opts.Neps; opts.Neps; opts.Neps; opts.Neps; -1e4]./opts.cscale(:);
+ubc = [0; +1e2; +10;       +10;       +10;       +10;       +0]./opts.cscale(:);
 % b = bcs_fun(xi,xf)
 lbb = zeros(nb,1);
 ubb = zeros(nb,1);
@@ -261,27 +289,8 @@ lbc = repmat(lbc(:), [d,1]); ubc = repmat(ubc(:), [d,1]);
 % Mesh
 % N = round(opts.numMeshPts / d); % Value set by user is the total number of pts (including collocated pts)
 N = opts.numMeshPts; % Value set by user is number of mesh pts (excluding internal collocated pts)
-switch opts.meshStrategy
-    case 'adaptive' % Adpative mesh
-        ntmp = sum((track.s(:)>si) & (track.s(:)<sf));
-        stmp = interp1(track.s(:), track.s(:), linspace(si, sf, ntmp)','linear','extrap');
-        Omztmp = interp1(track.s(:), track.Omegaz(:), linspace(si, sf, ntmp)','linear','extrap');
-        smesh = carfm.common.createAdaptiveMesh(stmp, Omztmp, N, opts.meshRatio, ...
-            opts.meshMinSecLen, opts.meshTransLen, opts.meshThFactor, opts.debugSolve);
-        tmesh = smesh / opts.sscale;
-    case 'manual' % Manual mesh
-        % fix if numel(opts.meshFractions) is different from N-1
-        if numel(opts.meshFractions)>(N-1) % del last vals
-            opts.meshFractions = opts.meshFractions(1:(N-1));
-        elseif numel(opts.meshFractions)<(N-1) % rep last val
-            opts.meshFractions = [opts.meshFractions, repmat(opts.meshFractions(end), [1 (N-1)-numel(opts.meshFractions)])];
-        end
-        % calc tmesh
-        tmesh = [0, cumsum(opts.meshFractions/sum(opts.meshFractions))]*(tf-ti) + ti;
-    % case 'equally-spaced' % Equally-spaced mesh
-    otherwise % fallback to 'equally-spaced'
-        tmesh = linspace(ti, tf, N); % equally spaced
-end
+smesh = carfm.common.createMesh(si, sf, N, track.s, track.Omegaz, opts);
+tmesh = smesh / opts.sscale;
 hmesh = diff(tmesh); 
 % get time at collocation points + end time
 tcol = tmesh(1:end-1) + hmesh.*tau_root(1:end-1)';
@@ -289,9 +298,8 @@ tcol = tcol(:)'; tcol = [tcol, tmesh(end)];
 
 % Guess
 if isempty(fieldnames(guess))
-    % generate guess for x, u: SSA at V0 in straight
-    V0 = 50; % guess speed (hardcoded)
-    ssres = carfm.ssa(car,[V0; 0; 0],zeros(3,1));
+    % generate guess for x, u: SSA at opts.speedGuess in straight
+    ssres = carfm.ssa(car,[opts.speedGuess; 0; 0],zeros(3,1));
     % workaround: SSA resets the env, need to set it again ...
     % alternative is to implement SS analysis for dynamics here?
     % or allow user to give guess from SSA explicitly? This may be the best
@@ -306,6 +314,7 @@ if isempty(fieldnames(guess))
     end
     % Convert to dyna vars
     [x10, ~, u10] = carfm.dymlts.getDynVars(ssres);
+    u10(2,:) = 0; % better to use zero torque as guess?
     % Create x0,u0
     x0 = [ [x10; 0; 0] ./ opts.xscale(:); u10 ./ opts.uscale(:)]; % n,chi=0
     u0 = repmat(zeros(size(u)), [1 size(x0,2)]);
@@ -350,16 +359,17 @@ else
     z0 = reshape(u0, [nu*d N]);
 end
 
-% Get IPOPT tolerance options
-ipoptopt = carfm.common.getNLPTol(opts);
+% Get Ipopt tolerance options
+[ipopt_options, refine_ipopt_options] = carfm.common.getIpoptOptions(opts);
 
 % OCP-NLP formulation
-if opts.mex % use OPTra
+if opts.mex % use Optra
     % Generate Mex
     if ~opts.usePrebuilt
-        carfm.optra.build(opts.problemName, ...
+        optra.build(opts.problemName, ...
             ocp_runcost, ocp_bcscost, ocp_dyn, ocp_path, ocp_bcs, ocp_int, ...
-            ~opts.exactHessian);
+            opts.exactHessian || opts.refineSolution ... % generate hessian only if required
+        );
     end
     % Check for build only
     if opts.buildOnly
@@ -369,68 +379,70 @@ if opts.mex % use OPTra
         mltsout = struct(); % empty output argument
         return;
     end
-    % create OCP struct
+    % create problem
     problem.name = opts.problemName;
-    problem.N = N;
-    problem.ti = ti;
-    problem.tf = tf;
-    problem.guess.x = w0;
-    problem.guess.u = z0;
-    problem.guess.p = [];
-    problem.bounds.lbx = lbw; problem.bounds.ubx = ubw;
-    problem.bounds.lbu = lbz; problem.bounds.ubu = ubz;
-    problem.bounds.lbp = []; problem.bounds.ubp = [];
-    problem.bounds.lbc = lbc; problem.bounds.ubc = ubc;
-    problem.bounds.lbb = lbb; problem.bounds.ubb = ubb;
-    problem.bounds.lbq = []; problem.bounds.ubq = [];
-    % General options
-    problem.options.sb = true; % suppress banner
-    problem.options.print_iterint = opts.printInt;
-    problem.options.max_iter = opts.maxIter;
-    problem.options.flag_hessian = ~opts.exactHessian;
-    problem.options.num_threads = opts.numThreads;
-    problem.options.nlp = ipoptopt; % IPOPT-specific options
-    if opts.debugSolve % Set iter_callback
-        problem.options.iter_callback = @carfm.dymlts.iterCallbackFree;
+    problem.number_mesh = N;
+    problem.initial_time = ti;
+    problem.final_time = tf;
+    problem.mesh_fractions = hmesh/sum(hmesh);
+    problem.guess.state = w0;
+    problem.guess.control = z0;
+    problem.guess.parameter = [];
+    problem.bounds.state_lower = lbw; 
+    problem.bounds.state_upper = ubw;
+    problem.bounds.control_lower = lbz; 
+    problem.bounds.control_upper = ubz;
+    problem.bounds.parameter_lower = []; 
+    problem.bounds.parameter_upper = [];
+    problem.bounds.path_lower = lbc; 
+    problem.bounds.path_upper = ubc;
+    problem.bounds.bcs_lower = lbb; 
+    problem.bounds.bcs_upper = ubb;
+    problem.bounds.int_lower = []; 
+    problem.bounds.int_upper = [];
+    if opts.debugSolve 
+        problem.iteration_callback  = @carfm.dymlts.iterCallbackFree;
     end
-    % Mesh
-    problem.mesh = hmesh/sum(hmesh);
-    % Call to OPTRA
-    sol = carfm.optra.solve(problem);
-    % Undocumented feature: refine the solution using WORHP
-    % This feature refines the solution using using WORHP SQP (requires 
-    % WORHP installed) if mex=true. Default is opts.refineSol = false.
-    if ~isfield(opts, 'refineSol')
-        opts.refineSol = false;
-    end
-    if opts.refineSol
-        problem = sol.next_problem;
-        problem.options.sb = true; % suppress banner
-        problem.options.nlp = struct(); % reset NLP options
-        problem.options.nlpsolver = 'worhp'; % use WORHP
-        sol = carfm.optra.solve(problem);
+    % create global options
+    global_options.iteration_print_frequency = opts.printInt;
+    global_options.number_threads = opts.numThreads;
+    global_options.sb = true; % suppress banner
+
+    % Call to Optra
+    sol = optra.solve(problem, 'ipopt', ipopt_options, global_options);
+    % Undocumented feature: refine the solution using the exact Hessian and 
+    % the default Ipopt tolerances
+    if opts.refineSolution
+        problem.guess = sol; % set guess from solution
+        sol = optra.solve(problem, 'ipopt', refine_ipopt_options, global_options);
     end
     % Get the solution
-    wopt = sol.x;
-    zopt = sol.u;
+    wopt = sol.state;
+    zopt = sol.control;
+    lamwopt = sol.state_multiplier;
+    lamzopt = sol.control_multiplier;
+    lamfopt = sol.dyn_multiplier;
+    lamcopt = sol.path_multiplier;
     % Check derivatives (debugging only)
     % carfm.common.derivativeChecks;
 else % use CASADI solver
     % Utility functions
+    lamf1 = casadi.MX.sym('lamf', nx*d);
+    lamc1 = casadi.MX.sym('lamc', nc*d);
     eval_y = casadi.Function('eval_y', {w1, z1}, {[w1; z1]});
     eval_wz = casadi.Function('eval_wz', {[w1; z1]}, {w1, z1});
+    eval_lamfc = casadi.Function('eval_lamfc', {[lamf1; lamc1]}, {lamf1, lamc1});
     eval_y = returntypes('full', eval_y);
     eval_wz = returntypes('full', eval_wz);
+    eval_lamfc = returntypes('full', eval_lamfc);
     % NLP guess
     y0 = eval_y(w0, z0); y0 = y0(:);
-    % NLP opts
-    nlp_opts.ipopt = ipoptopt;
-    nlp_opts.ipopt.max_iter = opts.maxIter;
+    % Ipopt options
+    nlp_opts.ipopt = ipopt_options;
+    % additional ipopt options
     nlp_opts.ipopt.print_level = 5;
     nlp_opts.ipopt.print_timing_statistics = 'yes';
     nlp_opts.ipopt.print_frequency_iter = opts.printInt;
-    nlp_opts.ipopt.max_iter = opts.maxIter;
-    nlp_opts.ipopt.hessian_approximation = 'limited-memory';
     nlp_opts.ipopt.file_print_level = 5;
     nlp_opts.ipopt.output_file = [opts.problemName '.log'];
     % Transcribe problem
@@ -446,11 +458,7 @@ else % use CASADI solver
             @carfm.dymlts.iterCallbackFree);
         nlp_opts.iteration_callback = casadiIPOPTCallback;
     end
-    % Set custom settings
-    if opts.exactHessian
-        nlp_opts.ipopt.hessian_approximation = 'exact';
-    end
-    % Call to IPOPT
+    % Call to Ipopt
     solver = casadi.nlpsol('solver', 'ipopt', prob, nlp_opts);
     if opts.debugSolve
         casadiIPOPTCallback.set_solver(solver);
@@ -458,16 +466,48 @@ else % use CASADI solver
     sol = solver('x0', y0, 'lbx', lby, 'ubx', uby, 'lbg', lbg, 'ubg', ubg);
     % Get the solution
     yopt = sol.x;
-    [wopt,zopt] = eval_wz(reshape(yopt, [d*(nx+nu), N])); % get optimal w, z
+    lamyopt = sol.lam_x;
+    lamgopt = sol.lam_g;
+    [wopt,zopt] = eval_wz(reshape(yopt, [d*(nx+nu), N]));
+    [lamwopt,lamzopt] = eval_wz(reshape(lamyopt, [d*(nx+nu), N]));
+    [lamfopt, lamcopt] = eval_lamfc(reshape(lamgopt(1:end-nc*d-nb), [d*(nx+nc), N-1]));
+    lamcopt = [lamcopt, full(lamgopt((end-nc*d-nb+1):(end-nb)))];
 end
 
 % Post process
 % Integrals
 dlopt = ocp_runcost2(tmesh(1:end-1), wopt(:,1:end-1), zopt(:,1:end-1), wopt(:,2:end), zopt(:,2:end), [], hmesh);
 lopt = full(sum(dlopt,2));
-% Get states and controls at collocation points
+
+% Get OCP multipliers
+% apply quadrature weights
+Wlamw = reshape( repmat(W(1:end-1)', [nx 1]), [d*nx 1]);
+Wlamz = reshape( repmat(W(1:end-1)', [nu 1]), [d*nu 1]);
+Wlamf = reshape( repmat(W(1:end-1)', [nx 1]), [d*nx 1]);
+Wlamc = reshape( repmat(W(1:end-1)', [nc 1]), [d*nc 1]);
+lamwopt = lamwopt ./ Wlamw;
+lamzopt = lamzopt ./ Wlamz;
+lamfopt = lamfopt ./ Wlamf;
+lamcopt = lamcopt ./ Wlamc;
+% apply mesh size
+lamwopt = lamwopt ./ [hmesh, hmesh(end)]; % repeat last
+lamzopt = lamzopt ./ [hmesh, hmesh(end)]; % repeat last
+lamfopt = lamfopt ./ hmesh; 
+lamcopt = lamcopt ./ [hmesh, hmesh(end)]; % repeat last
+% check for cyclic bcs
+xBcsTry = rand(nx,1)+1; % test x
+uBcsTry = rand(nu,1)+1; % test u
+if ~opts.bcsRelax && all( opts.bcsFunc(xBcsTry,uBcsTry,xBcsTry,uBcsTry) == 0 )
+    lamcopt(:,1) = lamcopt(:,1) + lamcopt(:,end); % sum b/c cyclic (i.e. same constraint)
+    lamcopt(:,end) = lamcopt(:,1); % cyclic
+end
+% Get states, controls, and multipliers at collocation points
 Xopt = reshape(wopt, [nx N*d]); Xopt = Xopt(:,1:end-(d-1));
 Uopt = reshape(zopt, [nu N*d]); Uopt = Uopt(:,1:end-(d-1));
+Lxopt = reshape(lamwopt, [nx N*d]); Lxopt = Lxopt(:,1:end-(d-1));
+Luopt = reshape(lamzopt, [nu N*d]); Luopt = Luopt(:,1:end-(d-1));
+Lcopt = reshape(lamcopt, [nc N*d]); Lcopt = Lcopt(:,1:end-(d-1));
+Lfopt = reshape(lamfopt, [nx, (N-1)*d]);
 % Find xp
 fstep = casadi.Function('fstep', {xp,t,x,u}, {f(t, x, xp, u)});
 stepsolver = casadi.rootfinder('stepsolver', 'fast_newton', fstep);
@@ -487,7 +527,7 @@ else
     Xpopt = (diff(Xopt')./diff(tcol'))';
     Xpopt = [Xpopt, Xpopt(:,end)];
     if ~strcmp(opts.scheme, 'euler')
-        for k = 1 : numel(sol.t)
+        for k = 1 : numel(tcol)
             Xpopt(:,k) = stepsolver(Xpopt(:,k), tcol(:,k), Xopt(:,k), Uopt(:,k));
         end
     end
@@ -495,7 +535,9 @@ end
 
 % Get dynamics data
 aux.car = car; % do not use CASADI data
-[~, ~, ~, mltsout] = carfm.dymlts.ocpEquations(tcol,Xopt,Xpopt,Uopt,aux,opts); % eval ocp equations at optimal solution
+[~, ~, ~, mltsout] = carfm.dymlts.ocpEquations(tcol,Xopt,Xpopt,Uopt(1:end-np,:),aux,opts); % eval ocp equations at optimal solution
+mltsout = carfm.dymlts.calcSensitivities(mltsout, Lxopt, Luopt, Lfopt, Lcopt, opts); % dymlts sensitivities
+
 mltsout.laptime = lopt(1)*opts.lscale; % lap time
 mltsout.pnlt = lopt(2)*opts.lscale; % control penalty
 mltsout.t = mltsout.t / mltsout.t(end) * mltsout.laptime; % make res.t and res.laptime consistent
@@ -505,4 +547,3 @@ clearvars -except mltsout filepath
 carfm.common.setEnvironment(filepath, false);
 
 end
-

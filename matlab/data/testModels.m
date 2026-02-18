@@ -10,9 +10,8 @@ VS0   = 90;     % tangent speed (m/s)
 VN0   = 0;      % normal speed (m/s)
 VR0   = 89;     % rolling speed (m/s)
 ca0   = 0;      % camber angle (rad)
-phit0 = 0;      % turn slip (rad/m)
-[tyreFxf,tyreFyf] = car.frontTyre.Forces(car.frontTyre,N,VS0,VN0,VR0,[],ca0,phit0);
-[tyreFxr,tyreFyr] = car.rearTyre.Forces(car.rearTyre,N,VS0,VN0,VR0,[],ca0,phit0);
+[tyreFxf,tyreFyf] = car.frontTyre.Forces(car.frontTyre,N,VS0,VN0,VR0,VR0/car.frontTyreUnloadedRadius,ca0);
+[tyreFxr,tyreFyr] = car.rearTyre.Forces(car.rearTyre,N,VS0,VN0,VR0,VR0/car.rearTyreUnloadedRadius,ca0);
 
 % aero
 V = 50; %speed

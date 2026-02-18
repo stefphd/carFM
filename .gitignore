@@ -13,3 +13,4 @@ maple/+maple
 matlab/optra
 *.log
 *.asv
+/matlab/paper

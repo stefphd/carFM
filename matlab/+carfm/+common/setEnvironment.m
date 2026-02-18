@@ -16,68 +16,34 @@ arguments
     doSet (1,1) logical = true
 end
 
-persistent casadi_case; %[]: not found, 1: MEX found, 2: local MEX found, 3: global MEX found
 persistent oldMaxNumDir; % casadi global option setMaxNumDir
+
+% Expiration date and license numbers
+expiration_date = datetime(2026,09,30,23,59,59);
+licenses = {'40523914', '41067317', '41252325', '41252326', '41252328'};
 
 % Check expiration date
 today = datetime;
-expdate = datetime(2026,09,30,23,59,59);
-if today > expdate
+if today > expiration_date
     flagerr = true;
-    expdate.Format = 'yyyy-MM-dd';
-    errid = 'fmtools:expiredLicense';
-    errmsg = ['Expired license: expiration date is ' char(expdate)];
+    expiration_date.Format = 'yyyy-MM-dd';
+    errid = 'carfm:expiredLicense';
+    errmsg = ['Expired license: expiration date is ' char(expiration_date)];
     return;
 end
 
 % Check license number
 lic = license;
-lics = {'40523914', '40765951', '41067317', '41252325', '41252326', '41252328'};
-if ~any(strcmp(lic,lics))
+if ~any(strcmp(lic,licenses))
     flagerr = true;
-    errid = 'fmtools:invalidLicense';
+    errid = 'carfm:invalidLicense';
     errmsg = ['Invalid license number: current license number is ' lic];
     return;
 end
 
-% Check pc or mac
-casadipath = 'casadi-3.6.7';
-% if ispc
-%     casadipath = [casadipath '-pc'];
-% elseif ismac
-%     casadipath = [casadipath '-mac'];
-% end
-
-% Check casadi
-if isempty(casadi_case)
-    if isfile([filepath filesep casadipath filesep 'casadiMEX.' mexext]) % search in package folder
-        casadi_case = 1;
-    elseif isfile([casadipath filesep 'casadiMEX.' mexext]) % search in local folder
-        casadi_case = 2;
-    elseif exist('casadiMEX', 'file') == 3 % search in search path
-        casadi_case = 3;
-    else
-        casadi_case = [];
-    end
-end
-
-% Give error if no casadi is found
-if isempty(casadi_case)
-    errid = 'fmtools:casadiNotFound';
-    errmsg = 'CasADi not found in local folder or search path. Get CASADI from <a href = "https://web.casadi.org/">CASADI Web Site</a>.';
-    flagerr = true;
-    return
-end
-
 if doSet
     % Set env
-    switch casadi_case
-        case 1 % in package folder
-            addpath([filepath filesep casadipath]);
-        case 2 % in local folder
-            addpath(casadipath);
-        % case 3: no need to addpath casadi b/c already in path
-    end
+    addpath([filepath filesep 'external']) 
     % Check if casadi working
     try
         casadi.MX.sym('x');
@@ -94,13 +60,8 @@ else
     if (oldMaxNumDir) 
         carfm.common.setMaxNumDir(oldMaxNumDir);
     end
-    % Unset env
-    switch casadi_case
-        case 1
-            rmpath([filepath filesep casadipath]);
-        case 2
-            rmpath(casadipath);
-    end
+    % Reset env
+    rmpath([filepath filesep 'external']);
 end
 
 % Return

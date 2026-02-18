@@ -85,7 +85,7 @@ function checkCarStruct(bike)
     % check tyre, aero, suspension, engine model functions
     %frontTyre
     try
-        [~, ~, ~, ~, ~, ~, ~] = bike.frontTyre.Forces(bike.frontTyre, 1, 1, 0, 1, 1, 0, 1);
+        [~, ~, ~, ~, ~, ~, ~] = bike.frontTyre.Forces(bike.frontTyre, 1, 1, 0, 1, 1, 0);
     catch ME
         eid = 'carfm:unableEval';
         msg = 'Unable to evaluate frontTyre.Forces function.';
@@ -94,7 +94,7 @@ function checkCarStruct(bike)
     end
     %rearTyre
     try
-        [~, ~, ~, ~, ~, ~, ~] = bike.rearTyre.Forces(bike.rearTyre, 1, 1, 0, 1, 1, 0, 1); 
+        [~, ~, ~, ~, ~, ~, ~] = bike.rearTyre.Forces(bike.rearTyre, 1, 1, 0, 1, 1, 0); 
     catch ME
         eid = 'carfm:unableEval';
         msg = 'Unable to evaluate rearTyre.Forces function.';

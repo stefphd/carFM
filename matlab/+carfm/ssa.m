@@ -24,6 +24,9 @@ end
 % Default options and override with user-defined options
 opts = carfm.ssa.getDefaultOptions(opts);
 
+% Get undocumented options and override with user-defined options
+opts = carfm.ssa.getUndocOptions(opts);
+
 % Generate symbolic expression using CasADi only if ~usePrebuilt or ~mex
 % this is to reduce overhead when not necessary, thus reducing function inizialization time
 if ~opts.mex || ~opts.usePrebuilt

@@ -1,4 +1,4 @@
-function mltsout = calcSensitivities(mltsout, lamf, lamc, opts)
+function mltsout = calcSensitivities(mltsout, lamx, lamu, lamf, lamc, opts)
 %CALCSENSITIVITIES Compute ggmlts sensitivities
 
 % gg sensitivity

@@ -48,7 +48,7 @@ rearWheelSpinInertia = 1.3;
 % OUTPUT
 % Tij:          wheel torque (ij=fl,fr,rl,rr) (Nm)
 
-gearboxRatios = 1; % from 1st to highest gear - no gear ratios considered
+gearboxRatios = 0.1; % from 1st to highest gear - no gear ratios considered, used just to scale engine torque
 % switching angular velocity of rear tyre in rad/s from gear k-th to (k+1)-th.
 % The last value is the top angular velocity in rad/s.
 gearboxSwitchingSpeeds = 1000;
@@ -124,7 +124,7 @@ engine.Torques = @engineBasicModel;
 % dataset
 frontSuspension.F0 = 0;
 frontSuspension.k = 100e3;
-frontSuspension.c = 5e3;
+frontSuspension.c = 10e3;
 frontSuspension.ka = 70e3; % antiroll bar
 % user-function that gives suspension force
 frontSuspension.Force = @suspensionLinearModel;
@@ -133,9 +133,9 @@ frontSuspension.Kinematics = @suspensionKinematics;
 
 % Rear suspension
 rearSuspension.F0 = 0;
-rearSuspension.k = 90e3;
-rearSuspension.c = 4e3;
-rearSuspension.ka = 60e3; % antiroll bar
+rearSuspension.k = 100e3;
+rearSuspension.c = 10e3;
+rearSuspension.ka = 70e3; % antiroll bar
 % user-function that gives suspension force
 rearSuspension.Force = @suspensionLinearModel;
 % user-function that gives suspension kinematics
@@ -180,7 +180,7 @@ aero.Forces = @basicAeroModel;
 
 %% Tyre forces
 % <tyre.Forces> definition and usage
-%[tyreFx,tyreFy,tyreMx,tyreMy,tyreMz,tyreLS,tyreSA] = tyre.Forces(tyre, N, Vs, Vn, Vr, Omega, ca, phit)
+%[tyreFx,tyreFy,tyreMx,tyreMy,tyreMz,tyreLS,tyreSA] = tyre.Forces(tyre, N, Vs, Vn, Vr, Omega, ca)
 %
 % INPUT
 % tyre:     strcuture containing tyre constants
@@ -190,7 +190,6 @@ aero.Forces = @basicAeroModel;
 % Vr:       rolling speed  (m/s)
 % Omega:    angular speed  (rad/s)
 % ca:       camber angle   (rad)
-% phit:     turn slip      (rad/m)
 %
 % OUTPUT
 % tyreFx:   longitudinal force
@@ -202,42 +201,46 @@ aero.Forces = @basicAeroModel;
 % tyreSA:   slip         angle
 
 % Front tyre
-% % MagicFormula_v6.2, data are read from *.tir file and converted into *.mat
-% % NOTE: tyre geometry such as <TyreUnloadedRadius> must be specified at 
-% % the beginning and are not exctracted from the *.tir file
-% frontTyre.Forces = @tyreMF62Model;
-% frontTyre = import_tir_file('Siemens_car205_60R15.tir', frontTyre); % save TIR data into frontTyre
-% frontTyreStiffness = frontTyre.VERTICAL_STIFFNESS; % vertical
-% frontTyreDamping = frontTyre.VERTICAL_DAMPING; % vertical - Not used in steady-state
-% basic
-frontTyre.Forces = @tyreMFBasicModel3;
-frontTyre.KPUMIN = -1;
-frontTyre.KPUMAX = +1;
-frontTyre.ALPMIN = -1;
-frontTyre.ALPMAX = +1;
+frontTyre.Forces = @tyreMFBasicModel;
+% nominal
+frontTyre.UNLOADED_RADIUS = frontTyreUnloadedRadius;
 frontTyre.FNOMIN = 3500;
-frontTyre.PCX1 = 1.6935;
-frontTyre.PDX1 = 1.8757;
-frontTyre.PDX2 = -0.127;
-frontTyre.PEX1 = 0.07708;
-frontTyre.PKX1 = 30.5;
-frontTyre.PKX3 = 0.2766;
-frontTyre.PCY1 = 1.733;
-frontTyre.PDY1 = 1.8217;
-frontTyre.PDY2 = -0.43884;
-frontTyre.PEY1 = 0.29446;
-frontTyre.PKY1 = -44.2;
-frontTyre.PKY2 = 2.5977;
-frontTyre.LMUX = 0.93;
-frontTyre.LMUY = 0.84;
+% longitudinal
+frontTyre.PDX1 = 1.7;
+frontTyre.PDX2 = -0.1;
+frontTyre.PCX1 = 1.7;
+frontTyre.PEX1 = 0.1;
+frontTyre.PEX4 = 0;
+frontTyre.PKX1 = 30;
+frontTyre.RBX1 = 15;
+frontTyre.RBX2 = 13;
+frontTyre.RCX1 = 1;
+% lateral
+frontTyre.PDY1 = 1.5;
+frontTyre.PDY2 = -0.3;
+frontTyre.PCY1 = 1.7;
+frontTyre.PEY1 = -0.3;
+frontTyre.PKY1 = -45;
+frontTyre.PKY6 = 0;
+frontTyre.RBY1 = 15;
+frontTyre.RBY2 = 13;
+frontTyre.RCY1 = 1;
+% scaling factors
+frontTyre.LMUX = 1;
 frontTyre.LCX = 1;
-frontTyre.LKX = 1;
 frontTyre.LEX = 1;
+frontTyre.LKX = 1;
+frontTyre.LMUY = 1;
 frontTyre.LCY = 1;
-frontTyre.LKY = 1;
 frontTyre.LEY = 1;
+frontTyre.LKY = 1;
+frontTyre.LCG = 1;
+frontTyre.LKYG = 1;
+frontTyre.LXA = 1;
+frontTyre.LYK = 1;
+% model parameters
 frontTyreStiffness = 200e3;
-frontTyreDamping = 150;
+frontTyreDamping = 500;
 
 % Rear tyre
 rearTyre = frontTyre; % identical

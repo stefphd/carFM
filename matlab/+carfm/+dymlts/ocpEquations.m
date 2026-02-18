@@ -28,9 +28,9 @@ s = t*opts.sscale;
 %       n, chi,
 %       delta__ddot, Tau__t]
 n = x(24,:)*opts.xscale(24); % lateral position
-chi = x(25,:)*opts.xscale(25); % relative yaw orientation
-V = x(9,:)*opts.xscale(9); % total speed
-lambda = x(10,:)*opts.xscale(10); % sideslip
+chi = x(25,:)*opts.xscale(25); % relative yaw orientation - referred to the car symmetry plane, not to the raceline
+V__P = x(9,:)*opts.xscale(9); % total speed
+lambda__P = x(10,:)*opts.xscale(10); % sideslip
 % controls
 % u = [delta__dddot, Tau__tdot]
 
@@ -63,12 +63,21 @@ if isnumeric(x)
     Omegay = full(Omegay);
     Omegaz = full(Omegaz);
 end
+% This is to convert CasADi DM vars to standard double when input args are
+% numeric (i.e. numeric eval of this function)
+rwr = full(rwr);
+rwl = full(rwl);
+mu = full(mu);
+phi = full(phi);
+Omegax = full(Omegax);
+Omegay = full(Omegay);
+Omegaz = full(Omegaz);
 
 %% Road
-Vx = V.*cos(lambda); 
-Vy = V.*sin(lambda);
-sdot = (Vx.*cos(chi)-Vy.*sin(chi)) ./ (1 - n.*Omegaz);
-zetap = V./sdot;
+V__Px = V__P.*cos(lambda__P); 
+V__Py = V__P.*sin(lambda__P);
+sdot = (V__Px.*cos(chi)-V__Py.*sin(chi)) ./ (1 - n.*Omegaz);
+zetap = V__P./sdot;
 % Set g__x,g__y,g__z - valid also for 2D
 gravityFactors = 0*x(1:3,:);
 gravityFactors(1,:) =-sin(mu).*cos(chi) + cos(mu).*sin(phi).*sin(chi);
@@ -113,7 +122,7 @@ end
 f1 = f1./sdot*opts.sscale;
 
 % Tracking equations
-ndot = Vx.*sin(chi)+Vy.*cos(chi); % dn/dt
+ndot = V__Px.*sin(chi)+V__Py.*cos(chi); % dn/dt
 chidot = [dyout.yawRate] - Omegaz.*sdot; % dchi/dt
 f2 = [  xp(24,:) - ndot./sdot*opts.sscale/opts.xscale(24);
         xp(25,:) - chidot./sdot*opts.sscale/opts.xscale(25)];
@@ -135,31 +144,32 @@ N__rl = [rearLeftTyre.N];
 N__rr = [rearRightTyre.N];
 T__e = [dyout.engineTorque];
 T__emax = [dyout.engineMaxTorque];
-c = [n./rwr
-     n./rwl 
+c = [n-rwr                                 % n-rwr < 0
+     n+rwl                                 % n+rwl > 0
      N__fl/aux.car.mass/aux.car.gravity    % N__fl > opts.Neps
      N__fr/aux.car.mass/aux.car.gravity    % N__fr > opts.Neps
      N__rl/aux.car.mass/aux.car.gravity    % N__rl > opts.Neps
      N__rr/aux.car.mass/aux.car.gravity    % N__rr > opts.Neps
-     T__e./T__emax                        % engineTorque/engineMaxTorque < 1
+     T__e-T__emax                          % engineTorque/engineMaxTorque < 1
     ] ./ opts.cscale(:);
 
 % Lagrange cost
-pnlt = opts.wdeltadot    *[dyout.steerRate         ].^2 + ...
-       opts.wdeltaddot   *[dyout.steerAcc          ].^2 + ...
-       opts.wlambda      *[dyout.driftAngle        ].^2 + ...
-       opts.wlambdadot   *[dyout.driftRate         ].^2 + ...
-       opts.wkappa       *([rearLeftTyre.longSlip].^2 + [rearRightTyre.longSlip].^2) + ...
-       opts.wuDelta      *u(1,:).^2 + ...
-       opts.wuTaut       *u(2,:).^2;
+Omega__dot = [dyout.angAcc]; % [Omega__xdot, Omega__ydot, Omega__zdot]
+delta__ddot = [dyout.steerAcc];
+pnlt = [opts.wdeltaddot * delta__ddot.^2
+        opts.wOmegaxdot * Omega__dot(1,:).^2
+        opts.wOmegaydot * Omega__dot(2,:).^2
+        opts.wOmegazdot * Omega__dot(3,:).^2
+        opts.wuDelta    *u(1,:).^2
+        opts.wuTaut     *u(2,:).^2];
 tp = 1 ./ sdot;
 l = [tp
-     pnlt] * opts.sscale / opts.lscale;
+     sum(pnlt)] * opts.sscale / opts.lscale;
 
 %% Post-processing
 if nargout > 3
     data.s = s;
-    data.V = V;
+    data.V = V__P;
     data.n = n;
     data.chi = chi + [dyout.driftAngle];
     data.at = [dyout.tangentialAcc];
@@ -168,29 +178,20 @@ if nargout > 3
     data.Vdot = full(v1(9,:))*opts.xscale(9);
     data.ndot = full(ndot);
     data.chidot = full(chidot) + [dyout.driftRate];
+    aPeq = [dyout.totalAcc];
+    data.ateq = aPeq(1,:).*cos(lambda__P)+aPeq(2,:).*sin(lambda__P);
+    data.aneq = aPeq(2,:).*cos(lambda__P)-aPeq(1,:).*sin(lambda__P);
+    data.geq = -aPeq(3,:);
     xc = full(aux.track.x(s));
     yc = full(aux.track.y(s));
     zc = 0*t;
     theta = full(aux.track.theta(s));
-    % xl = full(aux.track.xl(s));
-    % yl = full(aux.track.yl(s));
-    % zl = 0*t;
-    % xr = full(aux.track.xr(s));
-    % yr = full(aux.track.yr(s));
-    % zr = 0*t;
-    % rw = full(aux.track.rw(s));
     if aux.track.isTrack3D
         zc = full(aux.track.z(s));
-        % zl = full(aux.track.zl(s));
-        % zr = full(aux.track.zr(s));
     end
-    % if isnumeric(zetap)
     data.zeta = cumtrapz(data.s, full(zetap));
-    % end
-    [data.x, data.y, data.z] = carfm.common.getVehCoords(xc, yc, zc, theta, mu, phi, ...
-        data.n);
-    [data.psi, data.sigma, data.beta] = carfm.common.getVehAngles(theta, mu, phi, ...
-                    data.chi);
+    [data.x, data.y, data.z] = carfm.common.getVehCoords(xc, yc, zc, theta, mu, phi, data.n);
+    [data.psi, data.sigma, data.beta] = carfm.common.getVehAngles(theta, mu, phi, data.chi);
     [data.vx, data.vy, data.vz] = carfm.common.getVehVels(data.psi, data.sigma, data.V);
     data.omegax = full((Omegax.*cos(data.chi)+Omegay.*sin(data.chi)).*sdot);
     data.omegay = full((Omegay.*cos(data.chi)-Omegax.*sin(data.chi)).*sdot);
@@ -198,13 +199,8 @@ if nargout > 3
 	data.Gammax = data.omegax./data.V;
 	data.Gammay = data.omegay./data.V;
 	data.Gammaz = data.omegaz./data.V;
-    % data.rha = full(rha); % NOT IMPLEMENTED
-    % if isnumeric(tp)
     data.t = cumtrapz(data.s, full(tp));
-    % end
-    % data.tp = full(tp);
-    % data.zetap = full(zetap);
-    data.pnlt = pnlt;
+    data.pnlt = sum(pnlt);
     data.data = dyout;
 end
 

@@ -7,10 +7,8 @@ function [nold] = setMaxNumDir(n)
 % NOTE this option may break in future casadi versions.
 % See also https://groups.google.com/g/casadi-users/c/JT73r_cYMkk/m/I2Z1sHbDDQAJ
 
-import casadi.*
-
-nold = GlobalOptions.getMaxNumDir();
-GlobalOptions.setMaxNumDir(n);
+nold = casadi.GlobalOptions.getMaxNumDir();
+casadi.GlobalOptions.setMaxNumDir(n);
 
 end
 

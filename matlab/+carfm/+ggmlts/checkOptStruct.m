@@ -371,6 +371,27 @@ function checkOptStruct(opts)
                     msg = '"sRange(2)" must be greater than sRange(1).';
                     error(eid,msg)
                 end
+            case 'speedRange'
+                if ~isequal(size(opts.speedRange),[1,2])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "speedRange" must be [1,2].';
+                    error(eid,msg)
+                end
+                if ~isnumeric(opts.speedRange)
+                    eid = 'carfm:incorrectType';
+                    msg = 'Field "speedRange" must be numeric.';
+                    error(eid,msg)
+                end
+                if any(opts.speedRange < 0)
+                    eid = 'carfm:incorrectType';
+                    msg = 'Values of field "speedRange" must be nonnegative.';
+                    error(eid,msg)
+                end
+                if opts.speedRange(1) > opts.speedRange(end)
+                    eid = 'carfm:incorrectType';
+                    msg = '"speedRange(2)" must be greater than or equal to speedRange(1).';
+                    error(eid,msg)
+                end
             case 'minDecLen'
                 if ~isequal(size(opts.minDecLen),[1,1])
                     eid = 'carfm:notEqual';

@@ -74,10 +74,10 @@ classdef CasadiIPOPTCallback < casadi.Callback
                 z = reshape(full(arg{1}), [self.nx+self.nu, self.N]);
                 g = full(arg{3});
                 g = reshape(g(1:(self.nx+self.nc)*(self.N-1)), [self.nx+self.nc, self.N-1]);
-                sol.t = self.t;
-                sol.x = z(1:self.nx,:);
-                sol.u = z(1:self.nu,:);
-                sol.f = g(1:self.nx,:);
+                sol.time = self.t;
+                sol.state = z(1:self.nx,:);
+                sol.control = z(1:self.nu,:);
+                sol.dyn_constraint = g(1:self.nx,:);
                 % call iter_callback
                 self.iter_callback(iter, obj, inf_pr, inf_du, sol);
             end

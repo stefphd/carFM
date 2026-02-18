@@ -24,7 +24,7 @@ function opts = getDefaultOptions(opts)
     default_opts.fscale = [ 1, 1, 1, ... % V', n', chi'
                             1, 1, ... % at', an'
                             ]; % f scale
-    default_opts.cscale = [ 1, 1, ... % road
+    default_opts.cscale = [ 1e1, 1e1, ... % road
                             1, ... % g-g map
                             1 ... % geq/g
                             ]; % c scale
@@ -38,6 +38,7 @@ function opts = getDefaultOptions(opts)
     % Solving options
     default_opts.problemName = 'ggmlts'; % Name of the problem
     default_opts.sRange = [-inf, inf]; % Initial and final travelled distance
+    default_opts.speedRange = [0, inf]; % speed range ([0, inf]=auto-selected from the GG speed grid) (m/s)
     default_opts.minDecLen = 0; % Minimum decimation length for track/trajectory data (0 = no downsampling)
     default_opts.bcsFunc = @(xi, xf) xf-xi; % function handle to define the boundary conditions (x=[V,n,chi,ax,ay] for free, x=[V,ax] for fixed)
     default_opts.numMeshPts = 2000; % number of mesh points

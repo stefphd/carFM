@@ -145,6 +145,44 @@ function checkOptStruct(opts)
                     msg = 'Size of field "extTorque" must be [1,3].';
                     error(eid,msg);
                 end
+            case 'sensitivityPar'
+                if ~iscell(opts.sensitivityPar)
+                    eid = 'mltsfm:invalidType';
+                    msg = 'Field "sensitivityPar" must a cell array.';
+                    error(eid,msg);
+                end
+                if isempty(opts.sensitivityPar)
+                    continue;
+                end
+                if ~isvector(opts.sensitivityPar)
+                    eid = 'mltsfm:notEqual';
+                    msg = 'Size of field "sensitivityPar" must be either [:,1] or [1,:].';
+                    error(eid,msg);
+                end
+                for ii = 1 : numel(opts.sensitivityPar)
+                    if iscell(opts.sensitivityPar{ii})
+                        if ~isvector(opts.sensitivityPar{ii})
+                            eid = 'mltsfm:notEqual';
+                            msg = ['Size of "sensitivityPar{' num2str(ii) '}" must be either [:,1] or [1,:].'];
+                            error(eid,msg);
+                        end
+                        for jj = 1 : numel(opts.sensitivityPar{ii})
+                            var = opts.sensitivityPar{ii}{jj};
+                            if ~ischar(var) || ~(size(var,1)==1)
+                                eid = 'mltsfm:invalidValue';
+                                msg = ['Value of "sensitivityPar{' num2str(ii) '}{' num2str(jj) '}" must be a char array.'];
+                                error(eid,msg)
+                            end
+                        end
+                        continue;
+                    end
+                    var = opts.sensitivityPar{ii};
+                    if ~ischar(var) || ~(size(var,1)==1)
+                        eid = 'mltsfm:invalidValue';
+                        msg = ['Value of "sensitivityPar{' num2str(ii) '}" must be a char array.'];
+                        error(eid,msg)
+                    end
+                end
             case 'rtol'
                 if ~isequal(size(opts.rtol),[1,1])
                     eid = 'carfm:notEqual';
@@ -244,6 +282,50 @@ function checkOptStruct(opts)
                     msg = 'Values of field "cscale" must be greater than 0.';
                     error(eid,msg)
                 end
+            case 'wdeltaddot'
+                if ~isequal(size(opts.wdeltaddot),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "wdeltaddot" must be [1,1].';
+                    error(eid,msg)
+                end
+                if opts.wdeltaddot < 0
+                    eid = 'carfm:invalidValue';
+                    msg = 'Value of field "wdeltaddot" must be greater than 0.';
+                    error(eid,msg)
+                end
+            case 'wOmegaxdot'
+                if ~isequal(size(opts.wOmegaxdot),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "wOmegaxdot" must be [1,1].';
+                    error(eid,msg)
+                end
+                if opts.wOmegaxdot < 0
+                    eid = 'carfm:invalidValue';
+                    msg = 'Value of field "wOmegaxdot" must be greater than 0.';
+                    error(eid,msg)
+                end
+            case 'wOmegaydot'
+                if ~isequal(size(opts.wOmegaydot),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "wOmegaydot" must be [1,1].';
+                    error(eid,msg)
+                end
+                if opts.wOmegaydot < 0
+                    eid = 'carfm:invalidValue';
+                    msg = 'Value of field "wOmegaydot" must be greater than 0.';
+                    error(eid,msg)
+                end
+            case 'wOmegazdot'
+                if ~isequal(size(opts.wOmegazdot),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "wOmegazdot" must be [1,1].';
+                    error(eid,msg)
+                end
+                if opts.wOmegazdot < 0
+                    eid = 'carfm:invalidValue';
+                    msg = 'Value of field "wOmegazdot" must be greater than 0.';
+                    error(eid,msg)
+                end
             case 'wuDelta'
                 if ~isequal(size(opts.wuDelta),[1,1])
                     eid = 'carfm:notEqual';
@@ -264,61 +346,6 @@ function checkOptStruct(opts)
                 if opts.wuTaut < 0
                     eid = 'carfm:invalidValue';
                     msg = 'Value of field "wuTaut" must be greater than 0.';
-                    error(eid,msg)
-                end
-            case 'wdeltadot'
-                if ~isequal(size(opts.wdeltadot),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "wdeltadot" must be [1,1].';
-                    error(eid,msg)
-                end
-                if opts.wdeltadot < 0
-                    eid = 'carfm:invalidValue';
-                    msg = 'Value of field "wdeltadot" must be greater than 0.';
-                    error(eid,msg)
-                end
-            case 'wdeltaddot'
-                if ~isequal(size(opts.wdeltaddot),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "wdeltaddot" must be [1,1].';
-                    error(eid,msg)
-                end
-                if opts.wdeltaddot < 0
-                    eid = 'carfm:invalidValue';
-                    msg = 'Value of field "wdeltaddot" must be greater than 0.';
-                    error(eid,msg)
-                end
-            case 'wlambda'
-                if ~isequal(size(opts.wlambda),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "wlambda" must be [1,1].';
-                    error(eid,msg)
-                end
-                if opts.wlambda < 0
-                    eid = 'carfm:invalidValue';
-                    msg = 'Value of field "wlambda" must be greater than 0.';
-                    error(eid,msg)
-                end
-            case 'wlambdadot'
-                if ~isequal(size(opts.wlambdadot),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "wlambdadot" must be [1,1].';
-                    error(eid,msg)
-                end
-                if opts.wlambdadot < 0
-                    eid = 'carfm:invalidValue';
-                    msg = 'Value of field "wlambdadot" must be greater than 0.';
-                    error(eid,msg)
-                end
-            case 'wkappa'
-                if ~isequal(size(opts.wkappa),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "wkappa" must be [1,1].';
-                    error(eid,msg)
-                end
-                if opts.wkappa < 0
-                    eid = 'carfm:invalidValue';
-                    msg = 'Value of field "wkappa" must be greater than 0.';
                     error(eid,msg)
                 end
             case 'mex'
@@ -516,17 +543,6 @@ function checkOptStruct(opts)
                     msg = 'Field "scheme" must be either ''euler'', ''trapz'', ''midpoint'' or ''lgr<N>'' (N=2,..,8).';
                     error(eid,msg);
                 end
-            case 'init_iter'
-                if ~isequal(size(opts.init_iter),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "init_iter" must be [1,1].';
-                    error(eid,msg);
-                end
-                if rem(opts.init_iter, 1) ~= 0 || opts.init_iter<0
-                    eid = 'carfm:incorrectType';
-                    msg = 'Field "init_iter" must be a non-negative integer number.';
-                    error(eid,msg);
-                end
             case 'sRange'
                 if ~isequal(size(opts.sRange),[1,2])
                     eid = 'carfm:notEqual';
@@ -542,6 +558,28 @@ function checkOptStruct(opts)
                     eid = 'carfm:incorrectType';
                     msg = '"sRange(2)" must be greater than sRange(1).';
                     error(eid,msg)
+                end
+            case 'speedGuess'
+                if ~isequal(size(opts.speedGuess),[1,1])
+                    eid = 'mltsfm:notEqual';
+                    msg = 'Size of field "speedGuess" must be [1,1].';
+                    error(eid,msg);
+                end
+                if opts.speedGuess<=0
+                    eid = 'mltsfm:incorrectType';
+                    msg = 'Field "speedGuess" must be a positive number.';
+                    error(eid,msg);
+                end
+            case 'minDecLen'
+                if ~isequal(size(opts.minDecLen),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "minDecLen" must be [1,1].';
+                    error(eid,msg);
+                end
+                if opts.minDecLen<0
+                    eid = 'carfm:incorrectType';
+                    msg = 'Field "minDecLen" must be a non-negative number.';
+                    error(eid,msg);
                 end
             case 'bcsFunc'
                 if ~isa(opts.bcsFunc, 'function_handle')
@@ -560,17 +598,6 @@ function checkOptStruct(opts)
                 catch e
                     eid = 'carfm:unableEval';
                     error(eid, 'Unable to evaluate "bcsFunc" function handle: %s', e.message)
-                end
-            case 'bcsRelax'
-                if ~isequal(size(opts.bcsRelax),[1,1])
-                    eid = 'carfm:notEqual';
-                    msg = 'Size of field "bcsRelax" must be [1,1].';
-                    error(eid,msg);
-                end
-                if ~islogical(opts.bcsRelax)
-                    eid = 'carfm:incorrectType';
-                    msg = 'Type of field "bcsRelax" must be logical.';
-                    error(eid,msg);
                 end
             case 'numThreads'
                 if ~isequal(size(opts.numThreads),[1 1])

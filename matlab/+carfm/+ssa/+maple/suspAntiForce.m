@@ -1,0 +1,6 @@
+% Suspension anti forces  *** DO NOT EDIT ***
+S__fl0 = ((Y__fl0 * psi__fl + X__fl0) * D__mu__fl + (X__fl0 * psi__fl - Y__fl0) * D__phi__fl + D__psi__fl * (X__fl0 * phi__fl + Y__fl0 * mu__fl)) * r0__fl + (-psi__fl * T__flx + T__flz * phi__fl + T__fly) * D__mu__fl + (T__fly * psi__fl + T__flx) * D__phi__fl + X__fl0 * D__x__fl + Y__fl0 * D__y__fl + T__flz * D__psi__fl;
+S__fr0 = ((Y__fr0 * psi__fr + X__fr0) * D__mu__fr + (X__fr0 * psi__fr - Y__fr0) * D__phi__fr + D__psi__fr * (X__fr0 * phi__fr + Y__fr0 * mu__fr)) * r0__fr + (-psi__fr * T__frx + T__frz * phi__fr + T__fry) * D__mu__fr + (T__fry * psi__fr + T__frx) * D__phi__fr + X__fr0 * D__x__fr + Y__fr0 * D__y__fr + T__frz * D__psi__fr;
+S__rl0 = ((Y__rl0 * psi__rl + X__rl0) * D__mu__rl + (X__rl0 * psi__rl - Y__rl0) * D__phi__rl + D__psi__rl * (X__rl0 * phi__rl + Y__rl0 * mu__rl)) * r0__rl + (-psi__rl * T__rlx + phi__rl * T__rlz + T__rly) * D__mu__rl + (psi__rl * T__rly + T__rlx) * D__phi__rl + X__rl0 * D__x__rl + Y__rl0 * D__y__rl + T__rlz * D__psi__rl;
+S__rr0 = ((Y__rr0 * psi__rr + X__rr0) * D__mu__rr + (X__rr0 * psi__rr - Y__rr0) * D__phi__rr + D__psi__rr * (X__rr0 * phi__rr + Y__rr0 * mu__rr)) * r0__rr + (-psi__rr * T__rrx + phi__rr * T__rrz + T__rry) * D__mu__rr + (psi__rr * T__rry + T__rrx) * D__phi__rr + X__rr0 * D__x__rr + Y__rr0 * D__y__rr + T__rrz * D__psi__rr;
+

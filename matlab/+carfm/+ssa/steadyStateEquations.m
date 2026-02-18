@@ -26,7 +26,7 @@ xscale = opts.xscale;
 rscale = opts.rscale;
 
 %% Model options
-gz_g = opts.gz_g;
+gravityFactors = opts.gravityFactors;
 iTyreType = opts.iTyreType;
 iSuspensionType = opts.iSuspensionType;
 iEngineBrake = opts.iEngineBrake;
@@ -84,16 +84,9 @@ u__lambda__P0 = u_lat(3);
 carfm.common.unpackCar;
 
 %% Other params
-g__x = 0;
-g__y = 0; 
-g__z = gz_g * g;
-
-%% Saturates tyre loads for tyre eval
-fsat_tyre = @(x,xl) xl*(x<xl) + x*(x>=xl);
-N__fl0_tyre = fsat_tyre(N__fl0 / car.mass / car.gravity, opts.Neps) * car.mass * car.gravity;
-N__fr0_tyre = fsat_tyre(N__fr0 / car.mass / car.gravity, opts.Neps) * car.mass * car.gravity; 
-N__rl0_tyre = fsat_tyre(N__rl0 / car.mass / car.gravity, opts.Neps) * car.mass * car.gravity; 
-N__rr0_tyre = fsat_tyre(N__rr0 / car.mass / car.gravity, opts.Neps) * car.mass * car.gravity;
+g__x = gravityFactors(1) * g;
+g__y = gravityFactors(2) * g;
+g__z = gravityFactors(3) * g;
 
 %% Suspension kinematics
 % travels are z__fl,z__fr,z__rl,z__rr (>0 in extension), while user defines
@@ -158,14 +151,14 @@ D__phi__rr = -D__phi__rr;
 carfm.ssa.maple.rearTyreKinematics; % This is generated from MAPLE
 
 % Left
-[rlTyreFx,rlTyreFy,T__rlx,T__rly,T__rlz,ls__rl,sa__rl] = rearTyre.Forces(rearTyre,N__rl0_tyre, ...
+[rlTyreFx,rlTyreFy,T__rlx,T__rly,T__rlz,ls__rl,sa__rl] = rearTyre.Forces(rearTyre,N__rl0, ...
     VSrl0,VNrl0*opts.iTyreSide,-VRrl0,omega__rl0, ...
-    -ca__rl*opts.iTyreSide,-phit__rl*opts.iTyreSide); 
+    -ca__rl*opts.iTyreSide); 
 
 % Right
-[rrTyreFx,rrTyreFy,T__rrx,T__rry,T__rrz,ls__rr,sa__rr] = rearTyre.Forces(rearTyre,N__rr0_tyre, ...
+[rrTyreFx,rrTyreFy,T__rrx,T__rry,T__rrz,ls__rr,sa__rr] = rearTyre.Forces(rearTyre,N__rr0, ...
     VSrr0,-VNrr0*opts.iTyreSide,-VRrr0,omega__rr0, ...
-    ca__rr*opts.iTyreSide,phit__rr*opts.iTyreSide); 
+    ca__rr*opts.iTyreSide); 
 
 % Fix left/right signs, depending on opts.iTyreSide
 rlTyreFy = -rlTyreFy*opts.iTyreSide;
@@ -187,14 +180,14 @@ T__rlz = -T__rlz;
 carfm.ssa.maple.frontTyreKinematics; % This is generated from MAPLE
 
 % Left
-[flTyreFx,flTyreFy,T__flx,T__fly,T__flz,ls__fl,sa__fl] = frontTyre.Forces(frontTyre,N__fl0_tyre, ...
+[flTyreFx,flTyreFy,T__flx,T__fly,T__flz,ls__fl,sa__fl] = frontTyre.Forces(frontTyre,N__fl0, ...
     VSfl0,VNfl0*opts.iTyreSide,-VRfl0,omega__fl0, ...
-    -ca__fl*opts.iTyreSide,-phit__fl*opts.iTyreSide); 
+    -ca__fl*opts.iTyreSide); 
 
 % Right
-[frTyreFx,frTyreFy,T__frx,T__fry,T__frz,ls__fr,sa__fr] = frontTyre.Forces(frontTyre,N__fr0_tyre, ...
+[frTyreFx,frTyreFy,T__frx,T__fry,T__frz,ls__fr,sa__fr] = frontTyre.Forces(frontTyre,N__fr0, ...
     VSfr0,-VNfr0*opts.iTyreSide,-VRfr0,omega__fr0, ...
-    ca__fr*opts.iTyreSide,phit__fr*opts.iTyreSide); 
+    ca__fr*opts.iTyreSide); 
 
 % Fix left/right signs, depending on opts.iTyreSide
 flTyreFy = -flTyreFy*opts.iTyreSide;
@@ -211,6 +204,9 @@ T__flz = -T__flz;
 frTyreFy = -frTyreFy;
 T__fry = -T__fry;
 T__frz = -T__frz;
+
+%% Suspension anti force
+carfm.ssa.maple.suspAntiForce; % This is generated from MAPLE
 
 %% Aerodynamic forces
 [aeroFD, aeroFS, aeroFL, aeroMR, aeroMP, aeroMY] = aero.Forces(aero, V__P0, ...
@@ -408,7 +404,8 @@ if nargout > 1
     CPfl = CPrr; CPfr = CPrr; % init
     Wrr = CPrr; Wrl = CPrr; % init
     Wfl = CPrr; Wfr = CPrr; % init
-    CA = CPrr; G = CPrr; II = 0*x(1:6); % init
+    CA = CPrr; G = CPrr; G1 = CPrr; % init
+    AG = CPrr; AP = CPrr; I1 = 0*x(1:6); % init
     carfm.ssa.maple.postProcessing;
     % ss results
     % overall vehicle
@@ -418,6 +415,7 @@ if nargout > 1
     output.normalAcc  = a__nP;
     output.longitudinalAcc = a__xP;
     output.lateralAcc  = a__yP;
+    output.totalAcc = AP(:);
     output.longitudinalSpeed = V__P0*cos(lambda__P0);
     output.lateralSpeed = V__P0*sin(lambda__P0);
     output.driftAngle  = lambda__P0;
@@ -431,34 +429,44 @@ if nargout > 1
     output.steerAngle  = delta0;
     output.steerRate   = 0;
     output.steerAcc    = 0;
-    output.centreOfMass = G(:);
+    output.chassisPoint = G(:);
+    output.longitudinalChassisAcc = a__xG;
+    output.lateralChassisAcc  = a__yG;
+    output.verticalChassisAcc  = a__zG;
     output.linVelocities = [V__x0; V__y0; V__z0];
     output.linVelocityRates = [V__dotx0; V__doty0; V__dotz0];
     output.angVelocities = [Omega__x0; Omega__y0; Omega__z0];
-    output.rollInertia = II(1);
-    output.pitchInertia = II(2);
-    output.yawInertia = II(3);
-    output.crossYawRollInertia = -II(4); % - b/c sign convenction
-    output.crossYawPitchInertia = -II(5); % - b/c sign convenction
-    output.crossRollPitchInertia = -II(6); % - b/c sign convenction
+    output.angAcc = [Omega__dotx0; Omega__doty0; Omega__dotz0];
+    output.totalChassisAcc = AG(:);
+    output.centreOfMass = G1(:);
+    output.rollInertia = I1(1);
+    output.pitchInertia = I1(2);
+    output.yawInertia = I1(3);
+    output.crossYawRollInertia = -I1(4); % - b/c sign convenction
+    output.crossYawPitchInertia = -I1(5); % - b/c sign convenction
+    output.crossRollPitchInertia = -I1(6); % - b/c sign convenction
     % suspensions
     output.frontLeftTravel = -z__fl0;
     output.frontLeftTravelRate = -0;
-    output.frontLeftForce = F__fl0;
+    output.frontLeftElasticForce = F__fl0;
+    output.frontLeftGeometricForce = S__fl0;
     output.frontRightTravel = -z__fr0;
     output.frontRightTravelRate = -0;
-    output.frontRightForce = F__fr0;
+    output.frontRightElasticForce = F__fr0;
+    output.frontRightGeometricForce = S__fr0;
     output.rearLeftTravel = -z__rl0;
     output.rearLeftTravelRate = -0;
-    output.rearLeftForce = F__rl0;
+    output.rearLeftElasticForce = F__rl0;
+    output.rearLeftGeometricForce = S__rl0;
     output.rearRightTravel = -z__rr0;
     output.rearRightTravelRate = -0;
-    output.rearRightForce = F__rr0;
+    output.rearRightElasticForce = F__rr0;
+    output.rearRightGeometricForce = S__rr0;
     % transmissions etc
-    output.frontLeftTorque = Tau__fl0;
+    output.frontLeftTorque  = Tau__fl0;
     output.frontRightTorque = Tau__fr0;
-    output.rearLeftTorque = Tau__rl0;
-    output.rearRightTorque = Tau__rr0;
+    output.rearLeftTorque   = Tau__rl0;
+    output.rearRightTorque  = Tau__rr0;
     output.totalTorque   = Tau__t0;
     output.gearboxRatio  = tau__g0;
     output.totalRatio    = tau__t;
@@ -501,7 +509,7 @@ if nargout > 1
     output.frontLeftTyre.contactPoint = CPfl(:);
     output.frontLeftTyre.contactPointVelocity = [VSfl0; VNfl0];
     output.frontLeftTyre.wheelCenter = Wfl(:);
-    output.frontLeftTyre.tyreModelArgs = {N__fl0_tyre,VSfl0,-VNfl0*(-opts.iTyreSide),-VRfl0,omega__fl0,phi__fl*(-opts.iTyreSide),phit__fl*(-opts.iTyreSide)};
+    output.frontLeftTyre.tyreModelArgs = {N__fl0,VSfl0,-VNfl0*(-opts.iTyreSide),-VRfl0,omega__fl0,phi__fl*(-opts.iTyreSide)};
     % front right Tyre
     output.frontRightTyre.angVelocity = omega__fr0;
     output.frontRightTyre.angAcceleration = omega__dotfr0;
@@ -520,7 +528,7 @@ if nargout > 1
     output.frontRightTyre.contactPoint = CPfr(:);
     output.frontRightTyre.contactPointVelocity = [VSfr0; VNfr0];
     output.frontRightTyre.wheelCenter = Wfr(:);
-    output.frontRightTyre.tyreModelArgs = {N__fr0_tyre,VSfr0,-VNfr0*(+opts.iTyreSide),-VRfr0,omega__fr0,phi__fr*(+opts.iTyreSide),phit__fr*(+opts.iTyreSide)};
+    output.frontRightTyre.tyreModelArgs = {N__fr0,VSfr0,-VNfr0*(+opts.iTyreSide),-VRfr0,omega__fr0,phi__fr*(+opts.iTyreSide)};
     % rear left Tyre
     output.rearLeftTyre.angVelocity = omega__rl0;
     output.rearLeftTyre.angAcceleration = omega__dotrl0;
@@ -539,7 +547,7 @@ if nargout > 1
     output.rearLeftTyre.contactPoint = CPrl(:);
     output.rearLeftTyre.contactPointVelocity = [VSrl0; VNrl0];
     output.rearLeftTyre.wheelCenter = Wrl(:);
-    output.rearLeftTyre.tyreModelArgs = {N__rl0_tyre,VSrl0,-VNrl0*(-opts.iTyreSide),-VRrl0,omega__rl0,phi__rl*(-opts.iTyreSide),phit__rl*(-opts.iTyreSide)};
+    output.rearLeftTyre.tyreModelArgs = {N__rl0,VSrl0,-VNrl0*(-opts.iTyreSide),-VRrl0,omega__rl0,phi__rl*(-opts.iTyreSide)};
     % rear right Tyre
     output.rearRightTyre.angVelocity = omega__rr0;
     output.rearRightTyre.angAcceleration = omega__dotrr0;
@@ -558,7 +566,7 @@ if nargout > 1
     output.rearRightTyre.contactPoint = CPrr(:);
     output.rearRightTyre.contactPointVelocity = [VSrr0; VNrr0];
     output.rearRightTyre.wheelCenter = Wrr(:);
-    output.rearRightTyre.tyreModelArgs = {N__rr0_tyre,VSrr0,-VNrr0*(+opts.iTyreSide),-VRrr0,omega__rr0,phi__rr*(+opts.iTyreSide),phit__rr*(+opts.iTyreSide)};
+    output.rearRightTyre.tyreModelArgs = {N__rr0,VSrr0,-VNrr0*(+opts.iTyreSide),-VRrr0,omega__rr0,phi__rr*(+opts.iTyreSide)};
     % variables and residual
     output.xss         = x;
     output.rss         = steadyStateRes;

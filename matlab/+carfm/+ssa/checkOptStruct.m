@@ -34,7 +34,7 @@ function checkOptStruct(opts)
                     msg = 'Size of field "xswap" must be [:,2].';
                     error(eid,msg)
                 end
-                if (min(opts.xswap) < 1) || (min(opts.xswap) > 33)
+                if any((min(opts.xswap) < 1) | (min(opts.xswap) > 33))
                     eid = 'carfm:invalidValue';
                     msg = 'Values of field "xswap" must be greater than 1 and lower than 33.';
                     error(eid,msg)
@@ -215,6 +215,33 @@ function checkOptStruct(opts)
                     msg = 'Type of field "isSymGG" must be logical.';
                     error(eid,msg);
                 end
+            case 'GGAngleRange'
+                if ~isequal(size(opts.GGAngleRange),[1,2])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "GGAngleRange" must be [1,2].';
+                    error(eid,msg);
+                end
+                if diff(opts.GGAngleRange)<=0 
+                    eid = 'carfm:incorrectValue';
+                    msg = 'Values of field "GGAngleRange" must be strictly increasing.';
+                    error(eid,msg);
+                end
+                if (opts.GGAngleRange(1)<-pi/2) || (opts.GGAngleRange(1)>+pi/2)
+                    eid = 'carfm:incorrectValue';
+                    msg = 'Values of field "GGAngleRange" must be within [-pi/2, +pi/2].';  
+                    error(eid,msg);                  
+                end
+            case 'useGGSeqGuess'
+                if ~isequal(size(opts.useGGSeqGuess),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "useGGSeqGuess" must be [1,1].';
+                    error(eid,msg);
+                end
+                if ~islogical(opts.useGGSeqGuess)
+                    eid = 'carfm:incorrectType';
+                    msg = 'Type of field "useGGSeqGuess" must be logical.';
+                    error(eid,msg);
+                end
             case 'GGshift'
                 if ~isa(opts.GGshift, 'function_handle')
                     eid = 'carfm:incorrectType';
@@ -241,6 +268,55 @@ function checkOptStruct(opts)
                 if ~any(strcmp(opts.algorithmGGopt,{'interior-point','sqp'}))
                     eid = 'carfm:invalidType';
                     msg = 'Field "algorithmGGopt" must be either ''interior-point'' or ''sqp''.';
+                    error(eid,msg);
+                end
+            case 'sensitivityPar'
+                if ~iscell(opts.sensitivityPar)
+                    eid = 'carfm:invalidType';
+                    msg = 'Field "sensitivityPar" must a cell array.';
+                    error(eid,msg);
+                end
+                if isempty(opts.sensitivityPar)
+                    continue;
+                end
+                if ~isvector(opts.sensitivityPar)
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "sensitivityPar" must be either [:,1] or [1,:].';
+                    error(eid,msg);
+                end
+                for ii = 1 : numel(opts.sensitivityPar)
+                    if iscell(opts.sensitivityPar{ii})
+                        if ~isvector(opts.sensitivityPar{ii})
+                            eid = 'carfm:notEqual';
+                            msg = ['Size of "sensitivityPar{' num2str(ii) '}" must be either [:,1] or [1,:].'];
+                            error(eid,msg);
+                        end
+                        for jj = 1 : numel(opts.sensitivityPar{ii})
+                            var = opts.sensitivityPar{ii}{jj};
+                            if ~ischar(var) || ~(size(var,1)==1)
+                                eid = 'carfm:invalidValue';
+                                msg = ['Value of "sensitivityPar{' num2str(ii) '}{' num2str(jj) '}" must be a char array.'];
+                                error(eid,msg)
+                            end
+                        end
+                        continue;
+                    end
+                    var = opts.sensitivityPar{ii};
+                    if ~ischar(var) || ~(size(var,1)==1)
+                        eid = 'carfm:invalidValue';
+                        msg = ['Value of "sensitivityPar{' num2str(ii) '}" must be a char array.'];
+                        error(eid,msg)
+                    end
+                end
+            case 'useExactSensitivity'
+                if ~isequal(size(opts.useExactSensitivity),[1,1])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "useExactSensitivity" must be [1,1].';
+                    error(eid,msg);
+                end
+                if ~islogical(opts.useExactSensitivity)
+                    eid = 'carfm:incorrectType';
+                    msg = 'Type of field "useExactSensitivity" must be logical.';
                     error(eid,msg);
                 end
             case 'iTyreSide'
@@ -382,15 +458,37 @@ function checkOptStruct(opts)
                     msg = 'Type of field "fillFailed" must be logical.';
                     error(eid,msg);
                 end
-            case 'kappaLim'
-                if ~isequal(size(opts.kappaLim),[1,1])
+            case 'maxLongSlip'
+                if ~isequal(size(opts.maxLongSlip),[1,2])
                     eid = 'carfm:notEqual';
-                    msg = 'Size of field "kappaLim" must be [1,1].';
+                    msg = 'Size of field "maxLongSlip" must be [1,2].';
                     error(eid,msg);
                 end
-                if opts.kappaLim<=0
+                if any(opts.maxLongSlip<=0)
                     eid = 'carfm:incorrectValue';
-                    msg = 'Value of field "kappaLim" must be strictly greater than 0.';
+                    msg = 'Values of field "maxLongSlip" must be strictly greater than 0.';
+                    error(eid,msg);
+                end
+            case 'minLongSlip'
+                if ~isequal(size(opts.minLongSlip),[1,2])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "minLongSlip" must be [1,2].';
+                    error(eid,msg);
+                end
+                if any(opts.minLongSlip>=0)
+                    eid = 'carfm:incorrectValue';
+                    msg = 'Values of field "minLongSlip" must be strictly lower than 0.';
+                    error(eid,msg);
+                end
+            case 'maxSideSlip'
+                if ~isequal(size(opts.maxSideSlip),[1,2])
+                    eid = 'carfm:notEqual';
+                    msg = 'Size of field "maxSideSlip" must be [1,2].';
+                    error(eid,msg);
+                end
+                if any(opts.maxSideSlip<=0)
+                    eid = 'carfm:incorrectValue';
+                    msg = 'Values of field "maxSideSlip" must be strictly greater than 0.';
                     error(eid,msg);
                 end
             case 'wlambda'
